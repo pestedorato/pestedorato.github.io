@@ -1,0 +1,1165 @@
+/* ============================================
+   PESTE DO RATO - ESTILOS PRINCIPAIS
+   Site de cultura hip hop e rock paraibano
+   
+   CORES PRINCIPAIS:
+   - Vermelho: #981213 (cor da bandeira da Paraíba)
+   - Preto: #000000 (fundo modo escuro)
+   - Branco: #FFFFFF (fundo modo claro)
+   - Cinza escuro: #1A1A1A (elementos secundários)
+   - Bege: #EDE7DB (textos suaves)
+   
+   COMO MODIFICAR:
+   - Para mudar cores, altere as variáveis em :root
+   - Para mudar fontes, altere font-family em :root
+   - Para mudar velocidades de animação, altere os valores em --transition-*
+   ============================================ */
+
+/* ============================================
+   VARIÁVEIS CSS (Configurações Globais)
+   Modifique aqui para mudar o visual do site todo
+   ============================================ */
+:root {
+    /* Cores do tema escuro (padrão) */
+    --cor-fundo: #000000;          /* Fundo principal */
+    --cor-texto: #FFFFFF;          /* Texto principal */
+    --cor-vermelho: #981213;       /* Cor de destaque (Paraíba) */
+    --cor-vermelho-hover: #b91415; /* Vermelho mais claro para hover */
+    --cor-cinza: #1A1A1A;          /* Cards e elementos secundários */
+    --cor-cinza-claro: #2A2A2A;    /* Bordas e separadores */
+    --cor-bege: #EDE7DB;           /* Textos suaves */
+    
+    /* Fontes */
+    --fonte-titulo: 'Oswald', sans-serif;      /* Para títulos */
+    --fonte-texto: 'Roboto', sans-serif;       /* Para textos */
+    
+    /* Velocidades de animação */
+    --transition-rapida: 0.3s;     /* Animações rápidas (hover) */
+    --transition-media: 0.5s;      /* Animações médias */
+    --transition-lenta: 0.8s;      /* Animações lentas (entrada) */
+    
+    /* Tamanhos */
+    --menu-altura: 60px;           /* Altura do menu fixo */
+    --borda-radius: 8px;           /* Arredondamento padrão */
+    --card-radius: 12px;           /* Arredondamento dos cards */
+}
+
+/* Tema claro - quando a classe 'light-mode' está no body */
+/* COMO USAR: JavaScript adiciona/remove a classe 'light-mode' no body */
+body.light-mode {
+    --cor-fundo: #FFFFFF;
+    --cor-texto: #000000;
+    --cor-cinza: #F5F5F5;
+    --cor-cinza-claro: #E0E0E0;
+    --cor-bege: #333333;
+}
+
+/* ============================================
+   RESET E ESTILOS BASE
+   Remove estilos padrão do navegador
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Inclui padding e border no tamanho total */
+}
+
+html {
+    scroll-behavior: smooth; /* Scroll suave ao clicar em links */
+}
+
+body {
+    font-family: var(--fonte-texto);
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    line-height: 1.6; /* Espaçamento entre linhas */
+    transition: background-color var(--transition-media), color var(--transition-media);
+    overflow-x: hidden; /* Esconde scroll horizontal */
+}
+
+/* Remove estilos padrão de links */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Remove estilos padrão de listas */
+ul, ol {
+    list-style: none;
+}
+
+/* Imagens responsivas por padrão */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ============================================
+   SPLASH SCREEN (Tela de Carregamento)
+   Aparece toda vez que o site carrega
+   
+   COMO MODIFICAR:
+   - Tempo de exibição: altere no JavaScript (splashDuration)
+   - Animação da logo: altere @keyframes logoAnimation
+   ============================================ */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--cor-fundo);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 10000; /* Fica acima de tudo */
+    transition: opacity var(--transition-lenta), visibility var(--transition-lenta);
+}
+
+/* Quando esconde a splash screen */
+.splash-screen.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Container da logo na splash - posiciona as duas logos sobrepostas */
+.splash-logo-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+/* 
+Logo na splash screen 
+As classes logo-dark e logo-light controlam qual aparece
+baseado no tema atual (definido mais abaixo no CSS)
+*/
+.splash-logo {
+    width: 200px;
+    height: auto;
+    animation: logoAnimation 2s ease-in-out infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+
+/* Animação da logo - pulsa suavemente */
+@keyframes logoAnimation {
+    0%, 100% { 
+        transform: scale(1); 
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.05); 
+        opacity: 0.8;
+    }
+}
+
+/* Barra de carregamento */
+.loading-bar-container {
+    width: 200px;
+    height: 4px;
+    background-color: var(--cor-cinza);
+    border-radius: 2px;
+    margin-top: 30px;
+    overflow: hidden;
+}
+
+.loading-bar {
+    width: 0%;
+    height: 100%;
+    background-color: var(--cor-vermelho);
+    border-radius: 2px;
+    animation: loadingAnimation 2s ease-in-out forwards;
+}
+
+/* Animação da barra de loading */
+@keyframes loadingAnimation {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+/* ============================================
+   TELA DE BOAS-VINDAS
+   Aparece apenas na primeira visita
+   
+   COMO MODIFICAR:
+   - Para mostrar novamente: localStorage.removeItem('welcomeShown')
+   - Para desativar: remova a chamada showWelcome() no JS
+   ============================================ */
+.welcome-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--cor-fundo);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-lenta), visibility var(--transition-lenta);
+}
+
+.welcome-screen.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.welcome-screen.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Texto de boas-vindas com efeito de onda */
+.welcome-text {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(1.5rem, 5vw, 3rem); /* Tamanho responsivo */
+    text-align: center;
+    padding: 0 20px;
+    color: var(--cor-texto);
+    animation: waveText 1.8s ease-in-out; /* Animação mais rápida (era 3s) */
+}
+
+/* Destaque em vermelho */
+.welcome-text span {
+    color: var(--cor-vermelho);
+    display: block;
+    margin-top: 10px;
+}
+
+/* Animação de onda no texto - mais rápida */
+@keyframes waveText {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+        filter: blur(8px);
+    }
+    40% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   MENU DE NAVEGAÇÃO
+   Menu hamburger para mobile, fixo no topo
+   ============================================ */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--menu-altura);
+    background-color: var(--cor-fundo);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+    border-bottom: 1px solid var(--cor-cinza-claro);
+    transition: background-color var(--transition-media);
+}
+
+/* Logo no menu */
+.navbar-logo img {
+    height: 40px;
+    width: auto;
+}
+
+/* Container dos controles (tema + menu) */
+.navbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Botão de alternar tema (sol/lua) */
+.theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    transition: transform var(--transition-rapida);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+/* Ícones SVG do tema - herdam a cor do texto automaticamente */
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--cor-texto); /* Usa a cor do texto que muda com o tema */
+    transition: stroke var(--transition-media);
+}
+
+/* Controla qual ícone aparece em cada modo */
+/* No modo escuro: mostra sol, esconde lua */
+.icon-sun {
+    display: block;
+}
+.icon-moon {
+    display: none;
+}
+
+/* No modo claro: mostra lua, esconde sol */
+body.light-mode .icon-sun {
+    display: none;
+}
+body.light-mode .icon-moon {
+    display: block;
+}
+
+/* 
+Botão hamburger 
+Usa spans com background-color que herda a cor do tema
+NÃO é uma imagem PNG, são elementos HTML puros
+*/
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    z-index: 1001;
+    background: none; /* Remove qualquer fundo */
+    border: none; /* Remove borda padrão de button */
+    padding: 0;
+}
+
+/* 
+Linhas do hamburger 
+A cor muda automaticamente com o tema através de var(--cor-texto)
+*/
+.hamburger-line {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: var(--cor-texto); /* Muda automaticamente: branco no escuro, preto no claro */
+    border-radius: 2px;
+    transition: all var(--transition-rapida);
+}
+
+/* Animação do hamburger quando aberto (vira X) */
+.hamburger.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 6px);
+}
+
+.hamburger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -6px);
+}
+
+/* Menu lateral (sidebar) */
+.nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Escondido fora da tela */
+    width: 80%;
+    max-width: 300px;
+    height: 100%;
+    background-color: var(--cor-cinza);
+    padding: 80px 30px 30px;
+    transition: right var(--transition-media);
+    z-index: 999;
+    overflow-y: auto;
+}
+
+/* Menu aberto */
+.nav-menu.active {
+    right: 0;
+}
+
+/* Links do menu */
+.nav-menu a {
+    display: block;
+    padding: 15px 0;
+    font-family: var(--fonte-titulo);
+    font-size: 1.2rem;
+    color: var(--cor-texto);
+    border-bottom: 1px solid var(--cor-cinza-claro);
+    transition: color var(--transition-rapida), padding-left var(--transition-rapida);
+}
+
+.nav-menu a:hover {
+    color: var(--cor-vermelho);
+    padding-left: 10px;
+}
+
+/* Overlay escuro quando menu está aberto */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-media), visibility var(--transition-media);
+    z-index: 998;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ============================================
+   CONTEÚDO PRINCIPAL
+   ============================================ */
+.main-content {
+    padding-top: var(--menu-altura); /* Espaço para o menu fixo */
+    min-height: 100vh;
+}
+
+/* Container padrão - centraliza e limita largura */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ============================================
+   SEÇÃO HERO (Topo da página)
+   Imagem principal + texto de apresentação
+   ============================================ */
+.hero-section {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/* Container da logo hero - para posicionar as duas versões */
+.hero-logo-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 30px;
+}
+
+/* Imagem principal responsiva */
+.hero-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border-radius: var(--card-radius);
+    object-fit: cover; /* Mantém proporção */
+}
+
+/* 
+SISTEMA DE TROCA DE LOGO
+- No modo escuro: mostra logo branca (logo-dark), esconde preta
+- No modo claro: mostra logo preta (logo-light), esconde branca
+*/
+
+/* Modo escuro (padrão): mostra logo branca, esconde logo preta */
+.logo-dark {
+    display: block;
+}
+.logo-light {
+    display: none;
+}
+
+/* Modo claro: mostra logo preta, esconde logo branca */
+body.light-mode .logo-dark {
+    display: none;
+}
+body.light-mode .logo-light {
+    display: block;
+}
+
+/* 
+Texto de apresentação 
+Fonte: Poppins (mais moderna e legível)
+Para mudar a fonte, altere font-family abaixo
+*/
+.hero-text {
+    font-family: 'Poppins', sans-serif; /* FONTE POPPINS - mude aqui se quiser outra */
+    font-size: clamp(1rem, 3vw, 1.1rem);
+    font-weight: 400;
+    line-height: 1.9;
+    letter-spacing: 0.3px;
+    color: var(--cor-bege);
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: justify;
+}
+
+/* Strong dentro do hero-text fica em vermelho para destaque */
+.hero-text strong {
+    color: var(--cor-vermelho);
+    font-weight: 600;
+}
+
+/* ============================================
+   ANIMAÇÃO DE SANGUE ESCORRENDO
+   Efeito decorativo entre seções
+   ============================================ */
+.blood-drip {
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--cor-vermelho));
+    position: relative;
+    overflow: hidden;
+    opacity: 0.6;
+}
+
+/* Gotas de sangue animadas */
+.blood-drip::before,
+.blood-drip::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 20px;
+    height: 40px;
+    background-color: var(--cor-vermelho);
+    border-radius: 0 0 50% 50%;
+    animation: drip 3s ease-in-out infinite;
+}
+
+.blood-drip::before {
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.blood-drip::after {
+    left: 70%;
+    animation-delay: 1.5s;
+}
+
+/* Animação da gota caindo */
+@keyframes drip {
+    0%, 100% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    50% {
+        transform: translateY(20px);
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   SEÇÕES DE CONTEÚDO
+   Álbuns e Artistas
+   ============================================ */
+.section {
+    padding: 60px 20px;
+}
+
+/* Título das seções */
+.section-title {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--cor-texto);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Linha decorativa abaixo do título */
+.section-title::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: var(--cor-vermelho);
+    margin: 15px auto 0;
+}
+
+/* ============================================
+   CARROSSEL
+   Slider horizontal para álbuns e artistas
+   
+   COMO MODIFICAR:
+   - Velocidade do auto-scroll: altere carouselSpeed no JS
+   - Quantidade de cards visíveis: altere o width dos cards
+   ============================================ */
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    padding: 20px 0;
+}
+
+/* Área do carrossel */
+.carousel {
+    display: flex;
+    gap: 20px;
+    transition: transform var(--transition-media);
+    cursor: grab;
+}
+
+.carousel:active {
+    cursor: grabbing;
+}
+
+/* Botões de navegação do carrossel */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background-color: var(--cor-vermelho);
+    color: var(--cor-texto);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color var(--transition-rapida), transform var(--transition-rapida);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-btn:hover {
+    background-color: var(--cor-vermelho-hover);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
+/* ============================================
+   CARDS DE ÁLBUNS
+   Cards retangulares com imagem e informações
+   ============================================ */
+.album-card {
+    flex: 0 0 280px; /* Tamanho fixo, não encolhe */
+    background-color: var(--cor-cinza);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    transition: transform var(--transition-rapida), box-shadow var(--transition-rapida);
+}
+
+.album-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(152, 18, 19, 0.3);
+}
+
+/* Container da imagem do álbum - proporção fixa */
+.album-image-container {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Quadrado - MODIFIQUE para outra proporção se quiser */
+    overflow: hidden;
+}
+
+/* Imagem do álbum */
+.album-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Mantém proporção, corta se necessário */
+    transition: transform var(--transition-media);
+}
+
+.album-card:hover .album-image-container img {
+    transform: scale(1.1);
+}
+
+/* Informações do álbum */
+.album-info {
+    padding: 15px;
+}
+
+.album-title {
+    font-family: var(--fonte-titulo);
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: var(--cor-texto);
+    /* Limita a 2 linhas */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.album-artist {
+    font-size: 0.9rem;
+    color: var(--cor-bege);
+    margin-bottom: 15px;
+}
+
+/* Botões de links (Spotify, YouTube) */
+.album-links {
+    display: flex;
+    gap: 10px;
+}
+
+.album-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--cor-cinza-claro);
+    border-radius: 50%;
+    transition: background-color var(--transition-rapida), transform var(--transition-rapida);
+}
+
+.album-link:hover {
+    background-color: var(--cor-vermelho);
+    transform: scale(1.1);
+}
+
+.album-link svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--cor-texto);
+}
+
+/* ============================================
+   CARDS DE ARTISTAS
+   Cards com foto circular
+   ============================================ */
+.artist-card {
+    flex: 0 0 200px;
+    text-align: center;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform var(--transition-rapida);
+}
+
+.artist-card:hover {
+    transform: translateY(-10px);
+}
+
+/* Container da foto circular */
+.artist-image-container {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 15px;
+    border-radius: 50%; /* Faz ficar circular */
+    overflow: hidden;
+    border: 3px solid var(--cor-vermelho);
+    transition: border-color var(--transition-rapida), box-shadow var(--transition-rapida);
+}
+
+.artist-card:hover .artist-image-container {
+    border-color: var(--cor-texto);
+    box-shadow: 0 0 20px rgba(152, 18, 19, 0.5);
+}
+
+/* Foto do artista - se adapta ao círculo */
+.artist-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Adapta qualquer formato ao círculo */
+    transition: transform var(--transition-media);
+}
+
+.artist-card:hover .artist-image-container img {
+    transform: scale(1.1);
+}
+
+/* Nome do artista */
+.artist-name {
+    font-family: var(--fonte-titulo);
+    font-size: 1.1rem;
+    color: var(--cor-texto);
+    margin-bottom: 5px;
+}
+
+/* Cidade do artista */
+.artist-city {
+    font-size: 0.9rem;
+    color: var(--cor-bege);
+}
+
+/* ============================================
+   BOTÃO "VER MAIS"
+   ============================================ */
+.btn-ver-mais {
+    display: block;
+    width: fit-content;
+    margin: 30px auto 0;
+    padding: 15px 40px;
+    background-color: transparent;
+    color: var(--cor-vermelho);
+    border: 2px solid var(--cor-vermelho);
+    border-radius: var(--borda-radius);
+    font-family: var(--fonte-titulo);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all var(--transition-rapida);
+}
+
+.btn-ver-mais:hover {
+    background-color: var(--cor-vermelho);
+    color: var(--cor-texto);
+}
+
+/* ============================================
+   BOTÃO VOLTAR AO TOPO / IR PARA BAIXO
+   ============================================ */
+.scroll-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--cor-vermelho);
+    color: var(--cor-texto);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-rapida);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scroll-btn.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.scroll-btn:hover {
+    background-color: var(--cor-vermelho-hover);
+    transform: scale(1.1);
+}
+
+/* ============================================
+   FOOTER (Rodapé)
+   ============================================ */
+.footer {
+    background-color: var(--cor-cinza);
+    padding: 40px 20px;
+    text-align: center;
+    border-top: 2px solid var(--cor-vermelho);
+}
+
+/* Frase do rodapé */
+.footer-quote {
+    font-family: var(--fonte-titulo);
+    font-size: 1.5rem;
+    color: var(--cor-vermelho);
+    margin-bottom: 20px;
+}
+
+/* Redes sociais */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background-color: var(--cor-cinza-claro);
+    border-radius: 50%;
+    transition: background-color var(--transition-rapida), transform var(--transition-rapida);
+}
+
+.social-link:hover {
+    background-color: var(--cor-vermelho);
+    transform: scale(1.1);
+}
+
+.social-link svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--cor-texto);
+}
+
+/* Copyright */
+.footer-copyright {
+    font-size: 0.9rem;
+    color: var(--cor-bege);
+}
+
+/* ============================================
+   PÁGINA DE LISTAGEM (Álbuns/Artistas)
+   Grid com paginação
+   ============================================ */
+.listing-page {
+    padding: 100px 20px 60px;
+}
+
+.listing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+/* Cards na listagem */
+.listing-grid .album-card,
+.listing-grid .artist-card {
+    flex: none;
+    width: 100%;
+}
+
+/* ============================================
+   PAGINAÇÃO
+   Navegação entre páginas de listagem
+   ============================================ */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+.pagination-btn {
+    width: 40px;
+    height: 40px;
+    background-color: var(--cor-cinza);
+    color: var(--cor-texto);
+    border: none;
+    border-radius: var(--borda-radius);
+    font-family: var(--fonte-titulo);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all var(--transition-rapida);
+}
+
+.pagination-btn:hover,
+.pagination-btn.active {
+    background-color: var(--cor-vermelho);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ============================================
+   PÁGINA DO ARTISTA INDIVIDUAL
+   ============================================ */
+.artist-page {
+    padding: 100px 20px 60px;
+}
+
+.artist-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.artist-page .artist-image-container {
+    width: 200px;
+    height: 200px;
+}
+
+.artist-details h1 {
+    font-family: var(--fonte-titulo);
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.artist-details .city {
+    color: var(--cor-bege);
+    margin-bottom: 20px;
+}
+
+.artist-bio {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: justify;
+    color: var(--cor-bege);
+    line-height: 1.8;
+}
+
+.artist-albums {
+    margin-top: 60px;
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   Ajustes para diferentes tamanhos de tela
+   
+   BREAKPOINTS:
+   - 768px: Tablets
+   - 480px: Celulares pequenos
+   ============================================ */
+
+/* Tablets e acima */
+@media (min-width: 768px) {
+    .navbar {
+        padding: 0 40px;
+    }
+    
+    .nav-menu {
+        position: static;
+        width: auto;
+        max-width: none;
+        height: auto;
+        background-color: transparent;
+        padding: 0;
+        display: flex;
+        gap: 30px;
+    }
+    
+    .nav-menu a {
+        padding: 0;
+        border: none;
+        font-size: 1rem;
+    }
+    
+    .hamburger {
+        display: none;
+    }
+    
+    .menu-overlay {
+        display: none;
+    }
+    
+    .hero-section {
+        padding: 60px 40px;
+    }
+    
+    .section {
+        padding: 80px 40px;
+    }
+    
+    .album-card {
+        flex: 0 0 300px;
+    }
+    
+    .artist-card {
+        flex: 0 0 220px;
+    }
+    
+    .artist-header {
+        flex-direction: row;
+        text-align: left;
+    }
+    
+    .artist-page .artist-image-container {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+/* Celulares pequenos */
+@media (max-width: 480px) {
+    .splash-logo {
+        width: 150px;
+    }
+    
+    .welcome-text {
+        font-size: 1.2rem;
+    }
+    
+    .album-card {
+        flex: 0 0 250px;
+    }
+    
+    .artist-card {
+        flex: 0 0 160px;
+    }
+    
+    .artist-image-container {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .scroll-btn {
+        width: 45px;
+        height: 45px;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* ============================================
+   UTILITÁRIOS
+   Classes auxiliares para uso geral
+   ============================================ */
+
+/* Esconde elemento */
+.hidden {
+    display: none !important;
+}
+
+/* Mostra elemento */
+.visible {
+    display: block !important;
+}
+
+/* Centraliza texto */
+.text-center {
+    text-align: center;
+}
+
+/* Texto em vermelho */
+.text-red {
+    color: var(--cor-vermelho);
+}
+
+/* Margem superior */
+.mt-20 { margin-top: 20px; }
+.mt-40 { margin-top: 40px; }
+.mt-60 { margin-top: 60px; }
+
+/* Margem inferior */
+.mb-20 { margin-bottom: 20px; }
+.mb-40 { margin-bottom: 40px; }
+
+/* ============================================
+   PROTEÇÃO DE IMAGENS
+   Dificulta o download de imagens do site
+   ============================================ */
+
+/* Bloqueia seleção e arraste de imagens */
+img {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    pointer-events: auto;
+    -webkit-touch-callout: none; /* Bloqueia menu de toque longo em iOS */
+}

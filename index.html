@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- ============================================
+    PESTE DO RATO - PÁGINA INICIAL
+    
+    Este é o arquivo HTML principal do site.
+    Cada seção está comentada para fácil entendimento.
+    
+    ESTRUTURA DO SITE:
+    1. Splash Screen (tela de carregamento)
+    2. Tela de Boas-vindas (primeira visita)
+    3. Menu de navegação
+    4. Hero (imagem + texto de apresentação)
+    5. Seção de Álbuns Hip-Hop
+    6. Seção de Artistas Hip-Hop
+    7. Seção de Álbuns Rock/Metal
+    8. Seção de Artistas Rock/Metal
+    9. Footer (rodapé)
+    ============================================ -->
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO - Modifique estas tags para melhorar busca no Google -->
+    <title>Peste do Rato - Hip Hop e Rock Paraibano</title>
+    <meta name="description" content="Movimento de valorização da cena alternativa paraibana. Hip Hop, Rock e Metal da Paraíba.">
+    <meta name="keywords" content="hip hop, rock, metal, paraíba, música, cultura, underground">
+    <meta name="author" content="Peste do Rato">
+    
+    <!-- Cor da barra de status em celulares -->
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Fontes do Google - Oswald para títulos, Poppins para texto principal, Roboto para texto secundário -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- ============================================
+    SPLASH SCREEN - Tela de Carregamento
+    
+    Aparece toda vez que o site carrega.
+    Para mudar o tempo de exibição, altere CONFIG.splashDuration no main.js
+    ============================================ -->
+    <div id="splash-screen" class="splash-screen">
+        <!-- 
+        Container da logo na splash
+        Duas versões que trocam automaticamente com o tema
+        -->
+        <div class="splash-logo-container">
+            <img 
+                src="/images/logopestedoratobranca.png" 
+                alt="Peste do Rato" 
+                class="splash-logo logo-dark"
+            >
+            <img 
+                src="/images/logopestedoratopreta.png" 
+                alt="Peste do Rato" 
+                class="splash-logo logo-light"
+            >
+        </div>
+        
+        <!-- Barra de carregamento animada -->
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
+        </div>
+    </div>
+    
+    <!-- ============================================
+    TELA DE BOAS-VINDAS - Primeira Visita
+    
+    Aparece apenas uma vez (salvo no navegador).
+    Para mostrar novamente: abra o console (F12) e digite resetWelcome()
+    Para desativar: mude CONFIG.alwaysShowWelcome para false no main.js
+    ============================================ -->
+    <div id="welcome-screen" class="welcome-screen">
+        <h1 class="welcome-text">
+            Bem-vindos à Peste do Rato, família!
+            <span>A Paraíba respira arte.</span>
+        </h1>
+    </div>
+    
+    <!-- ============================================
+    MENU DE NAVEGAÇÃO
+    
+    Menu fixo no topo com hamburger para mobile.
+    Em telas maiores, mostra menu horizontal.
+    ============================================ -->
+    <nav class="navbar">
+        <!-- Logo no menu -->
+        <a href="/" class="navbar-logo">
+            <img 
+                src="/images/logopestedoratobranca.png" 
+                alt="Peste do Rato" 
+                class="logo-img"
+            >
+        </a>
+        
+        <!-- Controles: tema + hamburger -->
+        <div class="navbar-controls">
+            <!-- 
+            Botão para alternar tema dark/light
+            Usa ícones SVG minimalistas que mudam de cor automaticamente
+            O JavaScript troca entre sol (para modo claro) e lua (para modo escuro)
+            -->
+            <button 
+                id="theme-toggle" 
+                class="theme-toggle" 
+                aria-label="Alternar tema"
+            >
+                <!-- Ícone do Sol (aparece no modo escuro) -->
+                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <!-- Ícone da Lua (aparece no modo claro) -->
+                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+            
+            <!-- Botão hamburger (3 linhas) - usa spans que mudam de cor automaticamente -->
+            <button id="hamburger" class="hamburger" aria-label="Menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+        
+        <!-- Menu lateral que abre ao clicar no hamburger -->
+        <div id="nav-menu" class="nav-menu">
+            <!-- 
+            LINKS DO MENU
+            Adicione ou remova links aqui.
+            O href deve apontar para a página correta.
+            -->
+            <a href="/">Início</a>
+            <a href="/albuns-hiphop.html">Álbuns Hip-Hop</a>
+            <a href="/artistas-hiphop.html">Artistas Hip-Hop</a>
+            <a href="/albuns-rock.html">Álbuns Rock/Metal</a>
+            <a href="/artistas-rock.html">Artistas Rock/Metal</a>
+        </div>
+    </nav>
+    
+    <!-- Overlay escuro quando menu está aberto -->
+    <div id="menu-overlay" class="menu-overlay"></div>
+    
+    <!-- ============================================
+    CONTEÚDO PRINCIPAL
+    ============================================ -->
+    <main class="main-content">
+        
+        <!-- ============================================
+        SEÇÃO HERO - Imagem Principal + Apresentação
+        ============================================ -->
+        <section class="hero-section">
+            <!-- 
+            IMAGEM PRINCIPAL
+            Agora com duas versões que trocam automaticamente com o tema:
+            - logo-dark: versão branca (aparece no fundo escuro)
+            - logo-light: versão preta (aparece no fundo claro)
+            -->
+            <div class="hero-logo-container">
+                <!-- Logo branca - para fundo escuro (modo dark) -->
+                <img 
+                    src="/images/logopestedoratobranca.png" 
+                    alt="Peste do Rato - Hip Hop e Rock Paraibano" 
+                    class="hero-image logo-dark"
+                >
+                <!-- Logo preta - para fundo claro (modo light) -->
+                <img 
+                    src="/images/logopestedoratopreta.png" 
+                    alt="Peste do Rato - Hip Hop e Rock Paraibano" 
+                    class="hero-image logo-light"
+                >
+            </div>
+            
+            <!-- Texto de apresentação - agora com fonte Poppins -->
+            <p class="hero-text">
+                Peste do Rato é um movimento de valorização da cena alternativa paraibana. 
+                Um espaço criado para fortalecer, divulgar e conectar artistas do hip hop, rock e metal 
+                que fazem da Paraíba um território de criatividade, atitude e resistência. 
+                Aqui, cada som tem voz, cada artista tem vez e cada história merece ser ouvida. 
+                <strong>083 no peito mizera, cultura viva nas ruas e a Paraíba respirando arte nesse carai.</strong>
+            </p>
+        </section>
+        
+        <!-- Animação de sangue escorrendo -->
+        <div class="blood-drip"></div>
+        
+        <!-- ============================================
+        SEÇÃO: ÁLBUNS HIP-HOP
+        ============================================ -->
+        <section class="section" id="albuns-hiphop">
+            <h2 class="section-title">Álbuns Hip-Hop</h2>
+            
+            <!-- Container do carrossel -->
+            <div class="carousel-container">
+                <!-- Botão anterior -->
+                <button class="carousel-btn prev" aria-label="Anterior">←</button>
+                
+                <!-- 
+                CARROSSEL DE ÁLBUNS
+                
+                COMO ADICIONAR UM ÁLBUM:
+                1. Copie todo o bloco <div class="album-card">...</div>
+                2. Cole abaixo do último album-card
+                3. Troque o src da imagem pela capa do álbum
+                4. Troque o título e artista
+                5. Atualize os links do Spotify e YouTube
+                
+                DICA: As imagens devem ter proporção 1:1 (quadradas)
+                -->
+                <div class="carousel">
+                    
+                    <!-- Card de Álbum 1 - EXEMPLO -->
+                    <div class="album-card">
+                        <!-- Container da imagem - mantém proporção -->
+                        <div class="album-image-container">
+                            <!-- 
+                            IMAGEM DO ÁLBUM
+                            Substitua o src pela URL da capa
+                            Formato ideal: 1000x1000px (ou qualquer quadrado)
+                            -->
+                            <img 
+                                src="https://placehold.co/500x500/1A1A1A/981213?text=Capa+Album" 
+                                alt="Nome do Álbum"
+                            >
+                        </div>
+                        
+                        <div class="album-info">
+                            <!-- Título do álbum -->
+                            <h3 class="album-title">Nome do Álbum Aqui</h3>
+                            <!-- Nome do artista -->
+                            <p class="album-artist">Nome do Artista</p>
+                            
+                            <!-- Links para plataformas -->
+                            <div class="album-links">
+                                <!-- 
+                                LINK DO SPOTIFY
+                                Substitua o href pelo link do álbum no Spotify
+                                -->
+                                <a 
+                                    href="https://open.spotify.com" 
+                                    target="_blank" 
+                                    class="album-link" 
+                                    aria-label="Ouvir no Spotify"
+                                >
+                                    <!-- Ícone do Spotify (SVG) -->
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                                    </svg>
+                                </a>
+                                
+                                <!-- 
+                                LINK DO YOUTUBE
+                                Substitua o href pelo link do álbum no YouTube
+                                -->
+                                <a 
+                                    href="https://youtube.com" 
+                                    target="_blank" 
+                                    class="album-link" 
+                                    aria-label="Assistir no YouTube"
+                                >
+                                    <!-- Ícone do YouTube (SVG) -->
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card de Álbum 2 - EXEMPLO -->
+                    <div class="album-card">
+                        <div class="album-image-container">
+                            <img 
+                                src="https://placehold.co/500x500/1A1A1A/981213?text=Album+2" 
+                                alt="Álbum 2"
+                            >
+                        </div>
+                        <div class="album-info">
+                            <h3 class="album-title">Segundo Álbum</h3>
+                            <p class="album-artist">Outro Artista</p>
+                            <div class="album-links">
+                                <a href="https://open.spotify.com" target="_blank" class="album-link" aria-label="Ouvir no Spotify">
+                                    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                                </a>
+                                <a href="https://youtube.com" target="_blank" class="album-link" aria-label="Assistir no YouTube">
+                                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card de Álbum 3 - EXEMPLO -->
+                    <div class="album-card">
+                        <div class="album-image-container">
+                            <img 
+                                src="https://placehold.co/500x500/1A1A1A/981213?text=Album+3" 
+                                alt="Álbum 3"
+                            >
+                        </div>
+                        <div class="album-info">
+                            <h3 class="album-title">Terceiro Álbum com Título Grande</h3>
+                            <p class="album-artist">MC Exemplo</p>
+                            <div class="album-links">
+                                <a href="https://open.spotify.com" target="_blank" class="album-link" aria-label="Ouvir no Spotify">
+                                    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                                </a>
+                                <a href="https://youtube.com" target="_blank" class="album-link" aria-label="Assistir no YouTube">
+                                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card de Álbum 4 -->
+                    <div class="album-card">
+                        <div class="album-image-container">
+                            <img src="https://placehold.co/500x500/1A1A1A/981213?text=Album+4" alt="Álbum 4">
+                        </div>
+                        <div class="album-info">
+                            <h3 class="album-title">Quarto Álbum</h3>
+                            <p class="album-artist">Artista 4</p>
+                            <div class="album-links">
+                                <a href="https://open.spotify.com" target="_blank" class="album-link" aria-label="Ouvir no Spotify">
+                                    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                                </a>
+                                <a href="https://youtube.com" target="_blank" class="album-link" aria-label="Assistir no YouTube">
+                                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card de Álbum 5 -->
+                    <div class="album-card">
+                        <div class="album-image-container">
+                            <img src="https://placehold.co/500x500/1A1A1A/981213?text=Album+5" alt="Álbum 5">
+                        </div>
+                        <div class="album-info">
+                            <h3 class="album-title">Quinto Álbum</h3>
+                            <p class="album-artist">Artista 5</p>
+                            <div class="album-links">
+                                <a href="https://open.spotify.com" target="_blank" class="album-link" aria-label="Ouvir no Spotify">
+                                    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                                </a>
+                                <a href="https://youtube.com" target="_blank" class="album-link" aria-label="Assistir no YouTube">
+                                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- Botão próximo -->
+                <button class="carousel-btn next" aria-label="Próximo">→</button>
+            </div>
+            
+            <!-- Botão Ver Mais - leva para página com todos os álbuns -->
+            <a href="/albuns-hiphop.html" class="btn-ver-mais">Ver Todos</a>
+        </section>
+        
+        <!-- ============================================
+        SEÇÃO: ARTISTAS HIP-HOP
+        ============================================ -->
+        <section class="section" id="artistas-hiphop">
+            <h2 class="section-title">Artistas Hip-Hop</h2>
+            
+            <div class="carousel-container">
+                <button class="carousel-btn prev" aria-label="Anterior">←</button>
+                
+                <!-- 
+                CARROSSEL DE ARTISTAS
+                
+                COMO ADICIONAR UM ARTISTA:
+                1. Copie todo o bloco <a class="artist-card">...</a>
+                2. Cole abaixo do último artist-card
+                3. Troque o href pelo link da página do artista
+                4. Troque o src da imagem pela foto
+                5. Atualize nome e cidade
+                
+                DICA: A foto será cortada em círculo, então centralize o rosto
+                -->
+                <div class="carousel">
+                    
+                    <!-- Card de Artista 1 - EXEMPLO -->
+                    <a href="/artista.html?id=1" class="artist-card">
+                        <div class="artist-image-container">
+                            <!-- 
+                            FOTO DO ARTISTA
+                            Qualquer formato funciona - será cortada em círculo
+                            Ideal: foto quadrada com rosto centralizado
+                            -->
+                            <img 
+                                src="https://placehold.co/300x300/1A1A1A/981213?text=Foto" 
+                                alt="Nome do Artista"
+                            >
+                        </div>
+                        <h3 class="artist-name">Lucas MC</h3>
+                        <p class="artist-city">Santa Rita, PB</p>
+                    </a>
+                    
+                    <!-- Card de Artista 2 -->
+                    <a href="/artista.html?id=2" class="artist-card">
+                        <div class="artist-image-container">
+                            <img src="https://placehold.co/300x300/1A1A1A/981213?text=Artista+2" alt="Artista 2">
+                        </div>
+                        <h3 class="artist-name">MC Exemplo</h3>
+                        <p class="artist-city">João Pessoa, PB</p>
+                    </a>
+                    
+                    <!-- Card de Artista 3 -->
+                    <a href="/artista.html?id=3" class="artist-card">
+                        <div class="artist-image-container">
+                            <img src="https://placehold.co/300x300/1A1A1A/981213?text=Artista+3" alt="Artista 3">
+                        </div>
+                        <h3 class="artist-name">Rapper PB</h3>
+                        <p class="artist-city">Campina Grande, PB</p>
+                    </a>
+                    
+                    <!-- Card de Artista 4 -->
+                    <a href="/artista.html?id=4" class="artist-card">
+                        <div class="artist-image-container">
+                            <img src="https://placehold.co/300x300/1A1A1A/981213?text=Artista+4" alt="Artista 4">
+                        </div>
+                        <h3 class="artist-name">DJ Underground</h3>
+                        <p class="artist-city">Bayeux, PB</p>
+                    </a>
+                    
+                    <!-- Card de Artista 5 -->
+                    <a href="/artista.html?id=5" class="artist-card">
+                        <div class="artist-image-container">
+                            <img src="https://placehold.co/300x300/1A1A1A/981213?text=Artista+5" alt="Artista 5">
+                        </div>
+                        <h3 class="artist-name">MC Paraíba</h3>
+                        <p class="artist-city">Cabedelo, PB</p>
+                    </a>
+                    
+                    <!-- Card de Artista 6 -->
+                    <a href="/artista.html?id=6" class="artist-card">
+                        <div class="artist-image-container">
+                            <img src="https://placehold.co/300x300/1A1A1A/981213?text=Artista+6" alt="Artista 6">
+                        </div>
+                        <h3 class="artist-name">Rimador 083</h3>
+                        <p class="artist-city">Guarabira, PB</p>
+                    </a>
+                    
+                </div>
+                
+                <button class="carousel-btn next" aria-label="Próximo">→</button>
+            </div>
+            
+            <a href="/artistas-hiphop.html" class="btn-ver-mais">Ver Todos</a>
+        </section>
+        
+        <!-- Separador de sangue -->
+        <div class="blood-drip"></div>
+        
+        <!-- ============================================
+        SEÇÃO: ÁLBUNS ROCK/METAL
+        ============================================ -->
+        <section class="section" id="albuns-rock">
+            <h2 class="section-title">Álbuns Rock/Metal</h2>
+            
+            <div class="carousel-container">
+                <button class="carousel-btn prev" aria-label="Anterior">←</button>
+                
+                <div class="carousel">
+                    
+                    <!-- Card de Álbum Rock 1 -->
+                    <div class="album-card">
+                        <div class="album-image-container">
+                            <img src="https://placehold.co/500x500/1A1A1A/981213?text=Rock+1" alt="Álbum Rock 1">
+                        </div>
+                        <div class="album-info">
+                            <h3 class="album-title">Álbum de Rock</h3>
+                            <p class="album-artist">Banda Exemplo</p>
+                            <div class="album-links">
+                                <a href="https://open.spotify.com" target="_blank" class="album-link" aria-label="Ouvir no Spotify">
+                                    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                                </a>
+                                <a href="https://youtube.com" target="_blank" class="album-link" aria-label="Assistir no YouTube">
+                                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card de Álbum Rock 2 -->
+                    <div class="album-card">
+                        <div class="album-image-container">
+                            <img src="https://placehold.co/500x500/1A1A1A/981213?text=Rock+2" alt="Álbum Rock 2">
+                        </div>
+                        <div class="album-info">
+                            <h3 class="album-title">Metal Paraibano</h3>
+                            <p class="album-artist">Banda Metal</p>
+                            <div class="album-links">
+                                <a href="https://open.spotify.com" target="_blank" class="album-link" aria-label="Ouvir no Spotify">
+                                    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                                </a>
+                                <a href="https://youtube.com" target="_blank" class="album-link" aria-label="Assistir no YouTube">
+                                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card de Álbum Rock 3 -->
+                    <div class="album-card">
+                        <div class="album-image-container">
+                            <img src="https://placehold.co/500x500/1A1A1A/981213?text=Rock+3" alt="Álbum Rock 3">
+                        </div>
+                        <div class="album-info">
+                            <h3 class="album-title">Hardcore PB</h3>
+                            <p class="album-artist">Banda Hardcore</p>
+                            <div class="album-links">
+                                <a href="https://open.spotify.com" target="_blank" class="album-link" aria-label="Ouvir no Spotify">
+                                    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                                </a>
+                                <a href="https://youtube.com" target="_blank" class="album-link" aria-label="Assistir no YouTube">
+                                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card de Álbum Rock 4 -->
+                    <div class="album-card">
+                        <div class="album-image-container">
+                            <img src="https://placehold.co/500x500/1A1A1A/981213?text=Rock+4" alt="Álbum Rock 4">
+                        </div>
+                        <div class="album-info">
+                            <h3 class="album-title">Punk Rock 083</h3>
+                            <p class="album-artist">Os Punks</p>
+                            <div class="album-links">
+                                <a href="https://open.spotify.com" target="_blank" class="album-link" aria-label="Ouvir no Spotify">
+                                    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                                </a>
+                                <a href="https://youtube.com" target="_blank" class="album-link" aria-label="Assistir no YouTube">
+                                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <button class="carousel-btn next" aria-label="Próximo">→</button>
+            </div>
+            
+            <a href="/albuns-rock.html" class="btn-ver-mais">Ver Todos</a>
+        </section>
+        
+        <!-- ============================================
+        SEÇÃO: ARTISTAS ROCK/METAL
+        ============================================ -->
+        <section class="section" id="artistas-rock">
+            <h2 class="section-title">Artistas Rock/Metal</h2>
+            
+            <div class="carousel-container">
+                <button class="carousel-btn prev" aria-label="Anterior">←</button>
+                
+                <div class="carousel">
+                    
+                    <!-- Card de Artista Rock 1 -->
+                    <a href="/artista.html?id=10" class="artist-card">
+                        <div class="artist-image-container">
+                            <img src="https://placehold.co/300x300/1A1A1A/981213?text=Banda+1" alt="Banda 1">
+                        </div>
+                        <h3 class="artist-name">Banda Rock PB</h3>
+                        <p class="artist-city">João Pessoa, PB</p>
+                    </a>
+                    
+                    <!-- Card de Artista Rock 2 -->
+                    <a href="/artista.html?id=11" class="artist-card">
+                        <div class="artist-image-container">
+                            <img src="https://placehold.co/300x300/1A1A1A/981213?text=Banda+2" alt="Banda 2">
+                        </div>
+                        <h3 class="artist-name">Metal Nordeste</h3>
+                        <p class="artist-city">Campina Grande, PB</p>
+                    </a>
+                    
+                    <!-- Card de Artista Rock 3 -->
+                    <a href="/artista.html?id=12" class="artist-card">
+                        <div class="artist-image-container">
+                            <img src="https://placehold.co/300x300/1A1A1A/981213?text=Banda+3" alt="Banda 3">
+                        </div>
+                        <h3 class="artist-name">Hardcore 083</h3>
+                        <p class="artist-city">Santa Rita, PB</p>
+                    </a>
+                    
+                    <!-- Card de Artista Rock 4 -->
+                    <a href="/artista.html?id=13" class="artist-card">
+                        <div class="artist-image-container">
+                            <img src="https://placehold.co/300x300/1A1A1A/981213?text=Banda+4" alt="Banda 4">
+                        </div>
+                        <h3 class="artist-name">Punk PB</h3>
+                        <p class="artist-city">Bayeux, PB</p>
+                    </a>
+                    
+                    <!-- Card de Artista Rock 5 -->
+                    <a href="/artista.html?id=14" class="artist-card">
+                        <div class="artist-image-container">
+                            <img src="https://placehold.co/300x300/1A1A1A/981213?text=Banda+5" alt="Banda 5">
+                        </div>
+                        <h3 class="artist-name">Grunge Paraíba</h3>
+                        <p class="artist-city">Patos, PB</p>
+                    </a>
+                    
+                </div>
+                
+                <button class="carousel-btn next" aria-label="Próximo">→</button>
+            </div>
+            
+            <a href="/artistas-rock.html" class="btn-ver-mais">Ver Todos</a>
+        </section>
+        
+    </main>
+    
+    <!-- ============================================
+    FOOTER - Rodapé do Site
+    ============================================ -->
+    <footer class="footer">
+        <!-- Frase de efeito -->
+        <p class="footer-quote">Foda-se o sistema, mizera!</p>
+        
+        <!-- 
+        REDES SOCIAIS
+        Adicione ou remova links conforme necessário
+        Substitua os # pelos links reais
+        -->
+        <div class="social-links">
+            <!-- Instagram -->
+            <a href="#" target="_blank" class="social-link" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+            </a>
+            
+            <!-- YouTube -->
+            <a href="#" target="_blank" class="social-link" aria-label="YouTube">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+            </a>
+            
+            <!-- Spotify -->
+            <a href="#" target="_blank" class="social-link" aria-label="Spotify">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                </svg>
+            </a>
+            
+            <!-- Twitter/X -->
+            <a href="#" target="_blank" class="social-link" aria-label="Twitter">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+            </a>
+        </div>
+        
+        <!-- Copyright -->
+        <p class="footer-copyright">
+            &copy; 2024 Peste do Rato. Todos os direitos reservados.
+        </p>
+    </footer>
+    
+    <!-- Botão de scroll (voltar ao topo / ir ao final) -->
+    <button id="scroll-btn" class="scroll-btn" aria-label="Scroll">↑</button>
+    
+    <!-- JavaScript principal -->
+    <script src="/js/main.js"></script>
+</body>
+</html>
