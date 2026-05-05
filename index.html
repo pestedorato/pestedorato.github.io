@@ -100,19 +100,12 @@
             >
         </a>
         
-        <!-- Controles: tema + hamburger -->
+        <!-- 
+        CONTROLES DA NAVBAR (tema + hamburger)
+        O botão de tema fica DO LADO do hamburger, não dentro do menu
+        -->
         <div class="navbar-controls">
-            <!-- 
-            Botão para alternar tema dark/light
-            Usa ícones SVG minimalistas que mudam de cor automaticamente
-            O JavaScript troca entre sol (para modo claro) e lua (para modo escuro)
-            -->
-            <button 
-                id="theme-toggle" 
-                class="theme-toggle" 
-                aria-label="Alternar tema"
-            >
-                <!-- Ícone do Sol (aparece no modo escuro) -->
+            <button id="theme-toggle" class="theme-toggle" aria-label="Alternar tema">
                 <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="5"></circle>
                     <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -124,13 +117,10 @@
                     <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                     <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                 </svg>
-                <!-- Ícone da Lua (aparece no modo claro) -->
                 <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                 </svg>
             </button>
-            
-            <!-- Botão hamburger (3 linhas) - usa spans que mudam de cor automaticamente -->
             <button id="hamburger" class="hamburger" aria-label="Menu">
                 <span class="hamburger-line"></span>
                 <span class="hamburger-line"></span>
@@ -140,16 +130,43 @@
         
         <!-- Menu lateral que abre ao clicar no hamburger -->
         <div id="nav-menu" class="nav-menu">
-            <!-- 
-            LINKS DO MENU
-            Adicione ou remova links aqui.
-            O href deve apontar para a página correta.
-            -->
+            <!-- Link direto para Início -->
             <a href="/">Início</a>
-            <a href="/albuns-hiphop.html">Álbuns Hip-Hop</a>
-            <a href="/artistas-hiphop.html">Artistas Hip-Hop</a>
-            <a href="/albuns-rock.html">Álbuns Rock/Metal</a>
-            <a href="/artistas-rock.html">Artistas Rock/Metal</a>
+            
+            <!-- Link direto para Faixas Hip-Hop -->
+            <a href="/faixas-hiphop.html">Faixas Hip-Hop</a>
+            
+            <!-- Artistas Hip-Hop com subcategorias -->
+            <div class="nav-item-group">
+                <div class="nav-link-main">
+                    Artistas Hip-Hop
+                    <span class="nav-arrow">▼</span>
+                </div>
+                <div class="nav-submenu">
+                    <a href="/hiphop-mcs.html">MCs</a>
+                    <a href="/hiphop-breaking.html">Breaking</a>
+                    <a href="/hiphop-djs.html">DJs</a>
+                    <a href="/hiphop-graffiti.html">Graffiti</a>
+                    <a href="/hiphop-produtores.html">Produtores</a>
+                    <a href="/hiphop-crew.html">Crew</a>
+                    <a href="/hiphop-batalhas.html">Batalhas</a>
+                </div>
+            </div>
+            
+            <!-- Link direto para Faixas Rock/Metal -->
+            <a href="/faixas-rock.html">Faixas Rock/Metal</a>
+            
+            <!-- Artistas Rock/Metal com subcategorias -->
+            <div class="nav-item-group">
+                <div class="nav-link-main">
+                    Artistas Rock/Metal
+                    <span class="nav-arrow">▼</span>
+                </div>
+                <div class="nav-submenu">
+                    <a href="/rock-bandas.html">Bandas</a>
+                    <a href="/rock-solo.html">Solo</a>
+                </div>
+            </div>
         </div>
     </nav>
     
@@ -189,7 +206,7 @@
             <!-- Texto de apresentação - agora com fonte Poppins -->
             <p class="hero-text">
                 Peste do Rato é um movimento de valorização da cena alternativa paraibana. 
-                Um espaço criado para fortalecer, divulgar e conectar artistas do hip hop, rock e metal 
+                Um espaço criado para fortalecer, divulgar e conectar artistas do hip hop, rock, metal, punk, hardcore e toda cena underground 
                 que fazem da Paraíba um território de criatividade, atitude e resistência. 
                 Aqui, cada som tem voz, cada artista tem vez e cada história merece ser ouvida. 
                 <strong>083 no peito mizera, cultura viva nas ruas e a Paraíba respirando arte nesse carai.</strong>
@@ -203,7 +220,7 @@
         SEÇÃO: ÁLBUNS HIP-HOP
         ============================================ -->
         <section class="section" id="albuns-hiphop">
-            <h2 class="section-title">Álbuns Hip-Hop</h2>
+            <h2 class="section-title">Faixas Hip-Hop</h2>
             
             <!-- Container do carrossel -->
             <div class="carousel-container">
@@ -371,7 +388,7 @@
             </div>
             
             <!-- Botão Ver Mais - leva para página com todos os álbuns -->
-            <a href="/albuns-hiphop.html" class="btn-ver-mais">Ver Todos</a>
+            <a href="/faixas-hiphop.html" class="btn-ver-mais">Ver Todos</a>
         </section>
         
         <!-- ============================================
@@ -406,30 +423,30 @@
                             Ideal: foto quadrada com rosto centralizado
                             -->
                             <img 
-                                src="https://placehold.co/300x300/1A1A1A/981213?text=Foto" 
+                                src="images/artistas/robsom.png" 
                                 alt="Nome do Artista"
                             >
                         </div>
-                        <h3 class="artist-name">Lucas MC</h3>
-                        <p class="artist-city">Santa Rita, PB</p>
+                        <h3 class="artist-name">Robsom MC</h3>
+                        <p class="artist-city">Campina Grande, PB</p>
                     </a>
                     
                     <!-- Card de Artista 2 -->
                     <a href="/artista.html?id=2" class="artist-card">
                         <div class="artist-image-container">
-                            <img src="https://placehold.co/300x300/1A1A1A/981213?text=Artista+2" alt="Artista 2">
+                            <img src="images/artistas/certy.jpg" alt="Artista 2">
                         </div>
-                        <h3 class="artist-name">MC Exemplo</h3>
+                        <h3 class="artist-name">Certy MC</h3>
                         <p class="artist-city">João Pessoa, PB</p>
                     </a>
                     
                     <!-- Card de Artista 3 -->
                     <a href="/artista.html?id=3" class="artist-card">
                         <div class="artist-image-container">
-                            <img src="https://placehold.co/300x300/1A1A1A/981213?text=Artista+3" alt="Artista 3">
+                            <img src="images/artistas/rank.jpg" alt="Artista 3">
                         </div>
-                        <h3 class="artist-name">Rapper PB</h3>
-                        <p class="artist-city">Campina Grande, PB</p>
+                        <h3 class="artist-name">Rank</h3>
+                        <p class="artist-city">João Pessoa, PB</p>
                     </a>
                     
                     <!-- Card de Artista 4 -->
@@ -464,7 +481,7 @@
                 <button class="carousel-btn next" aria-label="Próximo">→</button>
             </div>
             
-            <a href="/artistas-hiphop.html" class="btn-ver-mais">Ver Todos</a>
+            <a href="/hiphop-mcs.html" class="btn-ver-mais">Ver Todos</a>
         </section>
         
         <!-- Separador de sangue -->
@@ -474,7 +491,7 @@
         SEÇÃO: ÁLBUNS ROCK/METAL
         ============================================ -->
         <section class="section" id="albuns-rock">
-            <h2 class="section-title">Álbuns Rock/Metal</h2>
+            <h2 class="section-title">Faixas Rock/Metal</h2>
             
             <div class="carousel-container">
                 <button class="carousel-btn prev" aria-label="Anterior">←</button>
@@ -562,14 +579,14 @@
                 <button class="carousel-btn next" aria-label="Próximo">→</button>
             </div>
             
-            <a href="/albuns-rock.html" class="btn-ver-mais">Ver Todos</a>
+            <a href="/faixas-rock.html" class="btn-ver-mais">Ver Todos</a>
         </section>
         
         <!-- ============================================
         SEÇÃO: ARTISTAS ROCK/METAL
         ============================================ -->
         <section class="section" id="artistas-rock">
-            <h2 class="section-title">Artistas Rock/Metal</h2>
+            <h2 class="section-title">Bandas/Artistas Rock/Metal</h2>
             
             <div class="carousel-container">
                 <button class="carousel-btn prev" aria-label="Anterior">←</button>
@@ -626,7 +643,7 @@
                 <button class="carousel-btn next" aria-label="Próximo">→</button>
             </div>
             
-            <a href="/artistas-rock.html" class="btn-ver-mais">Ver Todos</a>
+            <a href="/rock-bandas.html" class="btn-ver-mais">Ver Todos</a>
         </section>
         
     </main>
@@ -675,7 +692,7 @@
         
         <!-- Copyright -->
         <p class="footer-copyright">
-            &copy; 2024 Peste do Rato. Todos os direitos reservados.
+            &copy; 2026 Peste do Rato. Todos os direitos reservados.
         </p>
     </footer>
     

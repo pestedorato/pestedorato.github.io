@@ -4,52 +4,63 @@
     <!-- ============================================
     PESTE DO RATO - PÁGINA INDIVIDUAL DO ARTISTA
     
-    Esta página mostra informações detalhadas de um artista.
-    O conteúdo é carregado via JavaScript baseado no ID da URL.
+    Esta página carrega as informações do artista baseado no ID na URL.
+    Exemplo: /artista.html?id=1 carrega o artista com ID 1
     
     COMO FUNCIONA:
-    - A URL contém o ID do artista: artista.html?id=1
-    - O JavaScript carrega os dados do artista correspondente
-    - Você pode adicionar mais artistas no objeto 'artistsData' no script
+    1. O JavaScript pega o ID da URL (?id=X)
+    2. Busca os dados do artista no objeto ARTISTAS
+    3. Preenche a página com as informações
     
     COMO ADICIONAR UM NOVO ARTISTA:
-    1. No script abaixo, adicione um novo objeto no 'artistsData'
-    2. Use um ID único (número)
-    3. Preencha todas as informações do artista
+    1. Vá até o objeto ARTISTAS no final deste arquivo
+    2. Adicione uma nova entrada com um ID único
+    3. Preencha: nome, categoria, cidade, foto, biografia, redes sociais
+    
+    CATEGORIAS DISPONÍVEIS:
+    - mc (MCs/Rappers)
+    - dj (DJs)
+    - breaking (B-Boys/B-Girls)
+    - graffiti (Grafiteiros)
+    - produtor (Produtores)
+    - crew (Crews/Grupos)
+    - batalha (Batalhas de Rap)
+    - banda (Bandas de Rock/Metal)
+    - solo (Artistas Solo Rock/Metal)
+    
+    Para linkar um artista no carrossel ou listagem, use:
+    <a href="/artista.html?id=NUMERO">
     ============================================ -->
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artista - Peste do Rato</title>
-    <meta name="description" content="Conheça os artistas da cena hip hop, rock e metal da Paraíba.">
+    <meta name="description" content="Perfil do artista da cena paraibana. Peste do Rato.">
     <meta name="theme-color" content="#000000">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="/css/styles.css">
     
-    <!-- Estilos específicos para página do artista -->
+    <!-- Estilos específicos da página do artista -->
     <style>
-        /* Container principal do artista */
-        .artist-profile {
-            padding: 100px 20px 60px;
-            max-width: 1000px;
+        .artist-page {
+            padding: 40px 20px;
+            max-width: 900px;
             margin: 0 auto;
         }
         
-        /* Cabeçalho do perfil */
-        .artist-profile-header {
+        .artist-header {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
         
-        /* Foto grande do artista */
-        .artist-profile-image {
+        .artist-photo {
             width: 200px;
             height: 200px;
             border-radius: 50%;
@@ -58,111 +69,180 @@
             margin-bottom: 20px;
         }
         
-        .artist-profile-image img {
+        .artist-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
         
-        /* Nome do artista */
-        .artist-profile-name {
+        .artist-name-title {
             font-family: var(--fonte-titulo);
-            font-size: 2.5rem;
-            margin-bottom: 5px;
+            font-size: clamp(2rem, 5vw, 3rem);
             color: var(--cor-texto);
+            margin-bottom: 10px;
         }
         
-        /* Cidade do artista */
-        .artist-profile-city {
-            font-size: 1.2rem;
-            color: var(--cor-vermelho);
-            margin-bottom: 20px;
-        }
-        
-        /* Gênero musical */
-        .artist-profile-genre {
+        .artist-category {
             display: inline-block;
-            background-color: var(--cor-cinza);
-            padding: 8px 20px;
+            background-color: var(--cor-vermelho);
+            color: #fff;
+            padding: 5px 15px;
             border-radius: 20px;
             font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .artist-location {
             color: var(--cor-bege);
-            margin-bottom: 20px;
+            font-size: 1.1rem;
         }
         
-        /* Links de redes sociais */
-        .artist-social-links {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-        
-        .artist-social-link {
-            width: 45px;
-            height: 45px;
+        .artist-bio {
             background-color: var(--cor-cinza);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color var(--transition-rapida), transform var(--transition-rapida);
+            padding: 30px;
+            border-radius: var(--card-radius);
+            margin-bottom: 30px;
         }
         
-        .artist-social-link:hover {
-            background-color: var(--cor-vermelho);
-            transform: scale(1.1);
-        }
-        
-        .artist-social-link svg {
-            width: 22px;
-            height: 22px;
-            fill: var(--cor-texto);
-        }
-        
-        /* Biografia */
-        .artist-bio-section {
-            margin-bottom: 50px;
-        }
-        
-        .artist-bio-title {
+        .artist-bio h2 {
             font-family: var(--fonte-titulo);
             font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: var(--cor-vermelho);
+            color: var(--cor-texto);
+            margin-bottom: 15px;
         }
         
-        .artist-bio-text {
+        .artist-bio p {
+            font-family: 'Poppins', sans-serif;
             color: var(--cor-bege);
             line-height: 1.8;
             text-align: justify;
         }
         
-        /* Seção de álbuns do artista */
-        .artist-albums-section {
-            margin-top: 50px;
+        .artist-social {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
         }
         
-        .artist-albums-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
+        .artist-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: var(--cor-cinza);
+            border-radius: 50%;
+            transition: background-color var(--transition-rapida), transform var(--transition-rapida);
         }
         
-        /* Responsividade */
+        .artist-social a:hover {
+            background-color: var(--cor-vermelho);
+            transform: scale(1.1);
+        }
+        
+        .artist-social svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--cor-texto);
+        }
+        
+        .artist-not-found {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .artist-not-found h1 {
+            font-family: var(--fonte-titulo);
+            font-size: 2rem;
+            color: var(--cor-vermelho);
+            margin-bottom: 20px;
+        }
+        
+        .artist-not-found p {
+            color: var(--cor-bege);
+            margin-bottom: 30px;
+        }
+        
+        /* ============================================
+           SEÇÃO DE DISCOGRAFIA (Embed do Spotify)
+           
+           Esta seção mostra o perfil do Spotify do artista incorporado.
+           
+           COMO FUNCIONA:
+           - Cada artista pode ter um campo "spotifyEmbedId" com o ID do artista no Spotify
+           - O ID é a parte final da URL do artista no Spotify
+           - Exemplo: https://open.spotify.com/artist/2HiXSO6Cb6ObIrtLt47iAZ
+           -          O ID seria: 2HiXSO6Cb6ObIrtLt47iAZ
+           
+           PERSONALIZAÇÕES DO EMBED:
+           - theme=0: Tema escuro (preto/cinza) - combina com o site
+           - theme=1: Tema claro (branco)
+           - Para mudar a altura: altere o valor de height no iframe (padrão: 352px)
+           - Para mudar a largura: o iframe usa 100% da largura do container
+           
+           COMO OBTER O ID DO SPOTIFY:
+           1. Vá ao perfil do artista no Spotify
+           2. Clique em "..." > Compartilhar > Copiar link do artista
+           3. O link terá formato: https://open.spotify.com/artist/XXXXXXXXXX
+           4. O ID é o código após "/artist/"
+           ============================================ */
+        .artist-discography {
+            background-color: var(--cor-cinza);
+            padding: 30px;
+            border-radius: var(--card-radius);
+            margin-bottom: 30px;
+        }
+        
+        .artist-discography h2 {
+            font-family: var(--fonte-titulo);
+            font-size: 1.5rem;
+            color: var(--cor-texto);
+            margin-bottom: 20px;
+        }
+        
+        /* 
+        Container do iframe do Spotify
+        - border-radius: mantém bordas arredondadas no embed
+        - overflow: hidden: garante que o iframe respeite o border-radius
+        */
+        .spotify-embed-container {
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #121212; /* Cor de fundo do Spotify enquanto carrega */
+        }
+        
+        /* 
+        Iframe do Spotify
+        - width: 100%: ocupa toda a largura disponível
+        - min-height: 352px: altura mínima recomendada pelo Spotify
+        - border: none: remove borda padrão do iframe
+        */
+        .spotify-embed-container iframe {
+            width: 100%;
+            min-height: 352px;
+            border: none;
+            display: block;
+        }
+        
+        /* Responsividade: em telas menores, pode ajustar a altura */
+        @media (max-width: 480px) {
+            .spotify-embed-container iframe {
+                min-height: 300px;
+            }
+        }
+        
         @media (min-width: 768px) {
-            .artist-profile-header {
+            .artist-header {
                 flex-direction: row;
                 text-align: left;
-                gap: 40px;
+                gap: 30px;
             }
             
-            .artist-profile-image {
-                width: 250px;
-                height: 250px;
-            }
-            
-            .artist-social-links {
-                justify-content: flex-start;
+            .artist-photo {
+                margin-bottom: 0;
             }
         }
     </style>
@@ -198,22 +278,42 @@
         </div>
         
         <div id="nav-menu" class="nav-menu">
-            <a href="/">Início</a>
-            <a href="/albuns-hiphop.html">Álbuns Hip-Hop</a>
-            <a href="/artistas-hiphop.html">Artistas Hip-Hop</a>
-            <a href="/albuns-rock.html">Álbuns Rock/Metal</a>
-            <a href="/artistas-rock.html">Artistas Rock/Metal</a>
+            <a href="/">Inicio</a>
+            <a href="/faixas-hiphop.html">Faixas Hip-Hop</a>
+            <div class="nav-item-group">
+                <div class="nav-link-main">
+                    Artistas Hip-Hop
+                    <span class="nav-arrow">▼</span>
+                </div>
+                <div class="nav-submenu">
+                    <a href="/hiphop-mcs.html">MCs</a>
+                    <a href="/hiphop-breaking.html">Breaking</a>
+                    <a href="/hiphop-djs.html">DJs</a>
+                    <a href="/hiphop-graffiti.html">Graffiti</a>
+                    <a href="/hiphop-produtores.html">Produtores</a>
+                    <a href="/hiphop-crew.html">Crew</a>
+                    <a href="/hiphop-batalhas.html">Batalhas</a>
+                </div>
+            </div>
+            <a href="/faixas-rock.html">Faixas Rock/Metal</a>
+            <div class="nav-item-group">
+                <div class="nav-link-main">
+                    Artistas Rock/Metal
+                    <span class="nav-arrow">▼</span>
+                </div>
+                <div class="nav-submenu">
+                    <a href="/rock-bandas.html">Bandas</a>
+                    <a href="/rock-solo.html">Solo</a>
+                </div>
+            </div>
         </div>
     </nav>
     
     <div id="menu-overlay" class="menu-overlay"></div>
     
     <main class="main-content">
-        <!-- Conteúdo será carregado pelo JavaScript -->
-        <div id="artist-content" class="artist-profile">
-            <!-- Placeholder enquanto carrega -->
-            <p class="text-center">Carregando...</p>
-        </div>
+        <!-- Conteúdo será preenchido pelo JavaScript -->
+        <div id="artist-content"></div>
     </main>
     
     <footer class="footer">
@@ -229,331 +329,433 @@
                 <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
             </a>
         </div>
-        <p class="footer-copyright">&copy; 2024 Peste do Rato. Todos os direitos reservados.</p>
+        <p class="footer-copyright">&copy; 2026 Peste do Rato. Todos os direitos reservados.</p>
     </footer>
     
     <button id="scroll-btn" class="scroll-btn" aria-label="Scroll">↑</button>
     
-    <!-- JavaScript principal -->
     <script src="/js/main.js"></script>
     
-    <!-- Script específico para carregar dados do artista -->
     <script>
-        /* ============================================
-        DADOS DOS ARTISTAS
+    /* ============================================
+       BANCO DE DADOS DOS ARTISTAS
+       
+       COMO ADICIONAR UM NOVO ARTISTA:
+       1. Copie um bloco de artista existente
+       2. Mude o número do ID (deve ser único)
+       3. Preencha os dados
+       
+       CAMPOS:
+       - id: número único do artista
+       - nome: nome artístico
+       - categoria: mc, dj, breaking, graffiti, produtor, crew, batalha, banda, solo
+       - cidade: cidade de origem
+       - foto: URL da foto (pode ser link externo ou /images/artistas/nome.jpg)
+       - biografia: texto sobre o artista (pode usar <br> para quebra de linha)
+       - instagram: link completo do Instagram (ou null se não tiver)
+       - youtube: link completo do YouTube (ou null se não tiver)
+       - spotify: link completo do Spotify (ou null se não tiver)
+       - soundcloud: link completo do SoundCloud (ou null se não tiver)
+       - spotifyEmbedId: ID do artista no Spotify para incorporar o player (ou null se não tiver)
+       
+       ============================================
+       COMO OBTER O SPOTIFY EMBED ID:
+       
+       1. Acesse o Spotify Web (open.spotify.com) ou app desktop
+       2. Vá até o perfil do artista
+       3. Clique nos 3 pontos (...) > Compartilhar > Incorporar artista
+       4. No código gerado, encontre a URL no src do iframe
+       5. O ID está após "/artist/" na URL
+       
+       Exemplo:
+       - URL do embed: https://open.spotify.com/embed/artist/2HiXSO6Cb6ObIrtLt47iAZ
+       - O spotifyEmbedId seria: "2HiXSO6Cb6ObIrtLt47iAZ"
+       
+       OU simplesmente:
+       1. Copie o link do perfil do artista
+       2. O ID é a parte final: https://open.spotify.com/artist/XXXXXXX
+       3. Use o XXXXXXX como spotifyEmbedId
+       ============================================
+       
+       EXEMPLO PARA CADA CATEGORIA:
+       
+       MC (Rapper):
+       { id: 100, nome: "MC Exemplo", categoria: "mc", cidade: "João Pessoa, PB", ..., spotifyEmbedId: "ID_AQUI" }
+       
+       DJ:
+       { id: 200, nome: "DJ Exemplo", categoria: "dj", cidade: "Campina Grande, PB", ..., spotifyEmbedId: null }
+       
+       B-Boy/B-Girl (Breaking):
+       { id: 300, nome: "B-Boy Exemplo", categoria: "breaking", cidade: "Guarabira, PB", ..., spotifyEmbedId: null }
+       
+       Grafiteiro:
+       { id: 400, nome: "Grafiteiro Exemplo", categoria: "graffiti", cidade: "Patos, PB", ..., spotifyEmbedId: null }
+       
+       Produtor:
+       { id: 500, nome: "Produtor Exemplo", categoria: "produtor", cidade: "Bayeux, PB", ..., spotifyEmbedId: "ID_AQUI" }
+       
+       Crew:
+       { id: 600, nome: "Crew Exemplo", categoria: "crew", cidade: "Paraíba", ..., spotifyEmbedId: null }
+       
+       Batalha:
+       { id: 700, nome: "Batalha Exemplo", categoria: "batalha", cidade: "João Pessoa, PB", ..., spotifyEmbedId: null }
+       
+       Banda Rock/Metal:
+       { id: 800, nome: "Banda Exemplo", categoria: "banda", cidade: "Campina Grande, PB", ..., spotifyEmbedId: "ID_AQUI" }
+       
+       Artista Solo Rock/Metal:
+       { id: 900, nome: "Artista Solo Exemplo", categoria: "solo", cidade: "João Pessoa, PB", ..., spotifyEmbedId: "ID_AQUI" }
+    ============================================ */
+    
+    const ARTISTAS = {
+        // ====================================
+        // MCs (IDs 1-99)
+        // ====================================
+        1: {
+            id: 1,
+            nome: "Robsom MC",
+            categoria: "mc",
+            cidade: "Campina Grande, PB",
+            foto: "/images/artistas/robsom.png",
+            biografia: "Robsom MC é um dos principais nomes do hip-hop paraibano. Natural de Campina Grande, começou sua trajetória nas batalhas de rima da cidade e hoje é referência na cena underground do Nordeste.<br><br>Com letras que retratam a realidade das periferias e a cultura nordestina, Robsom representa a essência do rap consciente brasileiro.",
+            instagram: "https://www.instagram.com/robsom.mc/",
+            youtube: "https://www.youtube.com/channel/UCHIlVebziJZ6QsIQJKzazJw",
+            spotify: "https://open.spotify.com/intl-pt/artist/2HiXSO6Cb6ObIrtLt47iAZ?go=1&sp_cid=d44ff7fdc9c83d22b4eed02f567c71dc&t=3&utm_source=embed_player_p&utm_medium=mobile&nd=1&dlsi=2a486fc45c2a457b",
+            soundcloud: null,
+            /* ============================================
+               SPOTIFY EMBED ID
+               
+               Este é o ID do artista no Spotify para incorporar o player.
+               
+               COMO ENCONTRAR O ID:
+               1. Abra o Spotify e vá ao perfil do artista
+               2. Clique nos 3 pontos (...) > Compartilhar > Incorporar artista
+               3. No código gerado, procure o ID na URL após "/artist/"
+               4. Exemplo: src="https://open.spotify.com/embed/artist/2HiXSO6Cb6ObIrtLt47iAZ"
+               5. O ID é: 2HiXSO6Cb6ObIrtLt47iAZ
+               
+               Se o artista não tem Spotify, deixe como null
+            ============================================ */
+            spotifyEmbedId: "2HiXSO6Cb6ObIrtLt47iAZ" // ID do Robsom MC no Spotify
+        },
+        2: {
+            id: 2,
+            nome: "Certy MC",
+            categoria: "mc",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/certy.jpg",
+            biografia: "Certy MC é um rapper de João Pessoa que vem ganhando destaque na cena hip-hop paraibana. Conhecido pelo flow único e letras impactantes, representa a nova geração do rap nordestino.",
+            instagram: "https://instagram.com/certymc",
+            youtube: "https://youtube.com/@certymc",
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+        },
+        3: {
+            id: 3,
+            nome: "Rank",
+            categoria: "mc",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/rank.jpg",
+            biografia: "Rank é um MC de João Pessoa conhecido por suas performances intensas e letras que abordam temas sociais. Participante ativo das batalhas de rima da capital paraibana.",
+            instagram: "https://instagram.com/rankmc",
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+        },
+        4: {
+            id: 4,
+            nome: "DJ Underground",
+            categoria: "dj",
+            cidade: "Bayeux, PB",
+            foto: "https://placehold.co/300x300/1A1A1A/981213?text=DJ",
+            biografia: "DJ Underground é um dos DJs mais respeitados da cena hip-hop paraibana. Responsável por sets em diversos eventos e batalhas, traz sempre as melhores batidas para a comunidade.",
+            instagram: null,
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+        },
+        5: {
+            id: 5,
+            nome: "MC Paraíba",
+            categoria: "mc",
+            cidade: "Cabedelo, PB",
+            foto: "https://placehold.co/300x300/1A1A1A/981213?text=MC",
+            biografia: "MC Paraíba representa a força do hip-hop litorâneo. Nascido em Cabedelo, carrega nas rimas a essência da cultura nordestina misturada com a brisa do mar.",
+            instagram: null,
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+        },
+        6: {
+            id: 6,
+            nome: "Rimador 083",
+            categoria: "mc",
+            cidade: "Guarabira, PB",
+            foto: "https://placehold.co/300x300/1A1A1A/981213?text=083",
+            biografia: "Rimador 083 é um MC do interior da Paraíba que leva o nome do estado com orgulho. Suas letras falam sobre a vida no sertão e a resistência do povo nordestino.",
+            instagram: null,
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+        },
+        20: {
+            id: 20,
+            nome: "Rank MC",
+            categoria: "mc",
+            cidade: "João Pessoa, PB",
+            foto: "https://placehold.co/300x300/1A1A1A/981213?text=Rank+MC",
+            biografia: "Rank MC é mais um talento da capital paraibana, trazendo rimas afiadas e conteúdo de qualidade para a cena local.",
+            instagram: null,
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+        },
         
-        COMO ADICIONAR UM NOVO ARTISTA:
-        1. Copie um objeto existente
-        2. Mude o ID (deve ser único)
-        3. Preencha os dados do artista
-        4. Adicione os álbuns dele no array 'albums'
-        
-        ESTRUTURA DO OBJETO:
-        {
-            id: número único,
-            name: "Nome do Artista",
-            city: "Cidade, PB",
-            genre: "Hip-Hop" ou "Rock/Metal",
-            image: "URL da foto",
-            bio: "Biografia do artista...",
-            spotify: "URL do Spotify (ou null)",
-            youtube: "URL do YouTube (ou null)",
-            instagram: "URL do Instagram (ou null)",
-            albums: [
-                {
-                    title: "Nome do Álbum",
-                    image: "URL da capa",
-                    spotify: "URL do álbum no Spotify",
-                    youtube: "URL do álbum no YouTube"
-                }
-            ]
+        // ====================================
+        // BANDAS ROCK/METAL (IDs 10-19)
+        // ====================================
+        10: {
+            id: 10,
+            nome: "Banda Rock PB",
+            categoria: "banda",
+            cidade: "João Pessoa, PB",
+            foto: "https://placehold.co/300x300/1A1A1A/981213?text=Rock",
+            biografia: "Banda Rock PB é uma das pioneiras do rock paraibano. Com mais de uma década de estrada, já se apresentou em diversos festivais do Nordeste.",
+            instagram: null,
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+        },
+        11: {
+            id: 11,
+            nome: "Metal Nordeste",
+            categoria: "banda",
+            cidade: "Campina Grande, PB",
+            foto: "https://placehold.co/300x300/1A1A1A/981213?text=Metal",
+            biografia: "Metal Nordeste traz o peso do metal com a energia do sertão. Uma banda que mistura influências do heavy metal clássico com elementos da cultura nordestina.",
+            instagram: null,
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+        },
+        12: {
+            id: 12,
+            nome: "Hardcore 083",
+            categoria: "banda",
+            cidade: "Santa Rita, PB",
+            foto: "https://placehold.co/300x300/1A1A1A/981213?text=HC",
+            biografia: "Hardcore 083 representa a cena hardcore paraibana. Letras diretas, riffs pesados e uma atitude que não aceita meios termos.",
+            instagram: null,
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+        },
+        13: {
+            id: 13,
+            nome: "Punk PB",
+            categoria: "banda",
+            cidade: "Bayeux, PB",
+            foto: "https://placehold.co/300x300/1A1A1A/981213?text=Punk",
+            biografia: "Punk PB carrega a bandeira do punk rock na Paraíba. Músicas rápidas, letras de protesto e muita energia no palco.",
+            instagram: null,
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+        },
+        14: {
+            id: 14,
+            nome: "Grunge Paraíba",
+            categoria: "banda",
+            cidade: "Patos, PB",
+            foto: "https://placehold.co/300x300/1A1A1A/981213?text=Grunge",
+            biografia: "Grunge Paraíba traz o som de Seattle para o interior do Nordeste. Guitarras sujas, vocais emotivos e uma atmosfera única.",
+            instagram: null,
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
         }
-        ============================================ */
         
-        const artistsData = {
-            // ===== ARTISTAS HIP-HOP =====
-            
-            1: {
-                id: 1,
-                name: "Lucas MC",
-                city: "Santa Rita, PB",
-                genre: "Hip-Hop",
-                image: "https://placehold.co/300x300/1A1A1A/981213?text=Lucas+MC",
-                bio: "Lucas MC é um rapper de Santa Rita que representa a cena underground paraibana desde 2015. Com letras que retratam a realidade das ruas e a luta diária do povo nordestino, ele se tornou uma voz importante do hip hop local. Suas rimas misturam crítica social com storytelling, criando músicas que conectam com a juventude das periferias da Paraíba.",
-                spotify: "https://open.spotify.com",
-                youtube: "https://youtube.com",
-                instagram: "https://instagram.com",
-                albums: [
-                    {
-                        title: "Rimas do Sertão",
-                        image: "https://placehold.co/300x300/1A1A1A/981213?text=Album+1",
-                        spotify: "https://open.spotify.com",
-                        youtube: "https://youtube.com"
-                    },
-                    {
-                        title: "083 no Peito",
-                        image: "https://placehold.co/300x300/1A1A1A/981213?text=Album+2",
-                        spotify: "https://open.spotify.com",
-                        youtube: "https://youtube.com"
-                    }
-                ]
-            },
-            
-            2: {
-                id: 2,
-                name: "MC Exemplo",
-                city: "João Pessoa, PB",
-                genre: "Hip-Hop",
-                image: "https://placehold.co/300x300/1A1A1A/981213?text=MC+Exemplo",
-                bio: "MC Exemplo representa a nova geração do rap paraibano. Nascido e criado em João Pessoa, ele traz um som moderno que mistura trap com elementos regionais. Suas batidas pesadas e letras conscientes conquistaram uma legião de fãs em toda a região.",
-                spotify: "https://open.spotify.com",
-                youtube: "https://youtube.com",
-                instagram: "https://instagram.com",
-                albums: [
-                    {
-                        title: "Nordeste Trap",
-                        image: "https://placehold.co/300x300/1A1A1A/981213?text=Trap",
-                        spotify: "https://open.spotify.com",
-                        youtube: "https://youtube.com"
-                    }
-                ]
-            },
-            
-            3: {
-                id: 3,
-                name: "Rapper PB",
-                city: "Campina Grande, PB",
-                genre: "Hip-Hop",
-                image: "https://placehold.co/300x300/1A1A1A/981213?text=Rapper+PB",
-                bio: "Direto de Campina Grande, Rapper PB é conhecido por suas batalhas de rima e pela energia explosiva nos shows. Ele é um dos responsáveis por fortalecer a cena hip hop no interior da Paraíba.",
-                spotify: "https://open.spotify.com",
-                youtube: "https://youtube.com",
-                instagram: null,
-                albums: []
-            },
-            
-            4: {
-                id: 4,
-                name: "DJ Underground",
-                city: "Bayeux, PB",
-                genre: "Hip-Hop",
-                image: "https://placehold.co/300x300/1A1A1A/981213?text=DJ",
-                bio: "DJ Underground é o produtor por trás de vários hits do hip hop paraibano. Suas batidas são reconhecidas pelo peso e originalidade, misturando samples de forró e coco com boom bap clássico.",
-                spotify: "https://open.spotify.com",
-                youtube: "https://youtube.com",
-                instagram: "https://instagram.com",
-                albums: []
-            },
-            
-            5: {
-                id: 5,
-                name: "MC Paraíba",
-                city: "Cabedelo, PB",
-                genre: "Hip-Hop",
-                image: "https://placehold.co/300x300/1A1A1A/981213?text=MC+PB",
-                bio: "MC Paraíba representa o litoral paraibano com orgulho. Suas músicas falam sobre a vida nas praias, as dificuldades dos pescadores e a resistência do povo nordestino.",
-                spotify: null,
-                youtube: "https://youtube.com",
-                instagram: "https://instagram.com",
-                albums: []
-            },
-            
-            6: {
-                id: 6,
-                name: "Rimador 083",
-                city: "Guarabira, PB",
-                genre: "Hip-Hop",
-                image: "https://placehold.co/300x300/1A1A1A/981213?text=Rimador",
-                bio: "Rimador 083 é sinônimo de freestyle na Paraíba. Campeão de várias batalhas, ele é respeitado pela capacidade de improvisar e pela técnica apurada.",
-                spotify: "https://open.spotify.com",
-                youtube: "https://youtube.com",
-                instagram: "https://instagram.com",
-                albums: []
-            },
-            
-            // ===== ARTISTAS ROCK/METAL =====
-            
-            10: {
-                id: 10,
-                name: "Banda Rock PB",
-                city: "João Pessoa, PB",
-                genre: "Rock/Metal",
-                image: "https://placehold.co/300x300/1A1A1A/981213?text=Rock+PB",
-                bio: "A Banda Rock PB é uma das mais antigas e respeitadas do rock paraibano. Formada em 2005, a banda já dividiu palco com grandes nomes do rock nacional e mantém viva a chama do rock n roll no Nordeste.",
-                spotify: "https://open.spotify.com",
-                youtube: "https://youtube.com",
-                instagram: "https://instagram.com",
-                albums: [
-                    {
-                        title: "Resistência",
-                        image: "https://placehold.co/300x300/1A1A1A/981213?text=Resistencia",
-                        spotify: "https://open.spotify.com",
-                        youtube: "https://youtube.com"
-                    }
-                ]
-            },
-            
-            11: {
-                id: 11,
-                name: "Metal Nordeste",
-                city: "Campina Grande, PB",
-                genre: "Rock/Metal",
-                image: "https://placehold.co/300x300/1A1A1A/981213?text=Metal",
-                bio: "Metal Nordeste é a banda de heavy metal mais pesada da Paraíba. Com riffs destruidores e vocais guturais, eles representam a cena extrema do estado desde 2010.",
-                spotify: "https://open.spotify.com",
-                youtube: "https://youtube.com",
-                instagram: null,
-                albums: []
-            },
-            
-            12: {
-                id: 12,
-                name: "Hardcore 083",
-                city: "Santa Rita, PB",
-                genre: "Rock/Metal",
-                image: "https://placehold.co/300x300/1A1A1A/981213?text=HC+083",
-                bio: "Hardcore 083 representa a cena straight edge da Paraíba. Shows intensos, mosh pits violentos e mensagens de conscientização são a marca registrada da banda.",
-                spotify: null,
-                youtube: "https://youtube.com",
-                instagram: "https://instagram.com",
-                albums: []
-            },
-            
-            13: {
-                id: 13,
-                name: "Punk PB",
-                city: "Bayeux, PB",
-                genre: "Rock/Metal",
-                image: "https://placehold.co/300x300/1A1A1A/981213?text=Punk",
-                bio: "Punk PB mantém vivo o espírito do punk rock 77 na Paraíba. Três acordes, muita atitude e letras que criticam o sistema são os ingredientes do som da banda.",
-                spotify: "https://open.spotify.com",
-                youtube: "https://youtube.com",
-                instagram: "https://instagram.com",
-                albums: []
-            },
-            
-            14: {
-                id: 14,
-                name: "Grunge Paraíba",
-                city: "Patos, PB",
-                genre: "Rock/Metal",
-                image: "https://placehold.co/300x300/1A1A1A/981213?text=Grunge",
-                bio: "Grunge Paraíba traz a melancolia de Seattle para o sertão nordestino. Sons sujos, letras introspectivas e uma energia única que mistura o rock alternativo com a realidade do interior.",
-                spotify: "https://open.spotify.com",
-                youtube: "https://youtube.com",
-                instagram: null,
-                albums: []
-            }
-        };
+        // ====================================
+        // ADICIONE MAIS ARTISTAS AQUI
+        // 
+        // Lembre-se:
+        // - Use IDs únicos
+        // - IDs 1-99: MCs
+        // - IDs 100-199: DJs
+        // - IDs 200-299: Breaking (B-Boys/B-Girls)
+        // - IDs 300-399: Graffiti
+        // - IDs 400-499: Produtores
+        // - IDs 500-599: Crews
+        // - IDs 600-699: Batalhas
+        // - IDs 700-799: Bandas Rock/Metal
+        // - IDs 800-899: Solo Rock/Metal
+        // ====================================
+    };
+    
+    // Mapeamento de categorias para labels bonitos
+    const CATEGORIAS_LABEL = {
+        mc: "MC",
+        dj: "DJ",
+        breaking: "Breaking",
+        graffiti: "Graffiti",
+        produtor: "Produtor",
+        crew: "Crew",
+        batalha: "Batalha",
+        banda: "Banda",
+        solo: "Artista Solo"
+    };
+    
+    // Função para carregar o artista baseado no ID da URL
+    function carregarArtista() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const artistaId = urlParams.get('id');
+        const container = document.getElementById('artist-content');
         
-        /**
-         * Carrega os dados do artista baseado no ID da URL
-         */
-        function loadArtist() {
-            // Pega o ID da URL (ex: artista.html?id=1)
-            const urlParams = new URLSearchParams(window.location.search);
-            const artistId = parseInt(urlParams.get('id'));
-            
-            const container = document.getElementById('artist-content');
-            
-            // Verifica se o artista existe
-            if (!artistId || !artistsData[artistId]) {
-                container.innerHTML = `
-                    <div class="text-center">
-                        <h1 class="section-title">Artista não encontrado</h1>
-                        <p>O artista que você está procurando não existe.</p>
-                        <a href="/" class="btn-ver-mais mt-40">Voltar ao Início</a>
-                    </div>
-                `;
-                return;
-            }
-            
-            const artist = artistsData[artistId];
-            
-            // Atualiza o título da página
-            document.title = `${artist.name} - Peste do Rato`;
-            
-            // Gera o HTML do perfil
-            let albumsHTML = '';
-            if (artist.albums && artist.albums.length > 0) {
-                albumsHTML = `
-                    <section class="artist-albums-section">
-                        <h2 class="artist-bio-title">Discografia</h2>
-                        <div class="artist-albums-grid">
-                            ${artist.albums.map(album => `
-                                <div class="album-card">
-                                    <div class="album-image-container">
-                                        <img src="${album.image}" alt="${album.title}">
-                                    </div>
-                                    <div class="album-info">
-                                        <h3 class="album-title">${album.title}</h3>
-                                        <div class="album-links">
-                                            ${album.spotify ? `
-                                                <a href="${album.spotify}" target="_blank" class="album-link" aria-label="Spotify">
-                                                    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-                                                </a>
-                                            ` : ''}
-                                            ${album.youtube ? `
-                                                <a href="${album.youtube}" target="_blank" class="album-link" aria-label="YouTube">
-                                                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                                                </a>
-                                            ` : ''}
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </section>
-                `;
-            }
-            
+        if (!artistaId || !ARTISTAS[artistaId]) {
+            // Artista não encontrado
             container.innerHTML = `
-                <!-- Cabeçalho do perfil -->
-                <header class="artist-profile-header">
-                    <div class="artist-profile-image">
-                        <img src="${artist.image}" alt="${artist.name}">
-                    </div>
-                    <div class="artist-profile-info">
-                        <h1 class="artist-profile-name">${artist.name}</h1>
-                        <p class="artist-profile-city">${artist.city}</p>
-                        <span class="artist-profile-genre">${artist.genre}</span>
-                        
-                        <div class="artist-social-links">
-                            ${artist.spotify ? `
-                                <a href="${artist.spotify}" target="_blank" class="artist-social-link" aria-label="Spotify">
-                                    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-                                </a>
-                            ` : ''}
-                            ${artist.youtube ? `
-                                <a href="${artist.youtube}" target="_blank" class="artist-social-link" aria-label="YouTube">
-                                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                                </a>
-                            ` : ''}
-                            ${artist.instagram ? `
-                                <a href="${artist.instagram}" target="_blank" class="artist-social-link" aria-label="Instagram">
-                                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                                </a>
-                            ` : ''}
-                        </div>
-                    </div>
-                </header>
-                
-                <!-- Biografia -->
-                <section class="artist-bio-section">
-                    <h2 class="artist-bio-title">Sobre</h2>
-                    <p class="artist-bio-text">${artist.bio}</p>
-                </section>
-                
-                <!-- Álbuns -->
-                ${albumsHTML}
-                
-                <!-- Botão voltar -->
-                <a href="javascript:history.back()" class="btn-ver-mais mt-60">Voltar</a>
+                <div class="artist-not-found">
+                    <h1>Artista não encontrado</h1>
+                    <p>O artista que você está procurando não existe ou foi removido.</p>
+                    <a href="/" class="btn-ver-mais">Voltar ao Início</a>
+                </div>
+            `;
+            return;
+        }
+        
+        const artista = ARTISTAS[artistaId];
+        
+        // Atualiza o título da página
+        document.title = `${artista.nome} - Peste do Rato`;
+        
+        // Monta os links de redes sociais
+        let redesSociais = '';
+        
+        if (artista.instagram) {
+            redesSociais += `
+                <a href="${artista.instagram}" target="_blank" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
             `;
         }
         
-        // Carrega o artista quando a página carregar
-        document.addEventListener('DOMContentLoaded', loadArtist);
+        if (artista.youtube) {
+            redesSociais += `
+                <a href="${artista.youtube}" target="_blank" aria-label="YouTube">
+                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </a>
+            `;
+        }
+        
+        if (artista.spotify) {
+            redesSociais += `
+                <a href="${artista.spotify}" target="_blank" aria-label="Spotify">
+                    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                </a>
+            `;
+        }
+        
+        if (artista.soundcloud) {
+            redesSociais += `
+                <a href="${artista.soundcloud}" target="_blank" aria-label="SoundCloud">
+                    <svg viewBox="0 0 24 24"><path d="M1.175 12.225c-.051 0-.094.046-.101.1l-.233 2.154.233 2.105c.007.058.05.098.101.098.05 0 .09-.04.099-.098l.255-2.105-.27-2.154c-.009-.057-.049-.1-.099-.1zm-.899.828c-.06 0-.091.037-.104.094L0 14.479l.165 1.308c.014.057.045.094.09.094s.089-.037.099-.094l.226-1.308-.226-1.332c-.01-.057-.044-.094-.09-.094zm1.83-1.229c-.061 0-.12.045-.126.105l-.195 2.38.195 2.16c.006.06.065.112.126.112.062 0 .12-.052.127-.112l.245-2.16-.245-2.38c-.007-.06-.065-.105-.127-.105zm.919-.398c-.073 0-.134.057-.14.127l-.168 2.778.168 2.24c.006.07.067.127.14.127.073 0 .134-.057.14-.127l.188-2.24-.188-2.778c-.006-.07-.067-.127-.14-.127zm.928-.105c-.084 0-.15.065-.157.148l-.142 2.883.142 2.2c.007.083.073.148.157.148.084 0 .15-.065.157-.148l.16-2.2-.16-2.883c-.007-.083-.073-.148-.157-.148zm.93.035c-.096 0-.17.075-.178.17l-.116 2.848.116 2.16c.008.095.082.17.178.17.096 0 .171-.075.178-.17l.131-2.16-.131-2.848c-.007-.095-.082-.17-.178-.17zm.927-.083c-.108 0-.19.085-.198.19l-.09 2.931.09 2.12c.008.105.09.19.198.19.108 0 .19-.085.198-.19l.102-2.12-.102-2.931c-.008-.105-.09-.19-.198-.19zm1.864-1.492c-.118 0-.21.094-.218.21l-.15 4.423.15 2.06c.008.116.1.21.218.21.119 0 .21-.094.218-.21l.168-2.06-.168-4.423c-.008-.116-.1-.21-.218-.21zm.929.062c-.13 0-.227.105-.236.233l-.127 4.361.127 2.03c.009.127.106.233.236.233.13 0 .227-.106.235-.233l.143-2.03-.143-4.361c-.008-.128-.105-.233-.235-.233zm.93-.106c-.141 0-.247.112-.257.253l-.1 4.467.1 2c.01.14.116.253.257.253.14 0 .246-.113.256-.253l.113-2-.113-4.467c-.01-.14-.116-.253-.256-.253zm2.802 2.36c-.072 0-.14.012-.207.032-.035-.57-.521-1.026-1.113-1.026-.164 0-.32.036-.461.1-.051.022-.065.045-.065.09v4.222c0 .046.018.087.062.1.013.003 2.687.006 2.687.006.585 0 1.059-.474 1.059-1.059v-.001c0-.586-.474-1.06-1.059-1.06-.166 0-.324.038-.469.106z"/></svg>
+                </a>
+            `;
+        }
+        
+        /* ============================================
+           SEÇÃO DE DISCOGRAFIA (Embed do Spotify)
+           
+           Monta o HTML do iframe do Spotify se o artista tiver spotifyEmbedId
+           
+           PARÂMETROS DO EMBED:
+           - utm_source=generator: identifica a origem do embed
+           - theme=0: tema escuro (preto/cinza) - RECOMENDADO para o site
+           - theme=1: tema claro (branco) - use se o site tiver fundo claro
+           
+           Para mudar o tema, altere o valor de "theme=" na URL abaixo
+           
+           ALTURA DO PLAYER:
+           - 352px é a altura padrão recomendada pelo Spotify
+           - Você pode ajustar para 152px (compacto) ou 500px+ (maior)
+        ============================================ */
+        let discografiaHtml = '';
+        
+        if (artista.spotifyEmbedId) {
+            discografiaHtml = `
+                <div class="artist-discography">
+                    <h2>Discografia</h2>
+                    <div class="spotify-embed-container">
+                        <!-- 
+                        IFRAME DO SPOTIFY - EMBED DO ARTISTA
+                        
+                        COMO PERSONALIZAR:
+                        - theme=0: Tema escuro (preto/cinza) - atual
+                        - theme=1: Tema claro (branco)
+                        - height="352": Altura do player (pode mudar para 152, 400, etc)
+                        
+                        O ID do artista (${artista.spotifyEmbedId}) é pego automaticamente
+                        dos dados do artista no objeto ARTISTAS acima.
+                        -->
+                        <iframe 
+                            style="border-radius:12px" 
+                            src="https://open.spotify.com/embed/artist/${artista.spotifyEmbedId}?utm_source=generator&theme=0" 
+                            width="100%" 
+                            height="352" 
+                            frameBorder="0" 
+                            allowfullscreen="" 
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                            loading="lazy"
+                            title="Spotify - ${artista.nome}"
+                        ></iframe>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Renderiza a página do artista
+        container.innerHTML = `
+            <section class="artist-page">
+                <div class="artist-header">
+                    <div class="artist-photo">
+                        <img src="${artista.foto}" alt="${artista.nome}">
+                    </div>
+                    <div>
+                        <h1 class="artist-name-title">${artista.nome}</h1>
+                        <span class="artist-category">${CATEGORIAS_LABEL[artista.categoria] || artista.categoria}</span>
+                        <p class="artist-location">${artista.cidade}</p>
+                    </div>
+                </div>
+                
+                ${redesSociais ? `<div class="artist-social">${redesSociais}</div>` : ''}
+                
+                <div class="artist-bio">
+                    <h2>Sobre</h2>
+                    <p>${artista.biografia}</p>
+                </div>
+                
+                ${discografiaHtml}
+                
+                <a href="javascript:history.back()" class="btn-ver-mais">Voltar</a>
+            </section>
+        `;
+    }
+    
+    // Carrega o artista quando a página terminar de carregar
+    document.addEventListener('DOMContentLoaded', carregarArtista);
     </script>
 </body>
 </html>
+</content>
+<parameter name="taskNameActive">Creating artista.html

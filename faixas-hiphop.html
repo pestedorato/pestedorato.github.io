@@ -15,8 +15,8 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Álbuns Hip-Hop - Peste do Rato</title>
-    <meta name="description" content="Todos os álbuns de Hip-Hop da cena paraibana. Peste do Rato.">
+    <title>Faixas Hip-Hop - Peste do Rato</title>
+    <meta name="description" content="Todas as faixas de Hip-Hop da cena paraibana. Peste do Rato.">
     <meta name="theme-color" content="#000000">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,10 +58,33 @@
         
         <div id="nav-menu" class="nav-menu">
             <a href="/">Início</a>
-            <a href="/albuns-hiphop.html">Álbuns Hip-Hop</a>
-            <a href="/artistas-hiphop.html">Artistas Hip-Hop</a>
-            <a href="/albuns-rock.html">Álbuns Rock/Metal</a>
-            <a href="/artistas-rock.html">Artistas Rock/Metal</a>
+            <a href="/faixas-hiphop.html">Faixas Hip-Hop</a>
+            <div class="nav-item-group">
+                <div class="nav-link-main">
+                    Artistas Hip-Hop
+                    <span class="nav-arrow">▼</span>
+                </div>
+                <div class="nav-submenu">
+                    <a href="/hiphop-mcs.html">MCs</a>
+                    <a href="/hiphop-breaking.html">Breaking</a>
+                    <a href="/hiphop-djs.html">DJs</a>
+                    <a href="/hiphop-graffiti.html">Graffiti</a>
+                    <a href="/hiphop-produtores.html">Produtores</a>
+                    <a href="/hiphop-crew.html">Crew</a>
+                    <a href="/hiphop-batalhas.html">Batalhas</a>
+                </div>
+            </div>
+            <a href="/faixas-rock.html">Faixas Rock/Metal</a>
+            <div class="nav-item-group">
+                <div class="nav-link-main">
+                    Artistas Rock/Metal
+                    <span class="nav-arrow">▼</span>
+                </div>
+                <div class="nav-submenu">
+                    <a href="/rock-bandas.html">Bandas</a>
+                    <a href="/rock-solo.html">Solo</a>
+                </div>
+            </div>
         </div>
     </nav>
     
@@ -69,7 +92,22 @@
     
     <main class="main-content">
         <section class="listing-page">
-            <h1 class="section-title">Álbuns Hip-Hop</h1>
+            <h1 class="section-title">Faixas Hip-Hop</h1>
+            
+            <!-- Barra de Busca -->
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="Buscar faixa..." autocomplete="off">
+                <button id="search-clear" class="search-clear" aria-label="Limpar busca">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
             
             <!-- 
             CONTAINER DA LISTAGEM
@@ -228,7 +266,7 @@
                 <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
             </a>
         </div>
-        <p class="footer-copyright">&copy; 2024 Peste do Rato. Todos os direitos reservados.</p>
+        <p class="footer-copyright">&copy; 2026 Peste do Rato. Todos os direitos reservados.</p>
     </footer>
     
     <button id="scroll-btn" class="scroll-btn" aria-label="Scroll">↑</button>

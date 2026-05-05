@@ -665,7 +665,145 @@ function initImageProtection() {
 }
 
 // ============================================
-// 10. INICIALIZAÇÃO
+// 10. MENU COM SUBCATEGORIAS
+// Sistema de dropdown para o menu lateral
+// ============================================
+
+/**
+ * Inicializa os submenus com dropdown
+ * Permite expandir/colapsar categorias no menu lateral
+ */
+function initSubmenus() {
+    const menuGroups = document.querySelectorAll('.nav-item-group');
+    
+    menuGroups.forEach(group => {
+        const mainLink = group.querySelector('.nav-link-main');
+        
+        if (mainLink) {
+            mainLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Fecha outros submenus abertos (comportamento accordion)
+                menuGroups.forEach(otherGroup => {
+                    if (otherGroup !== group && otherGroup.classList.contains('open')) {
+                        otherGroup.classList.remove('open');
+                    }
+                });
+                
+                // Alterna o estado do submenu atual
+                group.classList.toggle('open');
+            });
+        }
+    });
+}
+
+// ============================================
+// 11. SISTEMA DE BUSCA/FILTRO
+// Filtra itens nas paginas de listagem
+// ============================================
+
+/**
+ * Inicializa o sistema de busca nas paginas de listagem
+ * 
+ * COMO FUNCIONA:
+ * - O usuario digita no campo de busca
+ * - O sistema filtra todos os itens (mesmo em outras paginas)
+ * - Mostra apenas os itens que correspondem a busca
+ * - Esconde a paginacao durante a busca
+ */
+function initSearch() {
+    const searchInput = document.getElementById('search-input');
+    const searchClear = document.getElementById('search-clear');
+    const container = document.getElementById('listing-container');
+    const paginationContainer = document.getElementById('pagination');
+    
+    if (!searchInput || !container) return;
+    
+    const items = container.querySelectorAll('.pagination-item');
+    
+    // Evento de digitacao
+    searchInput.addEventListener('input', debounce(() => {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        
+        // Mostra/esconde botao de limpar
+        if (searchClear) {
+            if (searchTerm.length > 0) {
+                searchClear.classList.add('visible');
+            } else {
+                searchClear.classList.remove('visible');
+            }
+        }
+        
+        // Remove mensagem de "nenhum resultado" anterior
+        const existingNoResults = container.querySelector('.no-results');
+        if (existingNoResults) {
+            existingNoResults.remove();
+        }
+        
+        let visibleCount = 0;
+        
+        if (searchTerm === '') {
+            // Se nao ha termo de busca, mostra paginacao normal
+            if (paginationContainer) {
+                paginationContainer.style.display = '';
+            }
+            // Reinicializa a paginacao
+            initPagination();
+        } else {
+            // Esconde paginacao durante a busca
+            if (paginationContainer) {
+                paginationContainer.style.display = 'none';
+            }
+            
+            // Filtra os itens
+            items.forEach(item => {
+                // Pega o texto do item (nome do artista ou titulo do album)
+                const itemText = item.textContent.toLowerCase();
+                
+                if (itemText.includes(searchTerm)) {
+                    item.style.display = '';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Mostra mensagem se nao encontrou nada
+            if (visibleCount === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.innerHTML = `Nenhum resultado encontrado para "<strong>${searchInput.value}</strong>"`;
+                container.appendChild(noResults);
+            }
+        }
+    }, 200));
+    
+    // Botao de limpar busca
+    if (searchClear) {
+        searchClear.addEventListener('click', () => {
+            searchInput.value = '';
+            searchClear.classList.remove('visible');
+            
+            // Reinicializa a paginacao
+            if (paginationContainer) {
+                paginationContainer.style.display = '';
+            }
+            initPagination();
+            
+            // Remove mensagem de "nenhum resultado"
+            const existingNoResults = container.querySelector('.no-results');
+            if (existingNoResults) {
+                existingNoResults.remove();
+            }
+            
+            // Foca no input novamente
+            searchInput.focus();
+        });
+    }
+}
+
+// ============================================
+// 12. INICIALIZAÇÃO
 // Executa quando a página carrega
 // ============================================
 
@@ -678,12 +816,14 @@ function init() {
     initSplashScreen();
     initTheme();
     initHamburgerMenu();
+    initSubmenus(); // Menu com subcategorias
     initCarousels();
     initScrollButton();
     initPagination();
+    initSearch(); // Sistema de busca
     initImageProtection(); // Proteção de imagens
     
-    console.log('🐀 Peste do Rato - Site iniciado com sucesso!');
+    console.log('Peste do Rato - Site iniciado com sucesso!');
 }
 
 // Executa quando o DOM estiver pronto
