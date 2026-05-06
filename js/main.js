@@ -52,7 +52,18 @@ const CONFIG = {
     // Modo de controle da tela de boas-vindas:
     // 'session' = aparece uma vez por sessão (fecha navegador e abre = aparece)
     // 'time' = aparece uma vez a cada X tempo (definido em welcomeCooldown)
-    welcomeMode: 'session'
+    welcomeMode: 'session',
+    
+    // ============================================
+    // POPUP DE ARTISTAS - CONFIGURAÇÕES
+    // ============================================
+    
+    // Chave para salvar se já mostrou o popup de artistas
+    artistPopupStorageKey: 'pesteDoRato_artistPopupShown',
+    
+    // Tempo de delay para mostrar o popup após as boas-vindas (em milissegundos)
+    // 500ms = meio segundo após as boas-vindas sumirem
+    artistPopupDelay: 500
 };
 
 // ============================================
@@ -127,6 +138,12 @@ function checkWelcomeScreen() {
     
     if (shouldShow) {
         showWelcomeScreen();
+    } else {
+        // Se não mostrou boas-vindas, ainda assim verifica o popup de artistas
+        // (caso seja a primeira vez que o popup seria mostrado)
+        setTimeout(() => {
+            checkArtistPopup();
+        }, CONFIG.artistPopupDelay);
     }
 }
 
@@ -152,8 +169,97 @@ function showWelcomeScreen() {
     setTimeout(() => {
         welcomeScreen.classList.remove('show');
         welcomeScreen.classList.add('hide');
+        
+        // Verifica se deve mostrar o popup de artistas
+        setTimeout(() => {
+            checkArtistPopup();
+        }, CONFIG.artistPopupDelay);
     }, CONFIG.welcomeDuration);
 }
+
+// ============================================
+// 3.1 POPUP DE ARTISTAS
+// Aparece apenas UMA VEZ (nunca mais) para convidar artistas
+// ============================================
+
+/**
+ * Verifica se deve mostrar o popup de artistas
+ * O popup aparece apenas UMA VEZ para o usuário (salvo no localStorage)
+ * 
+ * COMO RESETAR (para mostrar novamente):
+ * Abra o console do navegador (F12) e digite: resetArtistPopup()
+ */
+function checkArtistPopup() {
+    const artistPopup = document.getElementById('artist-popup');
+    
+    if (!artistPopup) return;
+    
+    // Verifica se já foi mostrado anteriormente (usando localStorage para persistir)
+    const alreadyShown = localStorage.getItem(CONFIG.artistPopupStorageKey);
+    
+    if (!alreadyShown) {
+        showArtistPopup();
+    }
+}
+
+/**
+ * Mostra o popup de artistas com animação
+ */
+function showArtistPopup() {
+    const artistPopup = document.getElementById('artist-popup');
+    const closeBtn = document.getElementById('artist-popup-close');
+    
+    if (!artistPopup) return;
+    
+    // Mostra o popup
+    artistPopup.classList.add('show');
+    
+    // Marca como já mostrado (nunca mais vai aparecer)
+    localStorage.setItem(CONFIG.artistPopupStorageKey, 'true');
+    
+    // Evento de clique no botão de fechar
+    if (closeBtn) {
+        closeBtn.addEventListener('click', hideArtistPopup);
+    }
+    
+    // Fecha ao clicar fora do conteúdo (no overlay)
+    artistPopup.addEventListener('click', (e) => {
+        if (e.target === artistPopup) {
+            hideArtistPopup();
+        }
+    });
+    
+    // Fecha ao pressionar ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            hideArtistPopup();
+        }
+    });
+}
+
+/**
+ * Esconde o popup de artistas
+ */
+function hideArtistPopup() {
+    const artistPopup = document.getElementById('artist-popup');
+    
+    if (!artistPopup) return;
+    
+    artistPopup.classList.remove('show');
+    artistPopup.classList.add('hide');
+}
+
+/**
+ * Função para resetar o popup de artistas (útil para testes)
+ * Chame esta função no console: resetArtistPopup()
+ */
+function resetArtistPopup() {
+    localStorage.removeItem(CONFIG.artistPopupStorageKey);
+    console.log('Popup de artistas resetado! Recarregue a página.');
+}
+
+// Disponibiliza a função globalmente para uso no console
+window.resetArtistPopup = resetArtistPopup;
 
 /**
  * Função para resetar a tela de boas-vindas (útil para testes)
@@ -176,6 +282,38 @@ window.resetWelcome = resetWelcome;
 /**
  * Inicializa o sistema de temas
  * O tema é salvo no navegador e permanece ao recarregar
+ * 
+ * ============================================
+ * COMO FUNCIONA A TROCA DE LOGOS
+ * ============================================
+ * 
+ * As logos agora são trocadas AUTOMATICAMENTE via CSS!
+ * O CSS usa as classes .logo-dark e .logo-light para mostrar/esconder
+ * as logos corretas baseado no tema atual.
+ * 
+ * NAO precisa mais de JavaScript para trocar as logos!
+ * Basta ter as duas <img> no HTML com as classes corretas.
+ * 
+ * ONDE ALTERAR AS LOGOS (no HTML):
+ * 
+ * NAVBAR (logo deitada):
+ *   - Modo ESCURO: class="logo-img logo-dark" 
+ *     Arquivo: /images/logodeitadabranca.png
+ *   - Modo CLARO: class="logo-img logo-light"
+ *     Arquivo: /images/logodeitadapreta.png
+ * 
+ * SPLASH SCREEN (logo quadrada):
+ *   - Modo ESCURO: class="splash-logo logo-dark"
+ *     Arquivo: /images/logopestedoratobranca.png
+ *   - Modo CLARO: class="splash-logo logo-light"
+ *     Arquivo: /images/logopestedoratopreta.png
+ * 
+ * HERO (logo quadrada):
+ *   - Modo ESCURO: class="hero-image logo-dark"
+ *     Arquivo: /images/logopestedoratobranca.png
+ *   - Modo CLARO: class="hero-image logo-light"
+ *     Arquivo: /images/logopestedoratopreta.png
+ * ============================================
  */
 function initTheme() {
     const themeToggle = document.getElementById('theme-toggle');
@@ -185,10 +323,11 @@ function initTheme() {
     const savedTheme = localStorage.getItem(CONFIG.themeStorageKey) || 'dark';
     
     // Aplica o tema salvo
+    // A troca de logos e feita AUTOMATICAMENTE pelo CSS (classes logo-dark e logo-light)
     if (savedTheme === 'light') {
         body.classList.add('light-mode');
         updateThemeIcon(true);
-        updateLogo(true);
+        // NAO precisa mais chamar updateLogo() - o CSS faz isso automaticamente!
     }
     
     // Adiciona evento de clique no botão
@@ -199,6 +338,10 @@ function initTheme() {
 
 /**
  * Alterna entre tema escuro e claro
+ * 
+ * A troca de logos e feita AUTOMATICAMENTE pelo CSS!
+ * Quando o body ganha/perde a classe 'light-mode',
+ * o CSS mostra/esconde as logos certas (logo-dark e logo-light).
  */
 function toggleTheme() {
     const body = document.body;
@@ -207,9 +350,9 @@ function toggleTheme() {
     // Salva preferência
     localStorage.setItem(CONFIG.themeStorageKey, isLight ? 'light' : 'dark');
     
-    // Atualiza ícone e logo
+    // Atualiza apenas o icone (sol/lua) para acessibilidade
+    // A troca de logos e feita AUTOMATICAMENTE pelo CSS!
     updateThemeIcon(isLight);
-    updateLogo(isLight);
 }
 
 /**
@@ -228,22 +371,38 @@ function updateThemeIcon(isLight) {
 }
 
 /**
- * Atualiza a logo baseado no tema
- * Logo branca para fundo escuro, logo preta para fundo claro
- * @param {boolean} isLight - Se está no modo claro
+ * ============================================
+ * FUNCAO OBSOLETA - NAO E MAIS UTILIZADA
+ * ============================================
+ * 
+ * ANTES: Esta funcao trocava as logos via JavaScript.
+ * AGORA: A troca e feita AUTOMATICAMENTE pelo CSS!
+ * 
+ * O CSS usa as classes .logo-dark e .logo-light para mostrar/esconder
+ * as logos automaticamente quando o tema muda.
+ * 
+ * ┌─────────────────────────────────────────────────────────────────┐
+ * │ PARA ALTERAR AS LOGOS, EDITE NO HTML:                          │
+ * ├─────────────────────────────────────────────────────────────────┤
+ * │ NAVBAR (logo deitada):                                         │
+ * │   Modo ESCURO: src da img com class="logo-img logo-dark"       │
+ * │   Modo CLARO:  src da img com class="logo-img logo-light"      │
+ * ├─────────────────────────────────────────────────────────────────┤
+ * │ SPLASH SCREEN (logo quadrada):                                 │
+ * │   Modo ESCURO: src da img com class="splash-logo logo-dark"    │
+ * │   Modo CLARO:  src da img com class="splash-logo logo-light"   │
+ * ├─────────────────────────────────────────────────────────────────┤
+ * │ HERO (logo quadrada):                                          │
+ * │   Modo ESCURO: src da img com class="hero-image logo-dark"     │
+ * │   Modo CLARO:  src da img com class="hero-image logo-light"    │
+ * └─────────────────────────────────────────────────────────────────┘
+ * 
+ * Esta funcao esta aqui apenas para referencia e nao e mais chamada.
  */
 function updateLogo(isLight) {
-    const logos = document.querySelectorAll('.logo-img');
-    
-    logos.forEach(logo => {
-        if (isLight) {
-            logo.src = '/images/logopestedoratopreta.png';
-            logo.alt = 'Peste do Rato - Logo Preta';
-        } else {
-            logo.src = '/images/logopestedoratobranca.png';
-            logo.alt = 'Peste do Rato - Logo Branca';
-        }
-    });
+    // FUNCAO NAO UTILIZADA - A troca de logos agora e feita via CSS
+    // Veja os comentarios acima para saber onde alterar as imagens no HTML
+    console.log('[updateLogo] Esta funcao nao e mais necessaria. A troca de logos e feita via CSS.');
 }
 
 // ============================================

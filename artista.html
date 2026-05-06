@@ -234,6 +234,62 @@
             }
         }
         
+        /* ============================================
+           EMBED DO YOUTUBE (Alternativa ao Spotify)
+           
+           Para artistas que não têm Spotify, usa-se o YouTube.
+           
+           COMO FUNCIONA:
+           - Cada artista pode ter um campo "youtubeEmbedId" com o ID do vídeo
+           - O ID é a parte final da URL do vídeo no YouTube
+           - Exemplo: https://www.youtube.com/watch?v=Ifz0CEKCs7I
+           -          O ID seria: Ifz0CEKCs7I
+           
+           COMO OBTER O ID DO YOUTUBE:
+           1. Vá ao vídeo no YouTube
+           2. Clique em "Compartilhar" > "Incorporar"
+           3. No código, encontre o src do iframe
+           4. O ID está após "/embed/" na URL
+           
+           Exemplo:
+           - URL do embed: https://www.youtube.com/embed/Ifz0CEKCs7I
+           - O youtubeEmbedId seria: "Ifz0CEKCs7I"
+           
+           PRIORIDADE:
+           - Se tiver spotifyEmbedId, mostra Spotify
+           - Se não tiver Spotify mas tiver youtubeEmbedId, mostra YouTube
+           ============================================ */
+        
+        /* 
+        Container do iframe do YouTube
+        - aspect-ratio: mantém proporção 16:9 do vídeo
+        - border-radius: mantém bordas arredondadas
+        - background-color: cor escura enquanto carrega (combina com o site)
+        */
+        .youtube-embed-container {
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #121212;
+            /* Aspect ratio 16:9 para vídeos */
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 = 9/16 = 0.5625 = 56.25% */
+        }
+        
+        /* 
+        Iframe do YouTube
+        - position absolute para preencher o container
+        - cobre 100% da largura e altura do container
+        */
+        .youtube-embed-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
         @media (min-width: 768px) {
             .artist-header {
                 flex-direction: row;
@@ -318,16 +374,20 @@
     
     <footer class="footer">
         <p class="footer-quote">Foda-se o sistema, mizera!</p>
+        <p class="footer-artist-invite">
+            Se você é artista do hip hop, rock, metal, punk, cena alternativa e afins da Paraíba e quer ter seu perfil no Peste do Rato, preencha o formulário. 
+            <a href="https://forms.gle/DhzfnbfmYv86trrs8" target="_blank">Clique aqui</a>
+        </p>
         <div class="social-links">
-            <a href="#" target="_blank" class="social-link" aria-label="Instagram">
+            <a href="https://instagram.com/pestedorato" target="_blank" class="social-link" aria-label="Instagram">
                 <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
             </a>
-            <a href="#" target="_blank" class="social-link" aria-label="YouTube">
+            <a href="https://www.youtube.com/@PesteDoRato" target="_blank" class="social-link" aria-label="YouTube">
                 <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             </a>
-            <a href="#" target="_blank" class="social-link" aria-label="Spotify">
+            <!-- <a href="#" target="_blank" class="social-link" aria-label="Spotify">
                 <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-            </a>
+            </a> -->
         </div>
         <p class="footer-copyright">&copy; 2026 Peste do Rato. Todos os direitos reservados.</p>
     </footer>
@@ -356,7 +416,9 @@
        - youtube: link completo do YouTube (ou null se não tiver)
        - spotify: link completo do Spotify (ou null se não tiver)
        - soundcloud: link completo do SoundCloud (ou null se não tiver)
-       - spotifyEmbedId: ID do artista no Spotify para incorporar o player (ou null se não tiver)
+       - spotifyEmbedId: ID do artista/track/album no Spotify para incorporar o player (ou null se não tiver)
+       - spotifyEmbedType: tipo de embed do Spotify - "artist" (padrão), "track" (música), ou "album" (álbum)
+       - youtubeEmbedId: ID do vídeo no YouTube para incorporar (usado quando não tem Spotify, ou null)
        
        ============================================
        COMO OBTER O SPOTIFY EMBED ID:
@@ -375,36 +437,78 @@
        1. Copie o link do perfil do artista
        2. O ID é a parte final: https://open.spotify.com/artist/XXXXXXX
        3. Use o XXXXXXX como spotifyEmbedId
+       
+       ============================================
+       TIPOS DE EMBED DO SPOTIFY (spotifyEmbedType):
+       
+       O campo spotifyEmbedType define QUAL tipo de conteúdo será incorporado:
+       
+       1. "artist" (PADRÃO) - Incorpora o perfil completo do artista
+          - URL: https://open.spotify.com/embed/artist/ID
+          - Mostra: músicas populares, álbuns, etc.
+          - Use quando o artista tem um perfil limpo no Spotify
+       
+       2. "track" - Incorpora UMA MÚSICA específica
+          - URL: https://open.spotify.com/embed/track/ID
+          - Use quando o perfil do artista está bugado/misturado
+          - Ideal para mostrar apenas uma faixa específica
+          - COMO OBTER O ID DA TRACK:
+            1. Vá à música no Spotify
+            2. Clique nos 3 pontos (...) > Compartilhar > Incorporar
+            3. O ID está após "/track/" na URL
+            4. Exemplo: https://open.spotify.com/embed/track/6r5eOLAw2fmjhSwmxoqLMd
+            5. O spotifyEmbedId seria: "6r5eOLAw2fmjhSwmxoqLMd"
+       
+       3. "album" - Incorpora um ÁLBUM completo
+          - URL: https://open.spotify.com/embed/album/ID
+          - Use para mostrar um álbum específico do artista
+          - COMO OBTER O ID DO ALBUM:
+            1. Vá ao álbum no Spotify
+            2. Clique nos 3 pontos (...) > Compartilhar > Incorporar
+            3. O ID está após "/album/" na URL
+       
+       IMPORTANTE: Se spotifyEmbedType não for definido, o padrão é "artist"
+       ============================================
+       
+       ============================================
+       COMO OBTER O YOUTUBE EMBED ID:
+       
+       1. Acesse o vídeo no YouTube
+       2. Clique em "Compartilhar" > "Incorporar"
+       3. No código gerado, encontre o src do iframe
+       4. O ID está após "/embed/" na URL
+       
+       Exemplo:
+       - URL do embed: https://www.youtube.com/embed/Ifz0CEKCs7I
+       - O youtubeEmbedId seria: "Ifz0CEKCs7I"
+       
+       OU simplesmente:
+       1. Copie a URL do vídeo: https://www.youtube.com/watch?v=Ifz0CEKCs7I
+       2. O ID é o valor após "v=": Ifz0CEKCs7I
+       3. Use esse valor como youtubeEmbedId
+       
+       PRIORIDADE DE EXIBIÇÃO:
+       - Se o artista tiver spotifyEmbedId, mostra o Spotify
+       - Se não tiver Spotify mas tiver youtubeEmbedId, mostra o YouTube
+       - Se não tiver nenhum, não mostra a seção Discografia
        ============================================
        
        EXEMPLO PARA CADA CATEGORIA:
        
-       MC (Rapper):
-       { id: 100, nome: "MC Exemplo", categoria: "mc", cidade: "João Pessoa, PB", ..., spotifyEmbedId: "ID_AQUI" }
+       MC com perfil Spotify normal:
+       { id: 100, nome: "MC Exemplo", categoria: "mc", ..., spotifyEmbedId: "ID_ARTISTA", spotifyEmbedType: "artist", youtubeEmbedId: null }
        
-       DJ:
-       { id: 200, nome: "DJ Exemplo", categoria: "dj", cidade: "Campina Grande, PB", ..., spotifyEmbedId: null }
+       MC com perfil Spotify bugado (usa música específica):
+       { id: 101, nome: "MC Bugado", categoria: "mc", ..., spotifyEmbedId: "ID_TRACK", spotifyEmbedType: "track", youtubeEmbedId: null }
        
-       B-Boy/B-Girl (Breaking):
-       { id: 300, nome: "B-Boy Exemplo", categoria: "breaking", cidade: "Guarabira, PB", ..., spotifyEmbedId: null }
+       Banda com álbum específico:
+       { id: 800, nome: "Banda Exemplo", categoria: "banda", ..., spotifyEmbedId: "ID_ALBUM", spotifyEmbedType: "album", youtubeEmbedId: null }
        
-       Grafiteiro:
-       { id: 400, nome: "Grafiteiro Exemplo", categoria: "graffiti", cidade: "Patos, PB", ..., spotifyEmbedId: null }
+       Artista sem Spotify (usa YouTube):
+       { id: 200, nome: "DJ Exemplo", categoria: "dj", ..., spotifyEmbedId: null, youtubeEmbedId: "ID_VIDEO" }
        
-       Produtor:
-       { id: 500, nome: "Produtor Exemplo", categoria: "produtor", cidade: "Bayeux, PB", ..., spotifyEmbedId: "ID_AQUI" }
-       
-       Crew:
-       { id: 600, nome: "Crew Exemplo", categoria: "crew", cidade: "Paraíba", ..., spotifyEmbedId: null }
-       
-       Batalha:
-       { id: 700, nome: "Batalha Exemplo", categoria: "batalha", cidade: "João Pessoa, PB", ..., spotifyEmbedId: null }
-       
-       Banda Rock/Metal:
-       { id: 800, nome: "Banda Exemplo", categoria: "banda", cidade: "Campina Grande, PB", ..., spotifyEmbedId: "ID_AQUI" }
-       
-       Artista Solo Rock/Metal:
-       { id: 900, nome: "Artista Solo Exemplo", categoria: "solo", cidade: "João Pessoa, PB", ..., spotifyEmbedId: "ID_AQUI" }
+       Artista sem nenhum embed:
+       { id: 300, nome: "B-Boy Exemplo", categoria: "breaking", ..., spotifyEmbedId: null, youtubeEmbedId: null }
     ============================================ */
     
     const ARTISTAS = {
@@ -414,7 +518,7 @@
         1: {
             id: 1,
             nome: "Robsom MC",
-            categoria: "mc",
+            categoria: "HIP-HOP",
             cidade: "Campina Grande, PB",
             foto: "/images/artistas/robsom.png",
             biografia: "Robsom MC é um dos principais nomes do hip-hop paraibano. Natural de Campina Grande, começou sua trajetória nas batalhas de rima da cidade e hoje é referência na cena underground do Nordeste.<br><br>Com letras que retratam a realidade das periferias e a cultura nordestina, Robsom representa a essência do rap consciente brasileiro.",
@@ -436,104 +540,407 @@
                
                Se o artista não tem Spotify, deixe como null
             ============================================ */
-            spotifyEmbedId: "2HiXSO6Cb6ObIrtLt47iAZ" // ID do Robsom MC no Spotify
+            spotifyEmbedId: "2HiXSO6Cb6ObIrtLt47iAZ", // ID do Robsom MC no Spotify
+            youtubeEmbedId: null // Não precisa, pois tem Spotify
         },
         2: {
             id: 2,
             nome: "Certy MC",
-            categoria: "mc",
+            categoria: "HIP-HOP",
             cidade: "João Pessoa, PB",
             foto: "/images/artistas/certy.jpg",
             biografia: "Certy MC é um rapper de João Pessoa que vem ganhando destaque na cena hip-hop paraibana. Conhecido pelo flow único e letras impactantes, representa a nova geração do rap nordestino.",
-            instagram: "https://instagram.com/certymc",
+            instagram: "https://www.instagram.com/certymcoficial/",
             youtube: "https://youtube.com/@certymc",
-            spotify: null,
+            spotify: "https://open.spotify.com/intl-pt/artist/4eAgkFiM2ht8VavurSt0nq?utm_source=ig&utm_medium=social&utm_content=link_in_bio",
             soundcloud: null,
-            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+            spotifyEmbedId: "4eAgkFiM2ht8VavurSt0nq",
+            youtubeEmbedId: null // Não precisa, pois tem Spotify
         },
         3: {
             id: 3,
             nome: "Rank",
-            categoria: "mc",
+            categoria: "HIP-HOP",
             cidade: "João Pessoa, PB",
             foto: "/images/artistas/rank.jpg",
             biografia: "Rank é um MC de João Pessoa conhecido por suas performances intensas e letras que abordam temas sociais. Participante ativo das batalhas de rima da capital paraibana.",
-            instagram: "https://instagram.com/rankmc",
-            youtube: null,
+            instagram: "https://www.instagram.com/rank97_/",
+            youtube: "https://www.youtube.com/@Rank_zl",
             spotify: null,
             soundcloud: null,
-            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+            spotifyEmbedId: null,
+            /* ============================================
+               YOUTUBE EMBED ID
+               
+               Este artista não tem Spotify, então usa o YouTube.
+               O ID foi obtido do link de incorporação:
+               https://www.youtube.com/embed/Ifz0CEKCs7I
+               
+               COMO ENCONTRAR O ID:
+               1. Vá ao vídeo do artista no YouTube
+               2. Clique em Compartilhar > Incorporar
+               3. Copie o ID após "/embed/"
+            ============================================ */
+            youtubeEmbedId: "Ifz0CEKCs7I" // ID do vídeo do Rank no YouTube
         },
         4: {
             id: 4,
-            nome: "DJ Underground",
-            categoria: "dj",
-            cidade: "Bayeux, PB",
-            foto: "https://placehold.co/300x300/1A1A1A/981213?text=DJ",
-            biografia: "DJ Underground é um dos DJs mais respeitados da cena hip-hop paraibana. Responsável por sets em diversos eventos e batalhas, traz sempre as melhores batidas para a comunidade.",
-            instagram: null,
+            nome: "Stash",
+            categoria: "HIP-HOP",
+            cidade: "Paraná - Paraíba",
+            foto: "/images/artistas/stash.jpg",
+            biografia: "Stash MC é um nome de destaque nas batalhas de rima da Paraíba, reconhecido pela presença forte, improviso afiado e respeito conquistado nas rodas e arenas do estado. Natural do Paraná, construiu sua trajetória na cena paraibana e se tornou representante do movimento local, levando seu talento ao Duelo Nacional de MCs 2025, onde defendeu a Paraíba em nível nacional. Uma voz que une técnica, vivência e a força da cultura de rua.",
+            instagram: "https://www.instagram.com/stash__99/",
             youtube: null,
             spotify: null,
             soundcloud: null,
-            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+            spotifyEmbedId: null,
+            youtubeEmbedId: null
         },
         5: {
             id: 5,
-            nome: "MC Paraíba",
-            categoria: "mc",
-            cidade: "Cabedelo, PB",
-            foto: "https://placehold.co/300x300/1A1A1A/981213?text=MC",
-            biografia: "MC Paraíba representa a força do hip-hop litorâneo. Nascido em Cabedelo, carrega nas rimas a essência da cultura nordestina misturada com a brisa do mar.",
-            instagram: null,
+            nome: "Vulto 083",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/vulto083.png",
+            biografia: "Vulto 083 é expressão viva da arte marginal nordestina, unindo poesia, rap e resistência em uma identidade marcada pela força cultural da Paraíba. Multiartista e produtor cultural, transita entre o slam, a música e os movimentos independentes, transformando vivências em versos e atitude. Sua trajetória representa a potência criativa do Nordeste, onde palavra, ritmo e consciência caminham lado a lado.",
+            instagram: "https://www.instagram.com/vulto083/",
             youtube: null,
             spotify: null,
             soundcloud: null,
-            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+            /* ============================================
+               EMBED DO SPOTIFY - TIPO: TRACK (Música específica)
+               
+               O perfil do Vulto 083 no Spotify está bugado (mistura com
+               outra banda de metal chamada Vulto). Por isso, usamos o
+               tipo "track" para incorporar apenas UMA MÚSICA específica.
+               
+               spotifyEmbedId: ID da música (track)
+               spotifyEmbedType: "track" para incorporar apenas a música
+               
+               O ID foi obtido do link de incorporação:
+               https://open.spotify.com/embed/track/6r5eOLAw2fmjhSwmxoqLMd
+            ============================================ */
+            spotifyEmbedId: "6r5eOLAw2fmjhSwmxoqLMd", // ID da música específica do Vulto 083
+            spotifyEmbedType: "track", // Tipo: música específica (não o perfil)
+            youtubeEmbedId: null
         },
         6: {
             id: 6,
-            nome: "Rimador 083",
-            categoria: "mc",
-            cidade: "Guarabira, PB",
-            foto: "https://placehold.co/300x300/1A1A1A/981213?text=083",
-            biografia: "Rimador 083 é um MC do interior da Paraíba que leva o nome do estado com orgulho. Suas letras falam sobre a vida no sertão e a resistência do povo nordestino.",
-            instagram: null,
+            nome: "MC Hirlla",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/hirla.jpg",
+            biografia: "MC’ Hirlla representa força, talento e voz ativa dentro da cultura urbana paraibana. Mãe, poetisa e compositora, transforma vivências em rimas e versos carregados de verdade, sensibilidade e presença. Atuante na Batalha da Ponte 83, tornou-se referência na cena local, contribuindo diariamente para o crescimento do movimento. Hirlla é arte, resistência e inspiração para novas gerações.",
+            instagram: "https://www.instagram.com/mchirlla/",
             youtube: null,
             spotify: null,
             soundcloud: null,
-            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+            spotifyEmbedId: null,
+            youtubeEmbedId: null
+        },
+        7: {
+            id: 7,
+            nome: "Cidiely Dias",
+            categoria: "HIP-HOP",
+            cidade: "Campina Grande, PB",
+            foto: "/images/artistas/cidiely.jpg",
+            biografia: "Cidiely Dias é uma artista de destaque da cena hip hop paraibana, levando autenticidade, presença e identidade em cada trabalho. Natural de Campina Grande, PB, representa a força feminina dentro do movimento, somando talento e atitude à cultura urbana do estado. Seu nome fortalece a cena local e reafirma a potência artística da Paraíba.",
+            instagram: "https://www.instagram.com/cidiely_dias/",
+            youtube: "https://www.youtube.com/@Cidiely_Dias/videos",
+            spotify: "https://open.spotify.com/intl-pt/artist/7tv2AeG5iQcUMKVKQqX0GZ",
+            soundcloud: null,
+            spotifyEmbedId: "7tv2AeG5iQcUMKVKQqX0GZ",
+            youtubeEmbedId: null
+        },
+        8: {
+            id: 8,
+            nome: "Clow MC",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/clow.jpg",
+            biografia: "Clow MC, também conhecido como Real Cangaceiro Boy 083, é um nome de peso nas batalhas de rima e no hip hop paraibano. Com presença marcante e talento reconhecido, soma títulos importantes em sua trajetória, sendo bicampeão estadual da Paraíba (2017/2020), campeão nacional BNA pelo Levante da Juventude e bicampeão Chega Que É Certo (2017/2019). Representa a força do improviso nordestino e a potência cultural da Paraíba nas ruas e nas arenas.",
+            instagram: "https://www.instagram.com/realcangaceiroboy_083/",
+            youtube: "https://www.youtube.com/@MC-Clow",
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null,
+            youtubeEmbedId: "EroFMVpTMxU?si=lxsyK-6YTNSaBGg2"
+        },
+        9: {
+            id: 9,
+            nome: "MC Alone",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/mcalone.jpg",
+            biografia: "MC Alone é um nome ativo da cena hip hop de João Pessoa, PB, levando identidade, energia e conexão com as ruas em seus trabalhos. Conhecido por gravar sons voltados ao Botafogo-PB e às torcidas organizadas, também marca presença nas batalhas de rima e no movimento urbano local. Seu trabalho representa a união entre música, paixão pelo futebol e a força cultural da capital paraibana.",
+            instagram: "https://www.instagram.com/_mcalone/",
+            youtube: "https://www.youtube.com/channel/UC1wzaxZ-w0BpjtdIJ61aTvw",
+            spotify: "https://open.spotify.com/intl-pt/artist/3Th83s9XC6dB0l6XCwQusw?utm_source=ig&utm_medium=social&utm_content=link_in_bio",
+            soundcloud: null,
+            spotifyEmbedId: "3Th83s9XC6dB0l6XCwQusw",
+            youtubeEmbedId: null
+        },
+        10: {
+            id: 10,
+            nome: "Mago7z",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/mago.png",
+            biografia: "Mago7z é um nome de destaque do hip hop de João Pessoa, PB, reconhecido pela presença constante nas batalhas de rima e pelo talento nas rodas de improviso. Com títulos conquistados em diversas competições, construiu respeito dentro da cena local e segue fortalecendo o movimento também através de seus sons autorais. Representa a nova geração do rap paraibano com atitude, técnica e identidade própria.",
+            instagram: "https://www.instagram.com/mago7z/",
+            youtube: "https://www.youtube.com/@mago7z/",
+            spotify: "https://open.spotify.com/intl-pt/artist/4LirNg3Ch31xhaNYoFGVFN?utm_source=ig&utm_medium=social&utm_content=link_in_bio",
+            soundcloud: null,
+            spotifyEmbedId: "4LirNg3Ch31xhaNYoFGVFN",
+            youtubeEmbedId: null
+        },
+        11: {
+            id: 11,
+            nome: "Acerola",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/acerola.jpg",
+            biografia: "Acerola é artista de João Pessoa, PB, atuando como cantor, compositor e MC dentro da cena hip hop paraibana. Com identidade marcante e forte ligação cultural, soma música, vivência e representatividade em sua trajetória. Também contribui diretamente para o movimento local na organização da Batalha do Bairro e da Batalha da Lagoa JP, fortalecendo espaços importantes da cultura de rua na capital paraibana.",
+            instagram: "https://www.instagram.com/acerxla_x17/",
+            youtube: "https://www.youtube.com/@acerxla_x17",
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null,
+            youtubeEmbedId: "hK3ZhkuloBQ?si=mc6UMbWf6qWuEwYk"
+        },
+        12: {
+            id: 12,
+            nome: "Maquiavel",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/maquiavel.jpg",
+            biografia: "Maquiavel é um nome presente nas batalhas de rima de João Pessoa, PB, com forte atuação nas batalhas do Bairro das Indústrias, onde vem se destacando pela escrita refinada, criatividade e forte veia poética. Reconhecido por rimas marcantes e conteúdo inteligente, transforma palavra em expressão, unindo técnica, sentimento e visão crítica em cada verso. Sua presença fortalece a cena local e evidencia a potência lírica do hip hop paraibano",
+            instagram: "https://www.instagram.com/maquiavel_zs/",
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null,
+            youtubeEmbedId: null
+        },
+        13: {
+            id: 13,
+            nome: "Guri",
+            categoria: "HIP-HOP",
+            cidade: "Campina Grande, PB",
+            foto: "/images/artistas/guri.jpg",
+            biografia: "Guri é um nome forte das batalhas de rima de Campina Grande, PB, representando a Zona Leste com talento, atitude e presença marcante. Presente em diversas competições da cena, construiu respeito ao conquistar vários títulos e se destacar pelo improviso afiado. Sua trajetória fortalece o hip hop paraibano e mostra a potência cultural das ruas de Campina Grande.",
+            instagram: "https://www.instagram.com/guriiz.og/",
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null,
+            youtubeEmbedId: null
+        },
+        14: {
+            id: 14,
+            nome: "Zero",
+            categoria: "HIP-HOP",
+            cidade: "Campina Grande, PB",
+            foto: "/images/artistas/zero.jpg",
+            biografia: "Zero é um nome de destaque da cena urbana de Campina Grande, PB, unindo poesia, presença de palco e vivência cultural em sua trajetória. Bicampeão do Slam PB, se destaca pela força das palavras e autenticidade nos versos. Também atua como mestre de cerimônia, levando energia e personalidade por onde passa, além de fortalecer o movimento local através da Batalha das Quebradas e do projeto Cotidiano em Batidas.",
+            instagram: "https://www.instagram.com/zer0._9_/",
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            spotifyEmbedId: null,
+            youtubeEmbedId: null
+        },
+        15: {
+            id: 15,
+            nome: "Nillo",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/nillo.jpg",
+            biografia: "Nillo é um nome de grande peso nas batalhas de rima de João Pessoa, PB, reconhecido pela consistência, técnica e trajetória vitoriosa dentro da cena. Acumula conquistas importantes como títulos na Jornada de MCs (2022/23/24), Red Bull FrancaMente (2022/24), Circuito Hip Hop 2025 e vitórias em diversos estados como PB, PE, SP e MG. Com impressionantes 308 títulos, Nillo representa a força competitiva e o alto nível do freestyle paraibano em âmbito nacional.",
+            instagram: "https://www.instagram.com/nillo083/",
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            tiktok: "https://www.tiktok.com/@nillo083?_t=ZM-8zdvktIbbIm&_r=1",
+            spotifyEmbedId: null,
+            youtubeEmbedId: null
+        },
+        16: {
+            id: 16,
+            nome: "Akuma",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/akuma.jpg",
+            biografia: "Akuma é um MC de batalha e compositor de João Pessoa, PB, reconhecido pela presença forte, técnica refinada e personalidade marcante nas rodas de rima. Destaque da cena paraibana, construiu uma trajetória vitoriosa com o título do Estadual PB 2022, vice-campeonato em 2025, campeão da Expofavela 2024 e bicampeão da Usina (2023/2024). Seu nome representa competitividade, talento e a força do freestyle pessoense nas batalhas de rima.",
+            instagram: "https://www.instagram.com/4kuma.sgs/",
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            tiktok: "https://www.tiktok.com/@akumasgs?_t=ZM-8u5cMyNx1Yk&_r=1",
+            spotifyEmbedId: null,
+            youtubeEmbedId: null
+        },
+        17: {
+            id: 17,
+            nome: "Nevike",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/nevike.png",
+            biografia: "Nevike é um MC e trapper de João Pessoa, PB, nome consolidado na cena urbana local por sua constância, identidade sonora e trajetória construída ao longo de anos lançando músicas autorais. Com versatilidade entre rap e trap, soma trabalhos marcantes que fortaleceram seu nome, incluindo faixas como Ninja, Voando Alto, Fuga e Cultura Hip Hop Representante. Sua caminhada representa dedicação, evolução artística e a força da música independente paraibana.",
+            instagram: "https://www.instagram.com/nevike_rf/",
+            youtube: "https://www.youtube.com/@nevikeNINJA/videos",
+            spotify: "https://open.spotify.com/artist/34vP6wOmAZ39u3NNROFwLv",
+            soundcloud: null,
+            tiktok: null,
+            spotifyEmbedId: "34vP6wOmAZ39u3NNROFwLv",
+            youtubeEmbedId: null
+        },
+        18: {
+            id: 18,
+            nome: "Ayam",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/ayam.png",
+            biografia: "Ayam é um nome ativo da cena hip hop de João Pessoa, PB, marcando presença constante nas batalhas de rima e nos principais eventos culturais da cidade. Reconhecido pela postura firme, talento no improviso e conexão com o movimento de rua, também fortalece sua trajetória na música autoral. Em 2025, lançou a faixa Filho da Luta, trabalho que representa vivência, superação e a essência de quem constrói seu caminho através da arte.",
+            instagram: "https://www.instagram.com/ayam.pb/",
+            youtube: null,
+            spotify: "https://open.spotify.com/intl-pt/artist/5w3s0wPTYPTD1bPzJYxv85",
+            soundcloud: null,
+            tiktok: null,
+            applemusic: "https://music.apple.com/us/album/filho-da-luta-single/1819787441?uo=4",
+            spotifyEmbedId: "54X6UlrRZXo4e8y1F3nAYq", // ID da música específica do Vulto 083
+            spotifyEmbedType: "album", // Tipo: música específica (não o perfil)
+            youtubeEmbedId: null
+        },
+        19: {
+            id: 19,
+            nome: "Alves",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/alves.jpg",
+            biografia: "Alves é um MC das batalhas de rima de João Pessoa, PB, que vem ganhando destaque na cena local pela evolução rápida, presença marcante e talento no improviso. Mesmo com trajetória recente, já começa a conquistar notoriedade nas rodas e arenas da capital paraibana, mostrando personalidade, criatividade e grande potencial dentro do freestyle. Representa a nova geração do hip hop pessoense em ascensão.",
+            instagram: "https://www.instagram.com/alvezs083/",
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            tiktok: null,
+            spotifyEmbedId: null, // ID da música específica do Vulto 083
+            youtubeEmbedId: null
         },
         20: {
             id: 20,
-            nome: "Rank MC",
-            categoria: "mc",
+            nome: "Tourette MC",
+            categoria: "HIP-HOP",
             cidade: "João Pessoa, PB",
-            foto: "https://placehold.co/300x300/1A1A1A/981213?text=Rank+MC",
-            biografia: "Rank MC é mais um talento da capital paraibana, trazendo rimas afiadas e conteúdo de qualidade para a cena local.",
-            instagram: null,
+            foto: "/images/artistas/tourette.jpg",
+            biografia: "Tourette MC é um nome de destaque nas batalhas de rima de João Pessoa, reconhecido pela autenticidade, presença marcante e trajetória de superação dentro da cena. Primeiro MC com Tourette a alcançar grande notoriedade no movimento local, vem conquistando respeito com talento, personalidade forte e rimas intensas. Campeão Regional em 2025, segue representando a cultura hip hop e inspirando muita gente através da música e das batalhas.",
+            instagram: "https://www.instagram.com/touretteemici/",
             youtube: null,
             spotify: null,
             soundcloud: null,
-            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+            tiktok: null,
+            spotifyEmbedId: null, // ID da música específica do Vulto 083
+            youtubeEmbedId: null
+        },
+        21: {
+            id: 21,
+            nome: "Mix",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/mix.jpg",
+            biografia: "Mix é um artista versátil de João Pessoa que construiu seu nome nas batalhas de rima e na música, mostrando talento e presença na cena urbana. Atualmente focado no humor, vem se destacando com conteúdo autêntico e carisma natural, levando o jeito raiz da cidade para a internet. Com forte conexão com o público, soma cerca de 6 milhões de visualizações por mês e segue crescendo como um dos nomes mais populares do entretenimento local.",
+            instagram: "https://www.instagram.com/eoomiix/",
+            youtube: null,
+            spotify: "https://open.spotify.com/artist/7AuI4xd3Jzi7JmaDCnn0Xu",
+            soundcloud: null,
+            tiktok: "https://www.tiktok.com/@mano_mix6",
+            spotifyEmbedId: "7AuI4xd3Jzi7JmaDCnn0Xu", // ID da música específica do Vulto 083
+            youtubeEmbedId: null
+        },
+        22: {
+            id: 22,
+            nome: "LayLuz MC",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/layluz.jpg",
+            biografia: "Layluz MC é um nome de força nas batalhas de rima de João Pessoa, reconhecida pela garra, atitude e presença marcante no mic. Movida por fé em Deus e muita determinação, vem construindo seu espaço dentro da cena com autenticidade e personalidade única. Além da trajetória como MC, também se destaca no empreendedorismo, sendo responsável por projetos próprios nas áreas de beleza e tattoo/piercing, mostrando talento dentro e fora das batalhas.",
+            instagram: "https://www.instagram.com/og_layluz/",
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            tiktok: null,
+            spotifyEmbedId: null, // ID da música específica do Vulto 083
+            youtubeEmbedId: null
+        },
+        23: {
+            id: 23,
+            nome: "Isadroga",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/isadroga.jpg",
+            biografia: "Isadroga é uma artista multifacetada de João Pessoa que une rima, poesia e comunicação em uma trajetória marcada por criatividade e consciência cultural. Como MC e poeta, se destaca pela força das palavras e pela presença nas batalhas e slams da cena local. Também atua na produção e organização de importantes movimentos culturais, fortalecendo espaços de expressão, arte e resistência dentro do hip hop e da poesia periférica.",
+            instagram: "https://www.instagram.com/isadroga.83/",
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            tiktok: null,
+            linktree: "https://linktr.ee/Isadroga?utm_source=ig&utm_medium=social&utm_content=link_in_bio",
+            spotifyEmbedId: "608Y18eNMDSIletu0Sc5VD?utm_medium=share&utm_source=linktree",
+            spotifyEmbedType: "episode", // ID da música específica do Vulto 083
+            youtubeEmbedId: null
+        },
+        24: {
+            id: 24,
+            nome: "Kon MC",
+            categoria: "HIP-HOP",
+            cidade: "João Pessoa, PB",
+            foto: "/images/artistas/kon.jpg",
+            biografia: "Kon é um MC de batalha que vem ganhando destaque pela presença marcante, carisma e confiança nas rodas culturais. Representando a Paraíba, transmite a ideia de crescer sem perder a essência, sempre mirando voos maiores. Conhecido como “seu mano estrela”, carrega uma personalidade positiva e autêntica, passando a mensagem de que com o ângulo certo qualquer pessoa pode brilhar.",
+            instagram: "https://www.instagram.com/konemici/",
+            youtube: "https://www.youtube.com/@conexaon.p.b",
+            spotify: null,
+            soundcloud: null,
+            tiktok: null,
+            linktree: null,
+            spotifyEmbedId: null,
+            youtubeEmbedId: "naM1f5zkk4Q?si=3guB-OLhPDVq9X8X"
+        },
+        25: {
+            id: 25,
+            nome: "Igor Z",
+            categoria: "HIP-HOP",
+            cidade: "Campina Grande, PB",
+            foto: "/images/artistas/igorz.png",
+            biografia: "Igor Z é um MC de batalha de Campina Grande reconhecido pela qualidade nas rimas, criatividade e presença forte nas disputas. Com estilo marcante e boa leitura de batalha, vem se destacando por encaixar linhas inteligentes com naturalidade, sempre mantendo intensidade nas rodas culturais. Representando Campina Grande, Igor Z mostra talento e constância, fortalecendo seu nome no cenário paraibano.",
+            instagram: "https://www.instagram.com/igorzs_mc/",
+            youtube: null,
+            spotify: null,
+            soundcloud: null,
+            tiktok: null,
+            linktree: null,
+            spotifyEmbedId: null,
+            youtubeEmbedId: null
         },
         
         // ====================================
-        // BANDAS ROCK/METAL (IDs 10-19)
+        // BANDAS ROCK/METAL (IDs 100-0)
         // ====================================
-        10: {
-            id: 10,
-            nome: "Banda Rock PB",
+        100: {
+            id: 100,
+            nome: "Incessante",
             categoria: "banda",
             cidade: "João Pessoa, PB",
-            foto: "https://placehold.co/300x300/1A1A1A/981213?text=Rock",
-            biografia: "Banda Rock PB é uma das pioneiras do rock paraibano. Com mais de uma década de estrada, já se apresentou em diversos festivais do Nordeste.",
-            instagram: null,
-            youtube: null,
-            spotify: null,
+            foto: "images/artistas/incessante.jpg",
+            biografia: "Incessante é uma banda paraibana formada em 2010 que representa a força do rock produzido na Paraíba. Com identidade própria e atitude marcante, carrega a essência do “Rock made in PB”, valorizando a cena local e mantendo viva a energia do gênero no estado. Ao longo da trajetória, a banda construiu seu nome com autenticidade, presença de palco e compromisso com a música autoral, sendo parte ativa do movimento rock paraibano.Banda Rock PB é uma das pioneiras do rock paraibano. Com mais de uma década de estrada, já se apresentou em diversos festivais do Nordeste.",
+            instagram: "https://www.instagram.com/bandaincessante/",
+            youtube: "https://www.youtube.com/@bandaIncessante",
+            spotify: "https://open.spotify.com/intl-pt/artist/1cYYpE9qONHQDWYMvBNQ1J",
             soundcloud: null,
-            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+            spotifyEmbedId: "1cYYpE9qONHQDWYMvBNQ1J",
+            youtubeEmbedId: null
         },
-        11: {
+        901: {
             id: 11,
             nome: "Metal Nordeste",
             categoria: "banda",
@@ -544,9 +951,10 @@
             youtube: null,
             spotify: null,
             soundcloud: null,
-            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+            spotifyEmbedId: null,
+            youtubeEmbedId: null
         },
-        12: {
+        902: {
             id: 12,
             nome: "Hardcore 083",
             categoria: "banda",
@@ -557,9 +965,10 @@
             youtube: null,
             spotify: null,
             soundcloud: null,
-            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+            spotifyEmbedId: null,
+            youtubeEmbedId: null
         },
-        13: {
+        903: {
             id: 13,
             nome: "Punk PB",
             categoria: "banda",
@@ -570,9 +979,10 @@
             youtube: null,
             spotify: null,
             soundcloud: null,
-            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+            spotifyEmbedId: null,
+            youtubeEmbedId: null
         },
-        14: {
+        904: {
             id: 14,
             nome: "Grunge Paraíba",
             categoria: "banda",
@@ -583,7 +993,8 @@
             youtube: null,
             spotify: null,
             soundcloud: null,
-            spotifyEmbedId: null // Adicione o ID do Spotify quando disponível
+            spotifyEmbedId: null,
+            youtubeEmbedId: null
         }
         
         // ====================================
@@ -649,6 +1060,36 @@
                 </a>
             `;
         }
+        if (artista.linktree) {
+            redesSociais += `
+                <a href="${artista.linktree}" target="_blank" aria-label="Links">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9.5 14.5a2 2 0 0 0 2.83 0l4.24-4.24a4 4 0 1 0-5.66-5.66L8.79 6.72a2 2 0 1 0 2.83 2.83l2.12-2.12a1 1 0 1 1 1.41 1.41L10.91 13.08a2 2 0 0 0 0 2.83z"/>
+                        <path d="M14.5 9.5a2 2 0 0 0-2.83 0l-4.24 4.24a4 4 0 1 0 5.66 5.66l2.12-2.12a2 2 0 1 0-2.83-2.83l-2.12 2.12a1 1 0 1 1-1.41-1.41l4.24-4.24a2 2 0 0 0 0-2.83z"/>
+                    </svg>
+                </a>
+            `;
+        }
+
+        if (artista.applemusic) {
+            redesSociais += `
+                <a href="${artista.applemusic}" target="_blank" aria-label="Apple Music">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.03 3.28c-1.18.07-2.6.8-3.4 1.75-.72.84-1.35 2.1-1.12 3.3 1.29.1 2.62-.65 3.39-1.58.74-.89 1.3-2.15 1.13-3.47zM20.5 17.1c-.53 1.2-.78 1.73-1.46 2.77-.95 1.45-2.28 3.25-3.94 3.26-1.47.01-1.85-.96-3.85-.95-2 .01-2.42.97-3.89.96-1.66-.01-2.92-1.64-3.87-3.09C.84 17.35-.7 12.47 1.45 8.74 2.98 6.08 5.4 4.52 7.67 4.52c1.5 0 2.74 1.03 4.13 1.03 1.35 0 2.17-1.03 4.12-1.03 2.02 0 4.16 1.1 5.68 3.02-4.99 2.74-4.18 9.94-.1 12.56z"/>
+                    </svg>
+                </a>
+    `;
+        }
+
+        if (artista.tiktok) {
+            redesSociais += `
+                <a href="${artista.tiktok}" target="_blank" aria-label="TikTok">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.227V2h-3.193v13.377c0 2.255-1.804 4.083-4.03 4.083a4.068 4.068 0 0 1-4.068-4.068 4.068 4.068 0 0 1 4.068-4.068c.372 0 .732.05 1.075.144V8.21a7.294 7.294 0 0 0-1.075-.08A7.262 7.262 0 0 0 1.333 15.39a7.262 7.262 0 0 0 7.263 7.263 7.262 7.262 0 0 0 7.263-7.263V8.687a7.93 7.93 0 0 0 4.73 1.56V7.054a4.765 4.765 0 0 1-.999-.368z"/>
+                    </svg>
+                </a>
+            `;
+        }
         
         if (artista.youtube) {
             redesSociais += `
@@ -675,42 +1116,55 @@
         }
         
         /* ============================================
-           SEÇÃO DE DISCOGRAFIA (Embed do Spotify)
+           SEÇÃO DE DISCOGRAFIA (Embed do Spotify ou YouTube)
            
-           Monta o HTML do iframe do Spotify se o artista tiver spotifyEmbedId
+           Monta o HTML do iframe baseado no que o artista tiver:
+           - Se tiver spotifyEmbedId: mostra Spotify (artist, track ou album)
+           - Se não tiver Spotify mas tiver youtubeEmbedId: mostra YouTube
+           - Se não tiver nenhum: não mostra a seção
            
-           PARÂMETROS DO EMBED:
+           TIPOS DE EMBED DO SPOTIFY (spotifyEmbedType):
+           - "artist" (padrão): perfil completo do artista
+           - "track": uma música específica
+           - "album": um álbum específico
+           
+           PARÂMETROS DO EMBED SPOTIFY:
            - utm_source=generator: identifica a origem do embed
            - theme=0: tema escuro (preto/cinza) - RECOMENDADO para o site
-           - theme=1: tema claro (branco) - use se o site tiver fundo claro
+           - theme=1: tema claro (branco)
            
-           Para mudar o tema, altere o valor de "theme=" na URL abaixo
-           
-           ALTURA DO PLAYER:
-           - 352px é a altura padrão recomendada pelo Spotify
-           - Você pode ajustar para 152px (compacto) ou 500px+ (maior)
+           PARÂMETROS DO EMBED YOUTUBE:
+           - O vídeo usa proporção 16:9 responsiva
+           - Fundo escuro (#121212) combina com a estética do site
         ============================================ */
         let discografiaHtml = '';
         
         if (artista.spotifyEmbedId) {
+            // Define o tipo de embed (padrão: artist)
+            const embedType = artista.spotifyEmbedType || 'artist';
+            
+            // PRIORIDADE 1: Spotify (se disponível)
+            // Suporta três tipos: artist (perfil), track (música) ou album (álbum)
             discografiaHtml = `
                 <div class="artist-discography">
                     <h2>Discografia</h2>
                     <div class="spotify-embed-container">
                         <!-- 
-                        IFRAME DO SPOTIFY - EMBED DO ARTISTA
+                        IFRAME DO SPOTIFY - EMBED TIPO: ${embedType.toUpperCase()}
+                        
+                        TIPOS DISPONÍVEIS:
+                        - artist: perfil do artista (padrão)
+                        - track: uma música específica
+                        - album: um álbum específico
                         
                         COMO PERSONALIZAR:
                         - theme=0: Tema escuro (preto/cinza) - atual
                         - theme=1: Tema claro (branco)
                         - height="352": Altura do player (pode mudar para 152, 400, etc)
-                        
-                        O ID do artista (${artista.spotifyEmbedId}) é pego automaticamente
-                        dos dados do artista no objeto ARTISTAS acima.
                         -->
                         <iframe 
                             style="border-radius:12px" 
-                            src="https://open.spotify.com/embed/artist/${artista.spotifyEmbedId}?utm_source=generator&theme=0" 
+                            src="https://open.spotify.com/embed/${embedType}/${artista.spotifyEmbedId}?utm_source=generator&theme=0" 
                             width="100%" 
                             height="352" 
                             frameBorder="0" 
@@ -722,7 +1176,37 @@
                     </div>
                 </div>
             `;
+        } else if (artista.youtubeEmbedId) {
+            // PRIORIDADE 2: YouTube (se não tem Spotify)
+            discografiaHtml = `
+                <div class="artist-discography">
+                    <h2>Discografia</h2>
+                    <div class="youtube-embed-container">
+                        <!-- 
+                        IFRAME DO YOUTUBE - EMBED DO VÍDEO
+                        
+                        Este artista não tem Spotify, então mostra um vídeo do YouTube.
+                        O container usa aspect-ratio 16:9 para manter proporção responsiva.
+                        
+                        COMO OBTER UM NOVO ID:
+                        1. Vá ao vídeo no YouTube
+                        2. Clique em Compartilhar > Incorporar
+                        3. Copie o ID após "/embed/"
+                        -->
+                        <iframe 
+                            src="https://www.youtube.com/embed/${artista.youtubeEmbedId}?si=embed" 
+                            title="YouTube - ${artista.nome}"
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            referrerpolicy="strict-origin-when-cross-origin" 
+                            allowfullscreen
+                            loading="lazy"
+                        ></iframe>
+                    </div>
+                </div>
+            `;
         }
+        // Se não tiver nem Spotify nem YouTube, discografiaHtml fica vazio
         
         // Renderiza a página do artista
         container.innerHTML = `
@@ -755,7 +1239,8 @@
     // Carrega o artista quando a página terminar de carregar
     document.addEventListener('DOMContentLoaded', carregarArtista);
     </script>
+    
 </body>
 </html>
 </content>
-<parameter name="taskNameActive">Creating artista.html
+<parameter name="taskNameActive">

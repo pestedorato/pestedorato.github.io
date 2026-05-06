@@ -273,7 +273,26 @@ baseado no tema atual (definido mais abaixo no CSS)
     transition: background-color var(--transition-media);
 }
 
-/* Logo no menu */
+/* 
+============================================
+LOGO DA NAVBAR
+============================================
+
+A navbar usa DUAS logos que trocam AUTOMATICAMENTE:
+- .logo-dark: aparece no modo escuro (fundo preto)
+- .logo-light: aparece no modo claro (fundo branco)
+
+PARA ALTERAR AS LOGOS, EDITE NO HTML:
+- Modo ESCURO: src da img com class="logo-img logo-dark"
+- Modo CLARO: src da img com class="logo-img logo-light"
+============================================
+*/
+.navbar-logo {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .navbar-logo img {
     height: 40px;
     width: auto;
@@ -514,12 +533,58 @@ A cor muda automaticamente com o tema através de var(--cor-texto)
 }
 
 /* 
-SISTEMA DE TROCA DE LOGO
-- No modo escuro: mostra logo branca (logo-dark), esconde preta
-- No modo claro: mostra logo preta (logo-light), esconde branca
+============================================
+SISTEMA DE TROCA DE LOGO - DARK/LIGHT MODE
+============================================
+
+Este sistema troca AUTOMATICAMENTE as logos quando o tema muda.
+Funciona para TODAS as logos do site: navbar, splash screen e hero.
+
+COMO FUNCIONA:
+- Adicione a classe "logo-dark" na logo para MODO ESCURO (fundo preto)
+- Adicione a classe "logo-light" na logo para MODO CLARO (fundo branco)
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ MODO ESCURO (padrao - fundo preto):                                │
+│   -> Mostra elementos com classe .logo-dark (logo BRANCA)          │
+│   -> Esconde elementos com classe .logo-light                      │
+├─────────────────────────────────────────────────────────────────────┤
+│ MODO CLARO (fundo branco):                                         │
+│   -> Mostra elementos com classe .logo-light (logo PRETA)          │
+│   -> Esconde elementos com classe .logo-dark                       │
+└─────────────────────────────────────────────────────────────────────┘
+
+ONDE ALTERAR AS IMAGENS (no arquivo HTML):
+
+1. NAVBAR (logo deitada):
+   - Modo ESCURO: procure class="logo-img logo-dark"
+     Altere: src="/images/logodeitadabranca.png"
+   
+   - Modo CLARO: procure class="logo-img logo-light"  
+     Altere: src="/images/logodeitadapreta.png"
+
+2. SPLASH SCREEN (logo quadrada):
+   - Modo ESCURO: procure class="splash-logo logo-dark"
+     Altere: src="/images/logopestedoratobranca.png"
+   
+   - Modo CLARO: procure class="splash-logo logo-light"
+     Altere: src="/images/logopestedoratopreta.png"
+
+3. HERO (logo quadrada na pagina inicial):
+   - Modo ESCURO: procure class="hero-image logo-dark"
+     Altere: src="/images/logopestedoratobranca.png"
+   
+   - Modo CLARO: procure class="hero-image logo-light"
+     Altere: src="/images/logopestedoratopreta.png"
+
+============================================
 */
 
-/* Modo escuro (padrão): mostra logo branca, esconde logo preta */
+/* 
+MODO ESCURO (padrao): 
+- Mostra logo BRANCA (logo-dark)
+- Esconde logo PRETA (logo-light)
+*/
 .logo-dark {
     display: block;
 }
@@ -527,7 +592,11 @@ SISTEMA DE TROCA DE LOGO
     display: none;
 }
 
-/* Modo claro: mostra logo preta, esconde logo branca */
+/* 
+MODO CLARO (quando body tem classe light-mode):
+- Esconde logo BRANCA (logo-dark)  
+- Mostra logo PRETA (logo-light)
+*/
 body.light-mode .logo-dark {
     display: none;
 }
@@ -953,6 +1022,33 @@ Para mudar a fonte, altere font-family abaixo
 }
 
 /* ============================================
+   TEXTO DE CONVITE PARA ARTISTAS NO FOOTER
+   Aparece em todas as páginas abaixo da frase principal
+   ============================================ */
+.footer-artist-invite {
+    font-family: var(--fonte-texto);
+    font-size: 0.85rem;
+    color: var(--cor-bege);
+    margin-bottom: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.footer-artist-invite a {
+    color: var(--cor-vermelho);
+    text-decoration: underline;
+    font-weight: 500;
+    transition: color var(--transition-rapida);
+}
+
+.footer-artist-invite a:hover {
+    color: var(--cor-vermelho-hover);
+}
+
+/* ============================================
    PÁGINA DE LISTAGEM (Álbuns/Artistas)
    Grid com paginação
    ============================================ */
@@ -1351,4 +1447,147 @@ img {
     user-drag: none;
     pointer-events: auto;
     -webkit-touch-callout: none; /* Bloqueia menu de toque longo em iOS */
+}
+
+/* ============================================
+   POPUP DE ARTISTAS
+   Popup que aparece UMA VEZ para convidar artistas a se cadastrarem
+   
+   COMO FUNCIONA:
+   - Aparece após a splash screen e boas-vindas
+   - Só aparece UMA VEZ (salvo no localStorage)
+   - Pode ser fechado clicando no X, no overlay ou pressionando ESC
+   
+   COMO PERSONALIZAR:
+   - Cores: usa as variáveis CSS do tema (muda automaticamente com dark/light)
+   - Tamanho: ajuste max-width em .artist-popup-content
+   - Animação: ajuste a transição em .artist-popup
+   ============================================ */
+
+/* Overlay escuro + container do popup */
+.artist-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9998; /* Abaixo da tela de boas-vindas (9999), acima do menu (1000) */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-media), visibility var(--transition-media);
+    padding: 20px;
+}
+
+/* Popup visível */
+.artist-popup.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Popup sendo escondido */
+.artist-popup.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Conteúdo do popup (caixa branca/preta) */
+.artist-popup-content {
+    background-color: var(--cor-cinza);
+    border-radius: var(--card-radius);
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    border: 2px solid var(--cor-vermelho);
+    
+    /* Animação de entrada */
+    transform: translateY(-20px);
+    transition: transform var(--transition-media);
+}
+
+.artist-popup.show .artist-popup-content {
+    transform: translateY(0);
+}
+
+/* Botão de fechar (X) */
+.artist-popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition-rapida);
+}
+
+.artist-popup-close:hover {
+    transform: scale(1.1);
+}
+
+.artist-popup-close svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--cor-bege);
+    transition: stroke var(--transition-rapida);
+}
+
+.artist-popup-close:hover svg {
+    stroke: var(--cor-vermelho);
+}
+
+/* Texto do popup */
+.artist-popup-text {
+    font-family: var(--fonte-texto);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--cor-texto);
+    margin-bottom: 25px;
+    padding: 0 10px;
+}
+
+/* Botão de preencher formulário */
+.artist-popup-btn {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: var(--cor-vermelho);
+    color: #FFFFFF;
+    font-family: var(--fonte-titulo);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: var(--borda-radius);
+    transition: background-color var(--transition-rapida), transform var(--transition-rapida);
+}
+
+.artist-popup-btn:hover {
+    background-color: var(--cor-vermelho-hover);
+    transform: scale(1.05);
+}
+
+/* Responsividade do popup */
+@media (max-width: 480px) {
+    .artist-popup-content {
+        padding: 25px 20px;
+    }
+    
+    .artist-popup-text {
+        font-size: 0.95rem;
+    }
+    
+    .artist-popup-btn {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+    }
 }
