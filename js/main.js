@@ -63,7 +63,24 @@ const CONFIG = {
     
     // Tempo de delay para mostrar o popup após as boas-vindas (em milissegundos)
     // 500ms = meio segundo após as boas-vindas sumirem
-    artistPopupDelay: 500
+    artistPopupDelay: 500,
+    
+    // ============================================
+    // NAVEGACAO - CONFIGURAÇÕES
+    // ============================================
+    
+    // Chave para saber se ja mostrou a splash screen NESTA SESSAO
+    // A splash aparece APENAS quando o usuario entra no site pela primeira vez
+    // Navegando entre paginas do site, a splash NAO aparece mais
+    splashShownStorageKey: 'pesteDoRato_splashShown',
+    
+    // Chave para salvar a pagina atual da paginacao
+    // Quando o usuario volta de uma pagina de artista, ele volta pra mesma pagina
+    paginationStorageKey: 'pesteDoRato_pagination',
+    
+    // Chave para salvar a posicao do scroll
+    // Quando o usuario volta, o site restaura a posicao onde ele estava
+    scrollPositionStorageKey: 'pesteDoRato_scrollPosition'
 };
 
 // ============================================
@@ -73,14 +90,51 @@ const CONFIG = {
 
 /**
  * Controla a exibição da splash screen
+ * 
+ * ============================================
+ * COMPORTAMENTO DA SPLASH SCREEN
+ * ============================================
+ * 
+ * A splash screen APENAS aparece quando o usuario ENTRA no site
+ * pela primeira vez nessa sessao do navegador.
+ * 
+ * Quando o usuario navega DENTRO do site (ex: clica em um artista
+ * e depois volta), a splash NAO aparece mais.
+ * 
+ * Isso melhora a experiencia de navegacao porque o usuario nao
+ * precisa esperar a splash toda vez que muda de pagina.
+ * 
+ * COMO FUNCIONA:
+ * - Quando a splash aparece, marca no sessionStorage
+ * - Se ja foi marcada, pula a splash e vai direto pro conteudo
+ * - O sessionStorage limpa quando fecha o navegador, entao
+ *   na proxima visita a splash aparece novamente
+ * 
  * COMO MODIFICAR:
  * - Para mudar o tempo: altere CONFIG.splashDuration
  * - Para desativar: comente a chamada initSplashScreen() na função init()
+ * ============================================
  */
 function initSplashScreen() {
     const splashScreen = document.getElementById('splash-screen');
     
     if (!splashScreen) return;
+    
+    // Verifica se a splash ja foi mostrada NESTA SESSAO
+    const splashAlreadyShown = sessionStorage.getItem(CONFIG.splashShownStorageKey);
+    
+    if (splashAlreadyShown) {
+        // Ja mostrou a splash nessa sessao, pula direto pro conteudo
+        splashScreen.classList.add('hide');
+        splashScreen.style.display = 'none';
+        
+        // Verifica se deve mostrar boas-vindas (caso ainda nao tenha mostrado)
+        checkWelcomeScreen();
+        return;
+    }
+    
+    // Marca que a splash foi mostrada nessa sessao
+    sessionStorage.setItem(CONFIG.splashShownStorageKey, 'true');
     
     // Após o tempo definido, esconde a splash screen
     setTimeout(() => {
@@ -273,6 +327,47 @@ function resetWelcome() {
 
 // Disponibiliza a função globalmente para uso no console
 window.resetWelcome = resetWelcome;
+
+/**
+ * Função para resetar a splash screen (útil para testes)
+ * Chame esta função no console: resetSplash()
+ * 
+ * Isso faz a splash aparecer novamente ao recarregar a página
+ */
+function resetSplash() {
+    sessionStorage.removeItem(CONFIG.splashShownStorageKey);
+    console.log('Splash screen resetada! Recarregue a página para ver novamente.');
+}
+
+// Disponibiliza a função globalmente para uso no console
+window.resetSplash = resetSplash;
+
+/**
+ * Função para resetar toda a navegacao (útil para testes)
+ * Chame esta função no console: resetNavigation()
+ * 
+ * Isso limpa:
+ * - Splash screen (vai aparecer novamente)
+ * - Posicoes de scroll salvas
+ * - Paginas de paginacao salvas
+ */
+function resetNavigation() {
+    // Limpa splash
+    sessionStorage.removeItem(CONFIG.splashShownStorageKey);
+    
+    // Limpa todas as posicoes de scroll e paginacao
+    for (let i = sessionStorage.length - 1; i >= 0; i--) {
+        const key = sessionStorage.key(i);
+        if (key && (key.includes('scrollPosition') || key.includes('pagination'))) {
+            sessionStorage.removeItem(key);
+        }
+    }
+    
+    console.log('Navegacao resetada! Recarregue a página.');
+}
+
+// Disponibiliza a função globalmente para uso no console
+window.resetNavigation = resetNavigation;
 
 // ============================================
 // 4. TEMA DARK/LIGHT
@@ -638,7 +733,26 @@ function initScrollButton() {
 /**
  * Inicializa a paginação nas páginas de listagem
  * 
+ * ============================================
+ * COMPORTAMENTO DA PAGINACAO
+ * ============================================
+ * 
+ * Quando o usuario esta na pagina 2, 3, etc de uma listagem
+ * e clica em um artista, ao voltar ele retorna para a MESMA PAGINA
+ * onde estava, nao para a pagina 1.
+ * 
  * COMO FUNCIONA:
+ * - A pagina atual e salva na URL (ex: ?page=3)
+ * - Quando o usuario volta, o sistema le a URL e vai pra pagina correta
+ * - O sessionStorage tambem guarda a pagina por categoria
+ * 
+ * EXEMPLO:
+ * - Usuario esta em hiphop-mcs.html na pagina 3
+ * - Clica no MC HIRLA para ver o perfil
+ * - Ao voltar (botao voltar do navegador), volta pra pagina 3
+ * ============================================
+ * 
+ * COMO FUNCIONA TECNICAMENTE:
  * - Os cards são marcados com a classe 'pagination-item'
  * - O sistema mostra CONFIG.itemsPerPage cards por vez
  * - Cria botões de navegação automaticamente
@@ -654,10 +768,54 @@ function initPagination() {
     const totalPages = Math.ceil(totalItems / CONFIG.itemsPerPage);
     let currentPage = 1;
     
+    // Pega a pagina da URL atual (para lembrar onde o usuario estava)
+    const currentPath = window.location.pathname;
+    const storageKey = CONFIG.paginationStorageKey + '_' + currentPath;
+    
+    /**
+     * Pega a pagina salva (da URL ou do sessionStorage)
+     */
+    const getSavedPage = () => {
+        // Primeiro tenta pegar da URL (ex: ?page=3)
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageFromUrl = parseInt(urlParams.get('page'));
+        
+        if (pageFromUrl && pageFromUrl >= 1 && pageFromUrl <= totalPages) {
+            return pageFromUrl;
+        }
+        
+        // Se nao tem na URL, tenta pegar do sessionStorage
+        const savedPage = parseInt(sessionStorage.getItem(storageKey));
+        if (savedPage && savedPage >= 1 && savedPage <= totalPages) {
+            return savedPage;
+        }
+        
+        return 1; // Padrao: pagina 1
+    };
+    
+    /**
+     * Salva a pagina atual (na URL e no sessionStorage)
+     */
+    const savePage = (page) => {
+        // Salva no sessionStorage
+        sessionStorage.setItem(storageKey, page.toString());
+        
+        // Atualiza a URL sem recarregar a pagina
+        const url = new URL(window.location);
+        if (page > 1) {
+            url.searchParams.set('page', page.toString());
+        } else {
+            url.searchParams.delete('page');
+        }
+        window.history.replaceState({}, '', url);
+    };
+    
     /**
      * Mostra os itens da página atual
+     * @param {number} page - Numero da pagina
+     * @param {boolean} scrollToTop - Se deve fazer scroll pro topo (padrao: true)
      */
-    const showPage = (page) => {
+    const showPage = (page, scrollToTop = true) => {
         currentPage = page;
         const start = (page - 1) * CONFIG.itemsPerPage;
         const end = start + CONFIG.itemsPerPage;
@@ -672,8 +830,13 @@ function initPagination() {
         
         updatePaginationButtons();
         
-        // Scroll para o topo da listagem
-        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Salva a pagina atual
+        savePage(page);
+        
+        // Scroll para o topo da listagem (apenas se solicitado)
+        if (scrollToTop) {
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     };
     
     /**
@@ -740,7 +903,11 @@ function initPagination() {
     // Inicializa se houver itens
     if (totalItems > 0) {
         createPaginationButtons();
-        showPage(1);
+        
+        // Pega a pagina salva e mostra ela (sem scroll se estiver voltando)
+        const savedPage = getSavedPage();
+        const isReturning = savedPage > 1;
+        showPage(savedPage, !isReturning); // Nao faz scroll se estiver voltando pra pagina salva
     }
 }
 
@@ -962,7 +1129,87 @@ function initSearch() {
 }
 
 // ============================================
-// 12. INICIALIZAÇÃO
+// 12. SISTEMA DE MEMORIA DE NAVEGACAO
+// Salva e restaura a posicao do scroll e do carrossel
+// ============================================
+
+/**
+ * ============================================
+ * SISTEMA DE MEMORIA DE NAVEGACAO
+ * ============================================
+ * 
+ * Este sistema melhora a experiencia de navegacao:
+ * 
+ * 1. POSICAO DO SCROLL:
+ *    - Quando o usuario clica em um artista, salva onde ele estava
+ *    - Quando ele volta (botao voltar), restaura a posicao exata
+ *    - Assim ele nao precisa rolar a pagina de novo pra achar onde estava
+ * 
+ * 2. POSICAO DO CARROSSEL:
+ *    - Se o usuario estava no meio de um carrossel, salva a posicao
+ *    - Quando volta, o carrossel esta na mesma posicao
+ * 
+ * COMO FUNCIONA:
+ * - Usa sessionStorage para guardar a posicao por pagina
+ * - Quando o usuario clica em um link, salva a posicao atual
+ * - Quando a pagina carrega, verifica se tem posicao salva e restaura
+ * ============================================
+ */
+
+/**
+ * Inicializa o sistema de memoria de navegacao
+ */
+function initNavigationMemory() {
+    const currentPath = window.location.pathname;
+    const storageKey = CONFIG.scrollPositionStorageKey + '_' + currentPath;
+    
+    // Restaura a posicao do scroll se existir
+    const savedPosition = sessionStorage.getItem(storageKey);
+    
+    if (savedPosition) {
+        // Aguarda um pouco para a pagina terminar de carregar
+        // e depois restaura a posicao
+        setTimeout(() => {
+            window.scrollTo({
+                top: parseInt(savedPosition),
+                behavior: 'auto' // Instantaneo, sem animacao
+            });
+        }, 100);
+        
+        // Limpa a posicao salva (para nao restaurar se recarregar a pagina)
+        sessionStorage.removeItem(storageKey);
+    }
+    
+    // Salva a posicao do scroll quando o usuario clica em um link interno
+    document.addEventListener('click', (e) => {
+        // Verifica se clicou em um link
+        const link = e.target.closest('a');
+        
+        if (link && link.href) {
+            // Verifica se e um link interno (mesmo dominio)
+            const linkUrl = new URL(link.href);
+            const currentUrl = new URL(window.location.href);
+            
+            // Se for link interno (mesmo dominio e nao e ancora)
+            if (linkUrl.hostname === currentUrl.hostname && !link.href.startsWith('#')) {
+                // Salva a posicao atual do scroll
+                const scrollPosition = window.scrollY;
+                sessionStorage.setItem(storageKey, scrollPosition.toString());
+            }
+        }
+    });
+    
+    // Tambem salva quando o usuario usa o botao voltar/avancar do navegador
+    window.addEventListener('beforeunload', () => {
+        // Nao salva se estiver no topo da pagina
+        if (window.scrollY > 100) {
+            sessionStorage.setItem(storageKey, window.scrollY.toString());
+        }
+    });
+}
+
+// ============================================
+// 13. INICIALIZAÇÃO
 // Executa quando a página carrega
 // ============================================
 
@@ -981,6 +1228,7 @@ function init() {
     initPagination();
     initSearch(); // Sistema de busca
     initImageProtection(); // Proteção de imagens
+    initNavigationMemory(); // Sistema de memoria de navegacao
     
     console.log('Peste do Rato - Site iniciado com sucesso!');
 }
