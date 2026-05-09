@@ -201,6 +201,9 @@
             <!-- Link direto para Início -->
             <a href="/">Início</a>
             
+            <!-- Link direto para Posts/Blog -->
+            <a href="/posts.html">Posts</a>
+            
             <!-- Link direto para Faixas Hip-Hop -->
             <a href="/faixas-hiphop.html">Faixas Hip-Hop</a>
             
@@ -277,8 +280,158 @@
                 Um espaço criado para fortalecer, divulgar e conectar artistas do hip hop, rock, metal, punk, hardcore e toda cena underground 
                 que fazem da Paraíba um território de criatividade, atitude e resistência. 
                 Aqui, cada som tem voz, cada artista tem vez e cada história merece ser ouvida. 
-                <strong>083 no peito mizera, cultura viva nas ruas e a Paraíba respirando arte nesse carai.</strong>
+                <strong>083 no peito, cultura viva nas ruas e a Paraíba respirando arte.</strong>
             </p>
+        </section>
+        
+        <!-- ============================================
+        SEÇÃO: POSTS / MINI BLOG
+        
+        Carrossel de posts/artigos do blog.
+        Mostra até 6 posts com navegação por setas e bolinhas.
+        No mobile, exibe 1 post por vez com transição suave.
+        
+        COMO ADICIONAR UM POST:
+        1. Primeiro, crie o arquivo do post em /post.html?id=X
+        2. Depois, adicione o card aqui com o mesmo ID
+        3. Preencha: imagem, título, resumo
+        
+        IMPORTANTE: Máximo de 6 posts no carrossel da home
+        ============================================ -->
+        <section class="section posts-section" id="posts">
+            <h2 class="section-title">Posts</h2>
+            
+            <!-- Container do carrossel de posts -->
+            <div class="posts-carousel-container">
+                <!-- Botão anterior -->
+                <button class="posts-carousel-btn posts-prev" aria-label="Post anterior">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
+                
+                <!-- 
+                CARROSSEL DE POSTS
+                
+                COMO ADICIONAR UM POST:
+                1. Copie todo o bloco <a class="post-card">...</a>
+                2. Cole dentro do posts-carousel
+                3. Atualize o href com o ID do post (ex: /post.html?id=2)
+                4. Troque a imagem, título e resumo
+                
+                LIMITE: Máximo 6 posts no carrossel da home
+                -->
+                <div class="posts-carousel-wrapper">
+                    <div class="posts-carousel" id="posts-carousel">
+                        
+                        <!-- POST 1 - EXEMPLO -->
+                        <a href="/post.html?id=1" class="post-card">
+                            <!-- 
+                            IMAGEM DO POST
+                            Formato recomendado: 16:9 (ex: 800x450px)
+                            A imagem será cortada para caber no card
+                            -->
+                            <div class="post-card-image">
+                                <img src="/images/posts/augustodosanjos.png" alt="Título do Post 1">
+                            </div>
+                            <div class="post-card-content">
+                                <!-- Título do post (máx. 2 linhas) -->
+                                <h3 class="post-card-title">Augusto dos Anjos: O Gênio Incompreendido da Paraíba</h3>
+                                <!-- Resumo do post (máx. 3 linhas) -->
+                                <p class="post-card-excerpt">
+                                    Conheça a trajetória de Augusto dos Anjos, poeta paraibano que transformou dor, ciência e reflexão em versos imortais. Criticado em sua época, hoje é reconhecido como um dos maiores nomes da literatura brasileira.
+                                </p>
+                            </div>
+                        </a>
+                        
+                        <!-- POST 2 - EXEMPLO -->
+                        <!-- <a href="/post.html?id=2" class="post-card">
+                            <div class="post-card-image">
+                                <img src="/images/posts/post2.jpg" alt="Título do Post 2">
+                            </div>
+                            <div class="post-card-content">
+                                <h3 class="post-card-title">Batalhas de Rima: Onde Tudo Acontece</h3>
+                                <p class="post-card-excerpt">
+                                    Conheça os principais eventos de batalha de rima do estado e descubra 
+                                    onde os MCs paraibanos mostram sua arte e improvisação.
+                                </p>
+                            </div>
+                        </a> -->
+                        
+                        <!-- POST 3 - EXEMPLO -->
+                        <!-- <a href="/post.html?id=3" class="post-card">
+                            <div class="post-card-image">
+                                <img src="/images/posts/post3.jpg" alt="Título do Post 3">
+                            </div>
+                            <div class="post-card-content">
+                                <h3 class="post-card-title">Rock Paraibano: Uma Cena que Resiste</h3>
+                                <p class="post-card-excerpt">
+                                    Das garagens aos palcos, a história das bandas de rock e metal 
+                                    que fazem a cena alternativa da Paraíba pulsar.
+                                </p>
+                            </div>
+                        </a> -->
+                        
+                        <!-- POST 4 - EXEMPLO -->
+                        <!-- <a href="/post.html?id=4" class="post-card">
+                            <div class="post-card-image">
+                                <img src="/images/posts/post4.jpg" alt="Título do Post 4">
+                            </div>
+                            <div class="post-card-content">
+                                <h3 class="post-card-title">Graffiti: Arte nas Paredes do 083</h3>
+                                <p class="post-card-excerpt">
+                                    Os artistas do spray que colorem as ruas paraibanas com cultura, 
+                                    protesto e identidade visual única.
+                                </p>
+                            </div>
+                        </a> -->
+                        
+                        <!-- POST 5 - EXEMPLO -->
+                        <!-- <a href="/post.html?id=5" class="post-card">
+                            <div class="post-card-image">
+                                <img src="/images/posts/post5.jpg" alt="Título do Post 5">
+                            </div>
+                            <div class="post-card-content">
+                                <h3 class="post-card-title">Produtores Musicais: Os Arquitetos do Som</h3>
+                                <p class="post-card-excerpt">
+                                    Conheça os beatmakers e produtores que criam as bases 
+                                    para os artistas paraibanos brilharem.
+                                </p>
+                            </div>
+                        </a> -->
+                        
+                        <!-- POST 6 - EXEMPLO -->
+                        <!-- <a href="/post.html?id=6" class="post-card">
+                            <div class="post-card-image">
+                                <img src="/images/posts/post6.jpg" alt="Título do Post 6">
+                            </div>
+                            <div class="post-card-content">
+                                <h3 class="post-card-title">Breaking na Paraíba: Cultura em Movimento</h3>
+                                <p class="post-card-excerpt">
+                                    A dança que atravessa gerações e continua viva nos encontros, 
+                                    batalhas e eventos do estado.
+                                </p>
+                            </div>
+                        </a> -->
+                        
+                    </div>
+                </div>
+                
+                <!-- Botão próximo -->
+                <button class="posts-carousel-btn posts-next" aria-label="Próximo post">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Indicadores (bolinhas de navegação) -->
+            <div class="posts-indicators" id="posts-indicators">
+                <!-- As bolinhas são geradas automaticamente pelo JavaScript -->
+            </div>
+            
+            <!-- Botão Ver Mais - leva para página com todos os posts -->
+            <a href="/posts.html" class="btn-ver-mais">Ver Mais Posts</a>
         </section>
         
         <!-- Animação de sangue escorrendo -->

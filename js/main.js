@@ -1209,7 +1209,254 @@ function initNavigationMemory() {
 }
 
 // ============================================
-// 13. INICIALIZAÇÃO
+// 13. CARROSSEL DE POSTS (MINI BLOG)
+// Carrossel especial para os posts do blog
+// ============================================
+
+/**
+ * Inicializa o carrossel de posts da página inicial
+ * 
+ * FUNCIONALIDADES:
+ * - No mobile: 1 post por vez com transição suave
+ * - No desktop: múltiplos posts visíveis
+ * - Navegação por setas e bolinhas (indicadores)
+ * - Suporte a touch/swipe em dispositivos móveis
+ * - Auto-play opcional (desativado por padrão)
+ * 
+ * COMO MODIFICAR:
+ * - autoPlay: true/false - ativa/desativa rotação automática
+ * - autoPlayInterval: tempo em ms entre cada troca (padrão: 5000)
+ */
+function initPostsCarousel() {
+    const carousel = document.getElementById('posts-carousel');
+    const indicatorsContainer = document.getElementById('posts-indicators');
+    const prevBtn = document.querySelector('.posts-prev');
+    const nextBtn = document.querySelector('.posts-next');
+    
+    if (!carousel) return; // Se não existe o carrossel, não faz nada
+    
+    const posts = carousel.querySelectorAll('.post-card');
+    const totalPosts = posts.length;
+    
+    if (totalPosts === 0) return;
+    
+    let currentIndex = 0;
+    let autoPlayTimer = null;
+    
+    // Configurações
+    const config = {
+        autoPlay: false,           // Mude para true se quiser auto-play
+        autoPlayInterval: 5000,    // Tempo entre cada troca (5 segundos)
+    };
+    
+    /**
+     * Calcula quantos posts são visíveis baseado na largura da tela
+     * @returns {number} Número de posts visíveis
+     */
+    const getVisibleCount = () => {
+        const width = window.innerWidth;
+        if (width < 768) return 1;       // Mobile: 1 post
+        if (width < 1024) return 2;      // Tablet: 2 posts
+        return 3;                         // Desktop: 3 posts
+    };
+    
+    /**
+     * Calcula a posição do carrossel para mostrar o post no índice
+     * @param {number} index - Índice do post
+     */
+    const scrollToIndex = (index) => {
+        const visibleCount = getVisibleCount();
+        const maxIndex = Math.max(0, totalPosts - visibleCount);
+        
+        // Limita o índice
+        currentIndex = Math.max(0, Math.min(index, maxIndex));
+        
+        // Calcula a porcentagem de deslocamento
+        // Cada post ocupa 100%/visibleCount do container
+        const percentage = (currentIndex * 100) / visibleCount;
+        
+        // Aplica o deslocamento
+        carousel.style.transform = `translateX(-${percentage}%)`;
+        
+        // Atualiza indicadores
+        updateIndicators();
+        
+        // Atualiza estado dos botões
+        updateButtons();
+    };
+    
+    /**
+     * Cria os indicadores (bolinhas) de navegação
+     */
+    const createIndicators = () => {
+        if (!indicatorsContainer) return;
+        
+        const visibleCount = getVisibleCount();
+        const totalIndicators = Math.ceil(totalPosts / visibleCount);
+        
+        indicatorsContainer.innerHTML = '';
+        
+        for (let i = 0; i < totalIndicators; i++) {
+            const indicator = document.createElement('button');
+            indicator.className = 'posts-indicator';
+            indicator.setAttribute('aria-label', `Ir para slide ${i + 1}`);
+            indicator.addEventListener('click', () => {
+                scrollToIndex(i * visibleCount);
+                resetAutoPlay();
+            });
+            indicatorsContainer.appendChild(indicator);
+        }
+        
+        updateIndicators();
+    };
+    
+    /**
+     * Atualiza qual indicador está ativo
+     */
+    const updateIndicators = () => {
+        if (!indicatorsContainer) return;
+        
+        const indicators = indicatorsContainer.querySelectorAll('.posts-indicator');
+        const visibleCount = getVisibleCount();
+        const activeIndex = Math.floor(currentIndex / visibleCount);
+        
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === activeIndex);
+        });
+    };
+    
+    /**
+     * Atualiza estado dos botões prev/next
+     */
+    const updateButtons = () => {
+        const visibleCount = getVisibleCount();
+        const maxIndex = Math.max(0, totalPosts - visibleCount);
+        
+        if (prevBtn) {
+            prevBtn.disabled = currentIndex === 0;
+        }
+        
+        if (nextBtn) {
+            nextBtn.disabled = currentIndex >= maxIndex;
+        }
+    };
+    
+    /**
+     * Vai para o próximo slide
+     */
+    const goToNext = () => {
+        const visibleCount = getVisibleCount();
+        scrollToIndex(currentIndex + visibleCount);
+    };
+    
+    /**
+     * Vai para o slide anterior
+     */
+    const goToPrev = () => {
+        const visibleCount = getVisibleCount();
+        scrollToIndex(currentIndex - visibleCount);
+    };
+    
+    /**
+     * Inicia auto-play
+     */
+    const startAutoPlay = () => {
+        if (!config.autoPlay) return;
+        
+        stopAutoPlay();
+        autoPlayTimer = setInterval(() => {
+            const visibleCount = getVisibleCount();
+            const maxIndex = Math.max(0, totalPosts - visibleCount);
+            
+            if (currentIndex >= maxIndex) {
+                scrollToIndex(0); // Volta ao início
+            } else {
+                goToNext();
+            }
+        }, config.autoPlayInterval);
+    };
+    
+    /**
+     * Para auto-play
+     */
+    const stopAutoPlay = () => {
+        if (autoPlayTimer) {
+            clearInterval(autoPlayTimer);
+            autoPlayTimer = null;
+        }
+    };
+    
+    /**
+     * Reinicia auto-play após interação
+     */
+    const resetAutoPlay = () => {
+        stopAutoPlay();
+        startAutoPlay();
+    };
+    
+    // Event Listeners para botões
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            goToPrev();
+            resetAutoPlay();
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            goToNext();
+            resetAutoPlay();
+        });
+    }
+    
+    // Suporte a touch/swipe
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    carousel.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        stopAutoPlay();
+    }, { passive: true });
+    
+    carousel.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+        startAutoPlay();
+    }, { passive: true });
+    
+    const handleSwipe = () => {
+        const diff = touchStartX - touchEndX;
+        const minSwipe = 50; // Mínimo de 50px para considerar swipe
+        
+        if (Math.abs(diff) > minSwipe) {
+            if (diff > 0) {
+                // Swipe para esquerda = próximo
+                goToNext();
+            } else {
+                // Swipe para direita = anterior
+                goToPrev();
+            }
+        }
+    };
+    
+    // Pausa auto-play no hover
+    carousel.addEventListener('mouseenter', stopAutoPlay);
+    carousel.addEventListener('mouseleave', startAutoPlay);
+    
+    // Atualiza ao redimensionar a janela
+    window.addEventListener('resize', debounce(() => {
+        createIndicators();
+        scrollToIndex(currentIndex);
+    }, 200));
+    
+    // Inicializa
+    createIndicators();
+    updateButtons();
+    startAutoPlay();
+}
+
+// ============================================
+// 14. INICIALIZAÇÃO
 // Executa quando a página carrega
 // ============================================
 
@@ -1224,6 +1471,7 @@ function init() {
     initHamburgerMenu();
     initSubmenus(); // Menu com subcategorias
     initCarousels();
+    initPostsCarousel(); // Carrossel de posts (novo)
     initScrollButton();
     initPagination();
     initSearch(); // Sistema de busca

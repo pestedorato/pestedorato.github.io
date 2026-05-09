@@ -1591,3 +1591,889 @@ img {
         font-size: 0.9rem;
     }
 }
+
+/* ============================================
+   SEÇÃO DE POSTS / MINI BLOG
+   Carrossel especial para posts do blog
+   
+   DIFERENÇAS DO CARROSSEL NORMAL:
+   - Cards maiores e mais destacados
+   - Navegação por setas e bolinhas
+   - No mobile: 1 post por vez com transição suave
+   - Suporte a touch/swipe
+   ============================================ */
+
+/* Container da seção de posts */
+.posts-section {
+    padding: 60px 20px;
+}
+
+/* Container principal do carrossel de posts */
+.posts-carousel-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 60px; /* Espaço para as setas */
+}
+
+/* Wrapper que esconde o overflow */
+.posts-carousel-wrapper {
+    overflow: hidden;
+    border-radius: var(--card-radius);
+}
+
+/* Container interno que se move */
+.posts-carousel {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+/* 
+============================================
+CARD DE POST
+Cards maiores que os de álbuns/artistas
+============================================
+*/
+.post-card {
+    flex: 0 0 100%; /* Mobile: 1 card por vez (100% da largura) */
+    display: block;
+    background-color: var(--cor-cinza);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    transition: transform var(--transition-rapida), box-shadow var(--transition-rapida);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Desktop: cards lado a lado */
+@media (min-width: 768px) {
+    .post-card {
+        flex: 0 0 calc(50% - 10px); /* 2 cards por vez */
+        margin-right: 20px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .post-card {
+        flex: 0 0 calc(33.333% - 14px); /* 3 cards por vez */
+        margin-right: 20px;
+    }
+}
+
+.post-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(152, 18, 19, 0.4);
+}
+
+/* Container da imagem do post */
+.post-card-image {
+    width: 100%;
+    aspect-ratio: 16 / 9; /* Proporção 16:9 */
+    overflow: hidden;
+    position: relative;
+}
+
+.post-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-media);
+}
+
+.post-card:hover .post-card-image img {
+    transform: scale(1.08);
+}
+
+/* Conteúdo do card (título + resumo) */
+.post-card-content {
+    padding: 20px;
+}
+
+/* Título do post */
+.post-card-title {
+    font-family: var(--fonte-titulo);
+    font-size: 1.3rem;
+    color: var(--cor-texto);
+    margin-bottom: 10px;
+    line-height: 1.3;
+    /* Limita a 2 linhas */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Resumo/excerpt do post */
+.post-card-excerpt {
+    font-family: var(--fonte-texto);
+    font-size: 0.95rem;
+    color: var(--cor-bege);
+    line-height: 1.6;
+    /* Limita a 3 linhas */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 
+============================================
+BOTÕES DE NAVEGAÇÃO DO CARROSSEL DE POSTS
+============================================
+*/
+.posts-carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background-color: var(--cor-vermelho);
+    color: var(--cor-texto);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-rapida), transform var(--transition-rapida), opacity var(--transition-rapida);
+}
+
+.posts-carousel-btn svg {
+    width: 24px;
+    height: 24px;
+    stroke: #FFFFFF;
+}
+
+.posts-carousel-btn:hover {
+    background-color: var(--cor-vermelho-hover);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.posts-carousel-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.posts-carousel-btn:disabled:hover {
+    transform: translateY(-50%);
+}
+
+.posts-prev {
+    left: 0;
+}
+
+.posts-next {
+    right: 0;
+}
+
+/* 
+============================================
+INDICADORES (BOLINHAS DE NAVEGAÇÃO)
+============================================
+*/
+.posts-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.posts-indicator {
+    width: 12px;
+    height: 12px;
+    background-color: var(--cor-cinza-claro);
+    border: 2px solid var(--cor-cinza-claro);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-rapida);
+    padding: 0;
+}
+
+.posts-indicator:hover {
+    border-color: var(--cor-vermelho);
+    background-color: var(--cor-cinza-claro);
+}
+
+.posts-indicator.active {
+    background-color: var(--cor-vermelho);
+    border-color: var(--cor-vermelho);
+    transform: scale(1.2);
+}
+
+/* 
+============================================
+RESPONSIVIDADE DO CARROSSEL DE POSTS
+============================================
+*/
+@media (max-width: 767px) {
+    .posts-carousel-container {
+        padding: 0 50px;
+    }
+    
+    .posts-carousel-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .posts-carousel-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .post-card-title {
+        font-size: 1.1rem;
+    }
+    
+    .post-card-content {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .posts-carousel-container {
+        padding: 0 40px;
+    }
+    
+    .posts-carousel-btn {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .posts-carousel-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* ============================================
+   PÁGINA DE LISTAGEM DE POSTS
+   Grid com todos os posts, busca e paginação
+   ============================================ */
+
+/* Container da página de posts */
+.posts-listing-page {
+    padding: 100px 20px 60px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Grid de posts na listagem (1 por linha em formato retangular) */
+.posts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+/* Card de post na listagem (formato horizontal/retangular) */
+.post-listing-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--cor-cinza);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    transition: transform var(--transition-rapida), box-shadow var(--transition-rapida);
+    text-decoration: none;
+}
+
+@media (min-width: 600px) {
+    .post-listing-card {
+        flex-direction: row;
+        min-height: 200px;
+    }
+}
+
+.post-listing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(152, 18, 19, 0.3);
+}
+
+/* Imagem do post na listagem */
+.post-listing-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+@media (min-width: 600px) {
+    .post-listing-image {
+        width: 280px;
+        min-width: 280px;
+        aspect-ratio: auto;
+        height: 100%;
+    }
+}
+
+.post-listing-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-media);
+}
+
+.post-listing-card:hover .post-listing-image img {
+    transform: scale(1.05);
+}
+
+/* Conteúdo do card na listagem */
+.post-listing-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+}
+
+.post-listing-title {
+    font-family: var(--fonte-titulo);
+    font-size: 1.4rem;
+    color: var(--cor-texto);
+    margin-bottom: 10px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.post-listing-excerpt {
+    font-family: var(--fonte-texto);
+    font-size: 0.95rem;
+    color: var(--cor-bege);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ============================================
+   PÁGINA INDIVIDUAL DO POST (BLOG)
+   Layout de leitura com estilo de blog moderno
+   ============================================ */
+
+/* Container principal do post */
+.post-page {
+    padding: 100px 20px 60px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Cabeçalho do post */
+.post-header {
+    margin-bottom: 40px;
+}
+
+/* Título principal do post */
+.post-title {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    color: var(--cor-texto);
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+/* Meta informações (data, autor, etc) */
+.post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: var(--cor-bege);
+    font-size: 0.9rem;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--cor-vermelho);
+}
+
+.post-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.post-meta-item svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--cor-vermelho);
+}
+
+/* Imagem de capa do post */
+.post-cover {
+    width: 100%;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.post-cover img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* 
+============================================
+CONTEÚDO DO POST (ARTIGO)
+
+Este é o container do texto principal do blog.
+Aqui ficam os parágrafos, títulos, imagens, vídeos, etc.
+
+ELEMENTOS SUPORTADOS:
+- Parágrafos <p>
+- Títulos <h2>, <h3>, <h4>
+- Imagens <img> ou <figure>
+- Vídeos <video> ou iframe do YouTube
+- Listas <ul>, <ol>
+- Citações <blockquote>
+- Código <code>, <pre>
+- Links <a>
+- Destaque <strong>, <em>, <mark>
+============================================
+*/
+.post-content {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--cor-bege);
+}
+
+/* Parágrafos - texto principal */
+.post-content p {
+    margin-bottom: 1.5em;
+    text-align: justify;
+}
+
+/* 
+TÍTULOS DENTRO DO POST
+Use <h2> para seções principais
+Use <h3> para subseções
+Use <h4> para tópicos menores
+*/
+.post-content h2 {
+    font-family: var(--fonte-titulo);
+    font-size: 1.8rem;
+    color: var(--cor-texto);
+    margin: 2em 0 0.8em;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--cor-vermelho);
+}
+
+.post-content h3 {
+    font-family: var(--fonte-titulo);
+    font-size: 1.4rem;
+    color: var(--cor-texto);
+    margin: 1.5em 0 0.6em;
+}
+
+.post-content h4 {
+    font-family: var(--fonte-titulo);
+    font-size: 1.2rem;
+    color: var(--cor-texto);
+    margin: 1.2em 0 0.5em;
+}
+
+/* 
+============================================
+IMAGENS NO POST
+
+COMO USAR:
+Simples: <img src="/images/posts/foto.jpg" alt="Descrição">
+
+Com legenda (recomendado):
+<figure>
+    <img src="/images/posts/foto.jpg" alt="Descrição">
+    <figcaption>Legenda da imagem</figcaption>
+</figure>
+
+Imagem com largura total:
+<figure class="full-width">
+    <img src="/images/posts/foto.jpg" alt="Descrição">
+</figure>
+============================================
+*/
+.post-content img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--borda-radius);
+    margin: 1.5em 0;
+}
+
+.post-content figure {
+    margin: 2em 0;
+}
+
+.post-content figure img {
+    margin: 0;
+}
+
+.post-content figcaption {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--cor-bege);
+    opacity: 0.8;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Imagem em largura total (vai além das margens) */
+.post-content figure.full-width {
+    margin-left: -20px;
+    margin-right: -20px;
+    width: calc(100% + 40px);
+}
+
+.post-content figure.full-width img {
+    border-radius: 0;
+}
+
+/* 
+============================================
+VÍDEOS NO POST
+
+YOUTUBE - Use um iframe:
+<div class="video-container">
+    <iframe 
+        src="https://www.youtube.com/embed/VIDEO_ID"
+        title="Título do vídeo"
+        allowfullscreen>
+    </iframe>
+</div>
+
+VIDEO LOCAL:
+<video controls>
+    <source src="/videos/meu-video.mp4" type="video/mp4">
+</video>
+============================================
+*/
+.post-content .video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 */
+    margin: 2em 0;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    background-color: #121212;
+}
+
+.post-content .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.post-content video {
+    width: 100%;
+    border-radius: var(--card-radius);
+    margin: 2em 0;
+}
+
+/* 
+============================================
+LISTAS NO POST
+
+Lista não ordenada:
+<ul>
+    <li>Item 1</li>
+    <li>Item 2</li>
+</ul>
+
+Lista ordenada:
+<ol>
+    <li>Primeiro</li>
+    <li>Segundo</li>
+</ol>
+============================================
+*/
+.post-content ul,
+.post-content ol {
+    margin: 1.5em 0;
+    padding-left: 30px;
+}
+
+.post-content li {
+    margin-bottom: 0.5em;
+    position: relative;
+}
+
+.post-content ul li::marker {
+    color: var(--cor-vermelho);
+}
+
+.post-content ol li::marker {
+    color: var(--cor-vermelho);
+    font-weight: 600;
+}
+
+/* 
+============================================
+CITAÇÕES / BLOCKQUOTE
+
+Como usar:
+<blockquote>
+    <p>Texto da citação aqui.</p>
+    <cite>- Autor da citação</cite>
+</blockquote>
+============================================
+*/
+.post-content blockquote {
+    margin: 2em 0;
+    padding: 25px 30px;
+    background-color: var(--cor-cinza);
+    border-left: 4px solid var(--cor-vermelho);
+    border-radius: 0 var(--borda-radius) var(--borda-radius) 0;
+    font-style: italic;
+}
+
+.post-content blockquote p {
+    margin-bottom: 0.5em;
+}
+
+.post-content blockquote p:last-of-type {
+    margin-bottom: 0;
+}
+
+.post-content blockquote cite {
+    display: block;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: var(--cor-vermelho);
+    font-style: normal;
+}
+
+/* 
+============================================
+CÓDIGO NO POST
+
+Código inline: <code>variavel</code>
+
+Bloco de código:
+<pre><code>
+function exemplo() {
+    console.log("Hello");
+}
+</code></pre>
+============================================
+*/
+.post-content code {
+    font-family: 'Roboto Mono', monospace;
+    background-color: var(--cor-cinza);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--cor-vermelho);
+}
+
+.post-content pre {
+    background-color: var(--cor-cinza);
+    padding: 20px;
+    border-radius: var(--borda-radius);
+    overflow-x: auto;
+    margin: 2em 0;
+}
+
+.post-content pre code {
+    padding: 0;
+    background: none;
+    color: var(--cor-texto);
+}
+
+/* Links dentro do post */
+.post-content a {
+    color: var(--cor-vermelho);
+    text-decoration: underline;
+    transition: color var(--transition-rapida);
+}
+
+.post-content a:hover {
+    color: var(--cor-vermelho-hover);
+}
+
+/* Texto em destaque */
+.post-content strong {
+    color: var(--cor-texto);
+    font-weight: 600;
+}
+
+.post-content em {
+    font-style: italic;
+}
+
+.post-content mark {
+    background-color: var(--cor-vermelho);
+    color: #FFFFFF;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/* Separador horizontal */
+.post-content hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--cor-vermelho), transparent);
+    margin: 3em 0;
+}
+
+/* 
+============================================
+BOTÕES DE DOWNLOAD/LINKS NO FINAL DO POST
+
+Como usar:
+<div class="post-links">
+    <h3>Downloads e Links</h3>
+    <a href="/downloads/arquivo.pdf" class="post-link-btn" download>
+        <svg>...</svg>
+        Baixar PDF
+    </a>
+    <a href="https://link.externo.com" class="post-link-btn" target="_blank">
+        <svg>...</svg>
+        Visitar Site
+    </a>
+</div>
+============================================
+*/
+.post-links {
+    margin-top: 50px;
+    padding: 30px;
+    background-color: var(--cor-cinza);
+    border-radius: var(--card-radius);
+    border: 2px solid var(--cor-vermelho);
+}
+
+.post-links h3 {
+    font-family: var(--fonte-titulo);
+    font-size: 1.3rem;
+    color: var(--cor-texto);
+    margin-bottom: 20px;
+}
+
+.post-links-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.post-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 25px;
+    background-color: transparent;
+    color: var(--cor-vermelho);
+    border: 2px solid var(--cor-vermelho);
+    border-radius: var(--borda-radius);
+    font-family: var(--fonte-titulo);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all var(--transition-rapida);
+}
+
+.post-link-btn:hover {
+    background-color: var(--cor-vermelho);
+    color: #FFFFFF;
+}
+
+.post-link-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+}
+
+/* Botão de voltar */
+.post-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 30px;
+    padding: 10px 20px;
+    background-color: var(--cor-cinza);
+    color: var(--cor-texto);
+    border-radius: var(--borda-radius);
+    font-family: var(--fonte-titulo);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all var(--transition-rapida);
+}
+
+.post-back-btn:hover {
+    background-color: var(--cor-vermelho);
+}
+
+.post-back-btn svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+}
+
+/* Navegação entre posts (anterior/próximo) */
+.post-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 2px solid var(--cor-cinza-claro);
+}
+
+.post-nav-link {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 20px;
+    background-color: var(--cor-cinza);
+    border-radius: var(--borda-radius);
+    text-decoration: none;
+    transition: all var(--transition-rapida);
+}
+
+.post-nav-link:hover {
+    background-color: var(--cor-vermelho);
+}
+
+.post-nav-link.prev {
+    align-items: flex-start;
+}
+
+.post-nav-link.next {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.post-nav-label {
+    font-size: 0.8rem;
+    color: var(--cor-bege);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.post-nav-title {
+    font-family: var(--fonte-titulo);
+    font-size: 1.1rem;
+    color: var(--cor-texto);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.post-nav-link:hover .post-nav-label,
+.post-nav-link:hover .post-nav-title {
+    color: #FFFFFF;
+}
+
+@media (max-width: 600px) {
+    .post-navigation {
+        flex-direction: column;
+    }
+    
+    .post-nav-link.prev,
+    .post-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+    }
+}

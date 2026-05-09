@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- ============================================
+    PESTE DO RATO - PÁGINA INDIVIDUAL DO POST (BLOG)
+    
+    Esta página carrega o conteúdo do post baseado no ID na URL.
+    Exemplo: /post.html?id=1 carrega o post com ID 1
+    
+    COMO FUNCIONA:
+    1. O JavaScript pega o ID da URL (?id=X)
+    2. Busca os dados do post no objeto POSTS
+    3. Preenche a página com o conteúdo
+    
+    COMO ADICIONAR UM NOVO POST:
+    1. Vá até o objeto POSTS no final deste arquivo
+    2. Adicione uma nova entrada com um ID único
+    3. Preencha: título, data, autor, imagem, conteúdo HTML
+    
+    ============================================
+    
+    GUIA DE FORMATAÇÃO DO CONTEÚDO:
+    
+    O campo "conteudo" aceita HTML completo. Veja exemplos:
+    
+    PARÁGRAFOS:
+    <p>Seu texto aqui.</p>
+    
+    TÍTULOS (USE DENTRO DO CONTEÚDO):
+    <h2>Título de Seção</h2>
+    <h3>Subtítulo</h3>
+    <h4>Tópico menor</h4>
+    
+    IMAGENS:
+    <figure>
+        <img src="/images/posts/foto.jpg" alt="Descrição">
+        <figcaption>Legenda opcional da imagem</figcaption>
+    </figure>
+    
+    IMAGEM FULL WIDTH (vai além das margens):
+    <figure class="full-width">
+        <img src="/images/posts/foto.jpg" alt="Descrição">
+    </figure>
+    
+    VÍDEO DO YOUTUBE:
+    <div class="video-container">
+        <iframe 
+            src="https://www.youtube.com/embed/VIDEO_ID_AQUI"
+            title="Título do vídeo"
+            allowfullscreen>
+        </iframe>
+    </div>
+    
+    CITAÇÃO:
+    <blockquote>
+        <p>Texto da citação aqui.</p>
+        <cite>- Autor da citação</cite>
+    </blockquote>
+    
+    LISTA:
+    <ul>
+        <li>Item 1</li>
+        <li>Item 2</li>
+    </ul>
+    
+    DESTAQUE:
+    <strong>Texto em negrito</strong>
+    <em>Texto em itálico</em>
+    <mark>Texto marcado/destacado</mark>
+    
+    LINKS:
+    <a href="https://exemplo.com" target="_blank">Texto do link</a>
+    
+    SEPARADOR:
+    <hr>
+    
+    ============================================ -->
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post - Peste do Rato</title>
+    <link rel="icon" href="images/favicon.png" type="image/png">
+    <meta name="description" content="Blog do movimento Peste do Rato. Cultura, arte e resistência na Paraíba.">
+    <meta name="theme-color" content="#000000">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="navbar-logo">
+            <!-- LOGO MODO ESCURO (Dark Mode) - Logo branca para fundo preto -->
+            <img 
+                src="/images/logodeitadabranca.png" 
+                alt="Peste do Rato" 
+                class="logo-img logo-dark"
+            >
+            <!-- LOGO MODO CLARO (Light Mode) - Logo preta para fundo branco -->
+            <img 
+                src="/images/logodeitadapreta.png" 
+                alt="Peste do Rato" 
+                class="logo-img logo-light"
+            >
+        </a>
+        
+        <div class="navbar-controls">
+            <button id="theme-toggle" class="theme-toggle" aria-label="Alternar tema">
+                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+            <button id="hamburger" class="hamburger" aria-label="Menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+        
+        <div id="nav-menu" class="nav-menu">
+            <a href="/">Inicio</a>
+            <a href="/posts.html">Posts</a>
+            <a href="/faixas-hiphop.html">Faixas Hip-Hop</a>
+            <div class="nav-item-group">
+                <div class="nav-link-main">
+                    Artistas Hip-Hop
+                    <span class="nav-arrow">▼</span>
+                </div>
+                <div class="nav-submenu">
+                    <a href="/hiphop-mcs.html">MCs/Poetas</a>
+                    <a href="/hiphop-breaking.html">Breaking</a>
+                    <a href="/hiphop-djs.html">DJs</a>
+                    <a href="/hiphop-graffiti.html">Graffiti</a>
+                    <a href="/hiphop-produtores.html">Produtores</a>
+                    <a href="/hiphop-crew.html">Crew</a>
+                    <a href="/hiphop-batalhas.html">Batalhas</a>
+                </div>
+            </div>
+            <a href="/faixas-rock.html">Faixas Rock/Metal</a>
+            <div class="nav-item-group">
+                <div class="nav-link-main">
+                    Artistas Rock/Metal
+                    <span class="nav-arrow">▼</span>
+                </div>
+                <div class="nav-submenu">
+                    <a href="/rock-bandas.html">Bandas</a>
+                    <a href="/rock-solo.html">Solo</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div id="menu-overlay" class="menu-overlay"></div>
+    
+    <main class="main-content">
+        <!-- Conteúdo será preenchido pelo JavaScript -->
+        <div id="post-content"></div>
+    </main>
+    
+    <footer class="footer">
+        <p class="footer-quote">Foda-se o sistema!</p>
+        <p class="footer-artist-invite">
+            Se você é artista do hip hop, rock, metal, punk, cena alternativa e afins da Paraíba e quer ter seu perfil no Peste do Rato, preencha o formulário. 
+            <a href="https://forms.gle/DhzfnbfmYv86trrs8" target="_blank">Clique aqui</a>
+        </p>
+        <div class="social-links">
+            <a href="https://instagram.com/pestedorato" target="_blank" class="social-link" aria-label="Instagram">
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@PesteDoRato" target="_blank" class="social-link" aria-label="YouTube">
+                <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+        </div>
+        <p class="footer-copyright">&copy; 2026 Peste do Rato. Todos os direitos reservados.</p>
+    </footer>
+    
+    <button id="scroll-btn" class="scroll-btn" aria-label="Scroll">↑</button>
+    
+    <script src="/js/main.js"></script>
+    
+    <script>
+    /* ============================================
+       BANCO DE DADOS DOS POSTS
+       
+       COMO ADICIONAR UM NOVO POST:
+       1. Copie um bloco de post existente
+       2. Mude o número do ID (deve ser único)
+       3. Preencha os dados
+       
+       CAMPOS OBRIGATÓRIOS:
+       - id: número único do post
+       - titulo: título do post
+       - data: data no formato "DD de MÊS de AAAA"
+       - autor: nome do autor
+       - imagem: URL da imagem de capa
+       - resumo: texto curto para preview (usado na listagem)
+       - conteudo: HTML completo do artigo (veja exemplos no cabeçalho)
+       
+       CAMPOS OPCIONAIS:
+       - links: array de objetos com links para download/acesso
+         Cada link tem: { titulo, url, icone, download }
+         - titulo: texto do botão
+         - url: link do arquivo ou página
+         - icone: "download", "link", "pdf", "music", "video"
+         - download: true se for para baixar, false se for abrir em nova aba
+       
+       ============================================ */
+    const POSTS = {
+        1: {
+            id: 1,
+            titulo: "Augusto dos Anjos: O Gênio Incompreendido da Paraíba",
+            data: "09 de Maio de 2026",
+            autor: "Peste do Rato",
+            imagem: "/images/posts/augustodosanjos.png",
+            resumo: "Conheça a trajetória de Augusto dos Anjos, poeta paraibano que transformou dor, ciência e reflexão em versos imortais. Criticado em sua época, hoje é reconhecido como um dos maiores nomes da literatura brasileira.",
+            conteudo: `
+                <!-- 
+                ============================================
+                EXEMPLO DE POST COMPLETO
+                
+                Este é um exemplo de como estruturar o conteúdo de um post.
+                Copie e modifique conforme necessário.
+                ============================================
+                -->
+                
+                <p>
+                    Augusto dos Anjos foi um dos nomes mais marcantes da literatura brasileira e um dos maiores símbolos culturais da Paraíba. Nascido no interior paraibano, criou uma poesia única, intensa e muito à frente do seu tempo.
+                </p>
+                
+                <p>
+                    Sua escrita abordava temas como vida, morte, sofrimento, existência humana e decadência, utilizando palavras incomuns para a poesia da época.
+                </p>
+                
+                <!-- EXEMPLO DE TÍTULO DE SEÇÃO -->
+                <h2>Início de Vida</h2>
+                
+                <p>
+                    Augusto de Carvalho Rodrigues dos Anjos nasceu em 20 de abril de 1884, no Engenho Pau d’Arco, na Paraíba, região que hoje pertence ao município de Sapé.
+                </p>
+
+                <p>
+                    Desde cedo teve contato com estudos e leitura, desenvolvendo grande interesse pela linguagem e pela escrita.
+                </p>
+                
+                <!-- EXEMPLO DE IMAGEM COM LEGENDA -->
+                <figure>
+                    <img src="/images/posts/augustodosanjos2.png" alt="Primeiras batalhas de rima na Paraíba">
+                    <figcaption>O ambiente rural paraibano marcou os primeiros anos de Augusto dos Anjos.</figcaption>
+                </figure>
+                
+                <h2>Formação e Caminho Intelectual</h2>
+                
+                <p>
+                    Mais tarde, estudou na Faculdade de Direito do Recife, um dos principais centros intelectuais do Nordeste naquele período.
+                </p>
+
+                <p>
+                    Mesmo formado em Direito, sua verdadeira marca seria construída na literatura.
+                </p>
+
+                <h2>Sua Obra Imortal</h2>
+
+                <p>
+                    Em 1912, lançou seu único livro: EU A obra chocou leitores e críticos por usar termos considerados agressivos e temas pesados, fugindo completamente do padrão romântico e elegante valorizado na época.
+                </p>
+
+                <p>
+                    Ainda assim, o livro atravessou gerações e se tornou um clássico absoluto da poesia brasileira.
+                </p>
+                
+                <!-- EXEMPLO DE CITAÇÃO -->
+                <blockquote>
+                    <p>
+                        "A mão que afaga é a mesma que apedreja".
+                    </p>
+                    <cite>— Augusto dos Anjos, Versos Íntimos</cite>
+                </blockquote>
+                
+                <h2>Por Que Era Diferente?</h2>
+                
+                <p>
+                    Augusto misturava poesia com ciência, filosofia e pessimismo existencial. Falava de vermes, carne, matéria, dor, tempo e decomposição — algo impensável para muitos escritores daquele tempo. Essa ousadia fez com que fosse criticado por parte da elite literária.
+                </p>
+
+                <h2>Reconhecimento Tardio</h2>
+                
+                <p>
+                    O que antes foi rejeitado, depois virou admiração. Com o passar dos anos, Augusto dos Anjos passou a ser estudado em escolas, universidades e reconhecido como um dos poetas mais originais da língua portuguesa. Hoje, é considerado um gênio literário.
+                </p>
+
+                <h2>Viveu Pouco, Marcou Para Sempre</h2>
+                
+                <p>
+                    Augusto faleceu em 12 de novembro de 1914, aos apenas 30 anos. Mesmo com vida curta, deixou uma obra eterna. Poucos escritores conseguiram marcar tanto a literatura brasileira em tão pouco tempo.
+                </p>
+                
+                <!-- EXEMPLO DE LISTA -->
+                <h3>Por que Augusto dos Anjos importa até hoje?</h3>
+                <ul>
+                    <li>Orgulho cultural da Paraíba</li>
+                    <li>Um dos maiores poetas do Brasil</li>
+                    <li>Escrita original e atemporal</li>
+                    <li>Influência em novas gerações</li>
+                    <li>Símbolo de autenticidade artística</li>
+                </ul>
+                
+                <h2>O Legado Paraibano</h2>
+                <p>
+                    A Paraíba revelou ao Brasil um autor impossível de ignorar. Conhecer Augusto dos Anjos é valorizar nossa história, nossa arte e a potência cultural do Nordeste.
+                </p>
+                
+                <!-- EXEMPLO DE VÍDEO DO YOUTUBE -->
+                <h2>Documentário - TV Senado</h2>
+                
+                <div class="video-container">
+                    <iframe 
+                        src="https://www.youtube.com/embed/Ptk0UgVdQmY"
+                        title="Augusto dos Anjos - Documentário pela TV Senado"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                
+                <p>
+                    Viva a <mark>Paraíba.</mark>
+                </p>
+                
+                <hr>
+            `,
+            // EXEMPLO DE LINKS PARA DOWNLOAD
+            links: [
+                {
+                    titulo: "LIVRO: EU E OUTRAS POESIAS",
+                    url: "https://humanitas.ufrn.br/wp-content/uploads/2025/02/Eu-e-Outras-Poesias.pdf",
+                    icone: "pdf",
+                    download: true
+                },
+            ]
+        },
+        
+        2: {
+            id: 2,
+            titulo: "Batalhas de Rima: Onde Tudo Acontece",
+            data: "20 de Janeiro de 2026",
+            autor: "Peste do Rato",
+            imagem: "/images/posts/post2.jpg",
+            resumo: "Conheça os principais eventos de batalha de rima do estado e descubra onde os MCs paraibanos mostram sua arte e improvisação.",
+            conteudo: `
+                <p>
+                    As batalhas de rima são o coração pulsante do hip hop paraibano. 
+                    É nos palcos improvisados das praças e centros culturais que 
+                    os MCs testam suas habilidades e conquistam respeito.
+                </p>
+                
+                <h2>Principais Batalhas do Estado</h2>
+                
+                <p>
+                    A Paraíba conta com diversas batalhas regulares que acontecem 
+                    semanalmente em diferentes cidades. Cada uma tem sua identidade 
+                    e atrai um público fiel de amantes da cultura.
+                </p>
+                
+                <h3>João Pessoa</h3>
+                <ul>
+                    <li><strong>Batalha do Mercado:</strong> Uma das mais tradicionais, acontece no Centro</li>
+                    <li><strong>Batalha da Praça:</strong> Revelou diversos talentos da nova geração</li>
+                    <li><strong>Duelo de MCs:</strong> Formato diferenciado com temáticas variadas</li>
+                </ul>
+                
+                <h3>Campina Grande</h3>
+                <ul>
+                    <li><strong>Batalha do Açude:</strong> A mais tradicional da cidade</li>
+                    <li><strong>Sangue na Rima:</strong> Formato mais agressivo e competitivo</li>
+                </ul>
+                
+                <blockquote>
+                    <p>
+                        A batalha é onde a gente se forma. É ali que você aprende 
+                        a pensar rápido, a lidar com a pressão, a ser MC de verdade.
+                    </p>
+                    <cite>- Participante de batalhas desde 2015</cite>
+                </blockquote>
+                
+                <h2>Como Participar</h2>
+                
+                <p>
+                    Se você quer participar das batalhas, o primeiro passo é 
+                    comparecer aos eventos e conhecer a comunidade. A maioria 
+                    das batalhas aceita inscrições no local, geralmente uma hora 
+                    antes do evento começar.
+                </p>
+                
+                <p>
+                    <strong>Dica:</strong> Comece assistindo algumas batalhas antes de se inscrever. 
+                    Entenda o formato, conheça os MCs locais e quando se sentir 
+                    preparado, manda ver!
+                </p>
+            `,
+            links: []
+        },
+        
+        3: {
+            id: 3,
+            titulo: "Rock Paraibano: Uma Cena que Resiste",
+            data: "25 de Janeiro de 2026",
+            autor: "Peste do Rato",
+            imagem: "/images/posts/post3.jpg",
+            resumo: "Das garagens aos palcos, a história das bandas de rock e metal que fazem a cena alternativa da Paraíba pulsar.",
+            conteudo: `
+                <p>
+                    O rock na Paraíba tem uma história de resistência e paixão. 
+                    Desde os anos 80, bandas surgem das garagens do estado 
+                    para mostrar que o Nordeste também sabe fazer barulho.
+                </p>
+                
+                <h2>Uma Tradição de Décadas</h2>
+                
+                <p>
+                    O cenário do rock paraibano sempre foi marcado pela 
+                    diversidade de estilos e pela força da comunidade local. 
+                    Do rock clássico ao metal extremo, passando pelo punk 
+                    e hardcore, todas as vertentes encontram seu espaço aqui.
+                </p>
+                
+                <figure>
+                    <img src="/images/posts/rock-pb.jpg" alt="Show de rock em João Pessoa">
+                    <figcaption>Show no circuito underground de João Pessoa</figcaption>
+                </figure>
+                
+                <h2>Bandas que Fizeram História</h2>
+                
+                <p>
+                    Ao longo das décadas, diversas bandas paraibanas conquistaram 
+                    reconhecimento nacional e até internacional. Seu Pereira e 
+                    Coletivo 401 é um exemplo de como a música paraibana pode 
+                    transcender fronteiras.
+                </p>
+                
+                <h2>Os Desafios da Cena</h2>
+                
+                <p>
+                    Manter uma banda de rock ativa na Paraíba não é fácil. 
+                    Falta de espaços para shows, dificuldade em conseguir 
+                    equipamentos e a distância dos grandes centros são 
+                    obstáculos constantes. Mas quem é do rock sabe: 
+                    <strong>a dificuldade faz parte da estrada.</strong>
+                </p>
+                
+                <blockquote>
+                    <p>
+                        A gente faz rock porque é o que a gente ama. 
+                        Não importa se o show é pra 10 ou 1000 pessoas, 
+                        a energia é sempre a mesma.
+                    </p>
+                    <cite>- Músico da cena local</cite>
+                </blockquote>
+                
+                <h2>O Futuro do Rock no 083</h2>
+                
+                <p>
+                    A nova geração de bandas está chegando com força. 
+                    Com o apoio de coletivos como o Peste do Rato, 
+                    a cena ganha mais visibilidade e organização, 
+                    conectando bandas, público e espaços culturais.
+                </p>
+            `,
+            links: []
+        },
+        
+        4: {
+            id: 4,
+            titulo: "Graffiti: Arte nas Paredes do 083",
+            data: "1 de Fevereiro de 2026",
+            autor: "Peste do Rato",
+            imagem: "/images/posts/post4.jpg",
+            resumo: "Os artistas do spray que colorem as ruas paraibanas com cultura, protesto e identidade visual única.",
+            conteudo: `
+                <p>
+                    O graffiti é uma das expressões mais visíveis da cultura 
+                    hip hop nas cidades paraibanas. Das periferias ao centro, 
+                    os muros contam histórias, protestam e embelezam a paisagem urbana.
+                </p>
+                
+                <h2>A Arte que Transforma Muros</h2>
+                
+                <p>
+                    Os grafiteiros paraibanos desenvolveram um estilo único, 
+                    misturando referências da cultura nordestina com as técnicas 
+                    clássicas do graffiti mundial. O resultado são obras que 
+                    refletem a identidade local de forma autêntica.
+                </p>
+                
+                <h2>Principais Artistas</h2>
+                
+                <p>
+                    A cena do graffiti no estado conta com artistas renomados 
+                    que já participaram de eventos nacionais e internacionais. 
+                    Seus trabalhos podem ser vistos em diversos pontos das 
+                    cidades, transformando espaços cinzas em galerias a céu aberto.
+                </p>
+                
+                <h2>O Graffiti como Resistência</h2>
+                
+                <p>
+                    Mais do que arte, o graffiti na Paraíba é uma forma de 
+                    resistência e ocupação do espaço público. Os artistas 
+                    usam suas obras para falar sobre questões sociais, 
+                    políticas e culturais que afetam a comunidade.
+                </p>
+                
+                <blockquote>
+                    <p>
+                        O muro é nossa tela. A rua é nossa galeria. 
+                        E a mensagem é pra quem quiser ver.
+                    </p>
+                    <cite>- Grafiteiro anônimo</cite>
+                </blockquote>
+            `,
+            links: []
+        },
+        
+        5: {
+            id: 5,
+            titulo: "Produtores Musicais: Os Arquitetos do Som",
+            data: "10 de Fevereiro de 2026",
+            autor: "Peste do Rato",
+            imagem: "/images/posts/post5.jpg",
+            resumo: "Conheça os beatmakers e produtores que criam as bases para os artistas paraibanos brilharem.",
+            conteudo: `
+                <p>
+                    Por trás de cada música que você ouve, existe um produtor 
+                    que passou horas criando a base perfeita. Na Paraíba, 
+                    esses arquitetos do som têm ganhado cada vez mais 
+                    reconhecimento pelo seu trabalho.
+                </p>
+                
+                <h2>O Trabalho Invisível</h2>
+                
+                <p>
+                    Muitas vezes, o produtor é o herói anônimo da música. 
+                    Enquanto o MC ou cantor aparece nos palcos e clipes, 
+                    o beatmaker trabalha nos bastidores, criando os sons 
+                    que dão vida às letras.
+                </p>
+                
+                <h2>Produção Musical na Paraíba</h2>
+                
+                <p>
+                    A cena de produção musical no estado tem evoluído rapidamente. 
+                    Com o acesso a softwares e equipamentos mais acessíveis, 
+                    cada vez mais jovens estão descobrindo o mundo da produção 
+                    e criando sons únicos em seus home studios.
+                </p>
+                
+                <h2>Características do Som Paraibano</h2>
+                
+                <p>
+                    Os produtores locais têm desenvolvido uma sonoridade própria, 
+                    incorporando elementos da cultura nordestina nas bases de 
+                    hip hop e outros gêneros. Samples de forró, baião e outros 
+                    ritmos regionais aparecem cada vez mais nas produções.
+                </p>
+                
+                <blockquote>
+                    <p>
+                        A gente não quer só copiar o que vem de fora. 
+                        Queremos criar um som que tenha a nossa cara, 
+                        a cara do Nordeste.
+                    </p>
+                    <cite>- Produtor local</cite>
+                </blockquote>
+            `,
+            links: []
+        },
+        
+        6: {
+            id: 6,
+            titulo: "Breaking na Paraíba: Cultura em Movimento",
+            data: "15 de Fevereiro de 2026",
+            autor: "Peste do Rato",
+            imagem: "/images/posts/post6.jpg",
+            resumo: "A dança que atravessa gerações e continua viva nos encontros, batalhas e eventos do estado.",
+            conteudo: `
+                <p>
+                    O breaking é um dos pilares fundamentais da cultura hip hop, 
+                    e na Paraíba essa tradição se mantém viva através de 
+                    praticantes dedicados que mantêm a chama acesa.
+                </p>
+                
+                <h2>Uma Tradição de Movimento</h2>
+                
+                <p>
+                    Desde os anos 90, b-boys e b-girls paraibanos têm se 
+                    destacado em competições regionais e nacionais. A dança, 
+                    que surgiu nas ruas do Bronx, encontrou solo fértil nas 
+                    praças e quadras do estado.
+                </p>
+                
+                <h2>Os Encontros e Batalhas</h2>
+                
+                <p>
+                    Semanalmente, grupos se reúnem em diferentes pontos das 
+                    cidades para treinar e trocar conhecimento. Essas rodas 
+                    são essenciais para a formação de novos dançarinos e 
+                    para manter a comunidade unida.
+                </p>
+                
+                <h2>O Breaking nas Olimpíadas</h2>
+                
+                <p>
+                    Com a inclusão do breaking nas Olimpíadas, a modalidade 
+                    ganhou ainda mais visibilidade. Na Paraíba, isso tem 
+                    incentivado mais jovens a conhecerem e praticarem a dança.
+                </p>
+                
+                <blockquote>
+                    <p>
+                        O breaking mudou minha vida. Me tirou da rua, 
+                        me deu disciplina, me conectou com pessoas incríveis.
+                    </p>
+                    <cite>- B-boy há mais de 10 anos</cite>
+                </blockquote>
+                
+                <h2>Como Começar</h2>
+                
+                <p>
+                    Se você quer aprender breaking, procure as rodas e 
+                    encontros que acontecem nas praças. A comunidade é 
+                    receptiva com iniciantes e sempre disposta a ensinar 
+                    os fundamentos da dança.
+                </p>
+            `,
+            links: []
+        }
+    };
+    
+    // ============================================
+    // FUNÇÕES PARA CARREGAR O POST
+    // ============================================
+    
+    /**
+     * Pega o ID do post da URL
+     * Exemplo: /post.html?id=1 retorna 1
+     */
+    function getPostIdFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('id');
+    }
+    
+    /**
+     * Gera o HTML dos ícones para os botões de link
+     * @param {string} icone - Tipo do ícone: download, link, pdf, music, video
+     */
+    function getLinkIcon(icone) {
+        const icons = {
+            download: `<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+            link: `<svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+            pdf: `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+            music: `<svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
+            video: `<svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>`
+        };
+        return icons[icone] || icons.link;
+    }
+    
+    /**
+     * Renderiza o post na página
+     * @param {Object} post - Objeto com os dados do post
+     */
+    function renderPost(post) {
+        const container = document.getElementById('post-content');
+        
+        // Gera HTML dos links se existirem
+        let linksHtml = '';
+        if (post.links && post.links.length > 0) {
+            linksHtml = `
+                <div class="post-links">
+                    <h3>Downloads e Links</h3>
+                    <div class="post-links-grid">
+                        ${post.links.map(link => `
+                            <a href="${link.url}" 
+                               class="post-link-btn" 
+                               ${link.download ? 'download' : 'target="_blank"'}>
+                                ${getLinkIcon(link.icone)}
+                                ${link.titulo}
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Gera navegação entre posts (anterior/próximo)
+        const postIds = Object.keys(POSTS).map(Number).sort((a, b) => a - b);
+        const currentIndex = postIds.indexOf(post.id);
+        const prevPost = currentIndex > 0 ? POSTS[postIds[currentIndex - 1]] : null;
+        const nextPost = currentIndex < postIds.length - 1 ? POSTS[postIds[currentIndex + 1]] : null;
+        
+        let navigationHtml = '<div class="post-navigation">';
+        
+        if (prevPost) {
+            navigationHtml += `
+                <a href="/post.html?id=${prevPost.id}" class="post-nav-link prev">
+                    <span class="post-nav-label">← Post Anterior</span>
+                    <span class="post-nav-title">${prevPost.titulo}</span>
+                </a>
+            `;
+        } else {
+            navigationHtml += '<div></div>';
+        }
+        
+        if (nextPost) {
+            navigationHtml += `
+                <a href="/post.html?id=${nextPost.id}" class="post-nav-link next">
+                    <span class="post-nav-label">Próximo Post →</span>
+                    <span class="post-nav-title">${nextPost.titulo}</span>
+                </a>
+            `;
+        }
+        
+        navigationHtml += '</div>';
+        
+        // Monta o HTML completo
+        container.innerHTML = `
+            <article class="post-page">
+                <!-- Botão voltar -->
+                <a href="/posts.html" class="post-back-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Voltar para Posts
+                </a>
+                
+                <!-- Cabeçalho do post -->
+                <header class="post-header">
+                    <h1 class="post-title">${post.titulo}</h1>
+                    <div class="post-meta">
+                        <span class="post-meta-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            ${post.data}
+                        </span>
+                        <span class="post-meta-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            ${post.autor}
+                        </span>
+                    </div>
+                </header>
+                
+                <!-- Imagem de capa -->
+                <div class="post-cover">
+                    <img src="${post.imagem}" alt="${post.titulo}">
+                </div>
+                
+                <!-- Conteúdo do post -->
+                <div class="post-content">
+                    ${post.conteudo}
+                </div>
+                
+                <!-- Links de download (se houver) -->
+                ${linksHtml}
+                
+                <!-- Navegação entre posts -->
+                ${navigationHtml}
+            </article>
+        `;
+        
+        // Atualiza o título da página
+        document.title = `${post.titulo} - Peste do Rato`;
+    }
+    
+    /**
+     * Mostra mensagem de post não encontrado
+     */
+    function renderPostNotFound() {
+        const container = document.getElementById('post-content');
+        
+        container.innerHTML = `
+            <div class="post-page" style="text-align: center; padding: 100px 20px;">
+                <h1 style="color: var(--cor-vermelho); font-family: var(--fonte-titulo); font-size: 2rem; margin-bottom: 20px;">
+                    Post não encontrado
+                </h1>
+                <p style="color: var(--cor-bege); margin-bottom: 30px;">
+                    O post que você está procurando não existe ou foi removido.
+                </p>
+                <a href="/posts.html" class="btn-ver-mais">Ver Todos os Posts</a>
+            </div>
+        `;
+    }
+    
+    /**
+     * Inicializa a página do post
+     */
+    function initPostPage() {
+        const postId = getPostIdFromUrl();
+        
+        if (!postId) {
+            renderPostNotFound();
+            return;
+        }
+        
+        const post = POSTS[postId];
+        
+        if (!post) {
+            renderPostNotFound();
+            return;
+        }
+        
+        renderPost(post);
+    }
+    
+    // Inicializa quando a página carrega
+    document.addEventListener('DOMContentLoaded', initPostPage);
+    </script>
+</body>
+</html>
